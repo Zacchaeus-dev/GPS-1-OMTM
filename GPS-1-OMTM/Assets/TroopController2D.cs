@@ -26,11 +26,11 @@ public class TroopController2D : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(0)) // Left click
+        if (Input.GetMouseButtonDown(0) && !isMoving) // Left click
         {
             SelectTroop();
         }
-        else if (Input.GetMouseButtonDown(1)) // Right click
+        else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
         {
             SetTroopTargetPosition();
         }
@@ -50,8 +50,6 @@ public class TroopController2D : MonoBehaviour
 
     void SetTroopTargetPosition()
     {
-        if (selectedTroop == null) return;
-
         targetPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         isMoving = true;
         Debug.Log("Troop target position set to: " + targetPosition);
