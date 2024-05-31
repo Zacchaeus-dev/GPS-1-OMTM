@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     public float speed = 2f; // enemy movement speed
     public float detectionRange = 10f; // enemy detection range
     public float stoppingDistance = 1f; // distance which the enemy stops moving towards the target 
-    public List<Transform> potentialTargets; // dist of potential targets (players, killdozer)
+    public List<Transform> potentialTargets; // distance of potential targets (players, killdozer)
 
     private Transform closestTarget;
 
