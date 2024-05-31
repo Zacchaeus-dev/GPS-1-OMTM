@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public float speed = 2f; // enemy movement speed
+    private float speed = 2f; // enemy movement speed
     public float detectionRange = 10f; // enemy detection range
     public float stoppingDistance = 1f; // distance which the enemy stops moving towards the target 
     public List<Transform> potentialTargets; // distance of potential targets (players, killdozer)
 
     private Transform closestTarget;
+
+    private void Start()
+    {
+        //find enemy component and set speed according to the enemy's speed
+        Enemy enemy = gameObject.GetComponent<Enemy>();
+        speed = enemy.moveSpeed;
+    }
 
     void Update()
     {

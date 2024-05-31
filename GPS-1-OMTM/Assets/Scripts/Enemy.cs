@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class Enemy: MonoBehaviour
 {
-    public int maxHealth = 100;
-    private int currentHealth;
-    public bool invincible = false; 
+    public bool invincible = false;
+
+    //Enemy stats
+    public int maxHealth;
+    public int currentHealth;
+    public int attack;
+    public float attackSpeed;
+    public float attackRange;
+    public float moveSpeed = 5f;
 
     void Start()
     {

@@ -85,6 +85,11 @@ public class TroopController2D : MonoBehaviour
 
     void MoveSelectedTroop()
     {
+        //get the troop attributes component and set the movespeed according to each troop's attribute
+        Troop troop = selectedTroop.GetComponent<Troop>();
+        moveSpeed = troop.moveSpeed;
+
+
         if (canMoveY && onLadder)
         {
             // Move in both X and Y directions
