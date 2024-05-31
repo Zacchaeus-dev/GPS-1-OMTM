@@ -537,8 +537,8 @@ Transform:
   m_GameObject: {fileID: 369057645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.38, y: -1.503, z: 0}
-  m_LocalScale: {x: 0.8414268, y: 4.914683, z: 1}
+  m_LocalPosition: {x: 10.38, y: -0.7266, z: 0}
+  m_LocalScale: {x: 0.8414268, y: 6.467231, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -904,6 +904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 718704415}
   - component: {fileID: 718704414}
+  - component: {fileID: 718704416}
   m_Layer: 0
   m_Name: TroopController
   m_TagString: Untagged
@@ -940,6 +941,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1246310442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &718704416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718704413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 087afe6aff76eb640baa063f71153838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1 &816666624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1143,7 @@ GameObject:
   - component: {fileID: 855706065}
   - component: {fileID: 855706064}
   - component: {fileID: 855706063}
+  - component: {fileID: 855706069}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Troop
@@ -1284,6 +1299,19 @@ MonoBehaviour:
   attackSpeed: 1
   attackRange: 1
   moveSpeed: 5
+--- !u!114 &855706069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855706062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 087afe6aff76eb640baa063f71153838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1 &883773519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1455,7 @@ GameObject:
   - component: {fileID: 891968469}
   - component: {fileID: 891968471}
   - component: {fileID: 891968472}
+  - component: {fileID: 891968475}
   m_Layer: 0
   m_Name: Player 1(DPS)
   m_TagString: Troop
@@ -1582,6 +1611,19 @@ MonoBehaviour:
   attackSpeed: 1
   attackRange: 4
   moveSpeed: 8
+--- !u!114 &891968475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891968467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 087afe6aff76eb640baa063f71153838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1 &1214734466
 GameObject:
   m_ObjectHideFlags: 0
