@@ -8,14 +8,19 @@ public class Killdozer : MonoBehaviour
     public Transform destination; // Destination point
 
     private Rigidbody2D rb;
-    private bool isMoving = true; 
+    public bool isMoving = true;
+
+    public int maxHealth;
+    public int currentHealth;
+    public bool invincible = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (isMoving)
         {
@@ -43,4 +48,31 @@ public class Killdozer : MonoBehaviour
         }
     }
     */
+
+    public void TakeDamage(int damage)
+    {
+        if (invincible)
+        {
+            return;
+        }
+
+        currentHealth -= damage;
+        Debug.Log("Killdozer took " + damage + " damage.");
+
+        if (currentHealth <= 0)
+        {
+            Death();
+        }
+    }
+
+    void Death()
+    {
+        // Put death animation or effects
+
+        Debug.Log("Killdozer is dead");
+
+        //lose screen
+
+        Destroy(gameObject);
+    }
 }

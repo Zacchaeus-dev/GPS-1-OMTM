@@ -26,11 +26,17 @@ public class TroopController2D : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(0)) // Left click
+        if (Input.GetMouseButtonDown(0) && selectedTroop == null) // Left click with no troop selected
         {
             SelectTroop();
         }
-        else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
+        else if (Input.GetMouseButtonDown(0) && selectedTroop != null) // Left click a new troop with a troop already selected
+        {
+            //Deselect the old troop and select the new troop
+            DeselectTroop();
+            SelectTroop();
+        }
+        else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click with a troop selected
         {
             SetTroopTargetPosition();
         }
@@ -45,8 +51,20 @@ public class TroopController2D : MonoBehaviour
         {
             selectedTroop = hit.collider.gameObject;
             selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
+
+            Troop troop = selectedTroop.GetComponent<Troop>(); //change selected bool in troop component to true
+            troop.selected = true;
+
             Debug.Log("Troop selected: " + selectedTroop.name);
         }
+    }
+
+    void DeselectTroop()
+    {
+        Troop troop = selectedTroop.GetComponent<Troop>(); //change selected bool in troop component to false
+        troop.selected = false;
+        Debug.Log("Troop Deselected: " + selectedTroop.name);
+        selectedTroop = null;
     }
 
     void SetTroopTargetPosition()
@@ -78,7 +96,7 @@ public class TroopController2D : MonoBehaviour
         }
 
         selectedTroop.GetComponent<TroopClass>().SetTargetPosition(targetPosition, canMoveY);
-        selectedTroop = null; // Deselect troop after issuing move command
+        //DeselectTroop(); // Deselect troop after issuing move command?
         Debug.Log("Troop target position set to: " + targetPosition + ", Can move Y: " + canMoveY);
     }
 }

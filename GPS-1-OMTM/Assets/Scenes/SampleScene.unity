@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b070fcf9b051b414e9502540b7c7a88c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invincible: 0
+  invincible: 1
   maxHealth: 100
   currentHealth: 0
   attack: 0
@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 346707046}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1128,8 +1128,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9199e2248abd291419ef744ac9c2db87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1
   destination: {fileID: 2064600635}
+  isMoving: 0
+  maxHealth: 1000
+  currentHealth: 1000
+  invincible: 0
 --- !u!1 &855706062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,7 +1296,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8c2344cde3270458a44b98ab465b0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invincible: 0
+  invincible: 1
+  selected: 0
   maxHealth: 200
   currentHealth: 200
   attack: 10
@@ -1325,7 +1330,7 @@ GameObject:
   - component: {fileID: 883773521}
   m_Layer: 0
   m_Name: UpperFloor
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1591,7 +1596,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &891968474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1604,7 +1609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8c2344cde3270458a44b98ab465b0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invincible: 0
+  invincible: 1
+  selected: 0
   maxHealth: 100
   currentHealth: 100
   attack: 10
@@ -1961,7 +1967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad04de84f238e84fb86ebfa63db608f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMovement: 1
+  cameraMovement: 0
 --- !u!1 &1447055453
 GameObject:
   m_ObjectHideFlags: 0
