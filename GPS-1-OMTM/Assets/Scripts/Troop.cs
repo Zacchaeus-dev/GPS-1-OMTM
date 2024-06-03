@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class Troop : MonoBehaviour
 {
     public bool invincible = false;
     public bool selected = false;
+    public bool stopAction = false;
 
     //Troop stats
     public int maxHealth;
@@ -21,6 +23,10 @@ public class Troop : MonoBehaviour
     private new Collider2D collider;
     private bool troopOnPlatform = false;
 
+    //Attack enemy
+    private GameObject targetEnemy;
+    private bool isAttacking;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -29,12 +35,19 @@ public class Troop : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // For testing only, replace this with enemy attack once its done
+        // Check if the stop key is pressed and troop is selected
+        if (selected && Input.GetKeyDown(KeyCode.S))
         {
-            TakeDamage(10); //deals 10 damage
+            stopAction = true;
+            StopAllCoroutines(); // Stop attacking coroutine
         }
 
-       HandleDropOffInput();
+        HandleDropOffInput();
+
+        if (targetEnemy != null)
+        {
+            MoveTowardsEnemy();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -92,5 +105,57 @@ public class Troop : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
 
         collider.enabled = true;
+    }
+
+    public void SetTargetEnemy(GameObject enemy, float attackRange)
+    {
+        this.targetEnemy = enemy;
+        this.attackRange = attackRange;
+        this.isAttacking = false;
+        this.stopAction = false;
+    }
+
+    public void DeselectTargetEnemy()
+    {
+        this.targetEnemy = null;
+    }
+
+    void MoveTowardsEnemy()
+    {
+        if (stopAction || targetEnemy == null)
+        {
+            return;
+        }
+
+        Vector2 direction = (targetEnemy.transform.position - transform.position).normalized;
+        float distance = Vector2.Distance(transform.position, targetEnemy.transform.position);
+
+        if (distance > attackRange)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetEnemy.transform.position, moveSpeed * Time.deltaTime);
+            Debug.Log("Moving");
+        }
+        else
+        {
+            if (!isAttacking)
+            {
+                Debug.Log("Attacking");
+                isAttacking = true;
+                StartCoroutine(AttackEnemy());
+            }
+        }
+    }
+
+    IEnumerator AttackEnemy()
+    {
+        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
+        {
+            targetEnemy.GetComponent<Enemy>().TakeDamage(attack); // enemy take damage equal to troop's attack
+            Debug.Log("Attacking enemy: " + targetEnemy.name);
+            yield return new WaitForSeconds(attackSpeed); 
+        }
+
+        targetEnemy = null; //deselect target enemy
+        isAttacking = false;
     }
 }

@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 32540109}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b070fcf9b051b414e9502540b7c7a88c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invincible: 1
+  invincible: 0
   maxHealth: 100
   currentHealth: 0
   attack: 0
@@ -926,6 +926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   ladderDetectionRange: 1
+  attackRange: 1.5
 --- !u!4 &718704415
 Transform:
   m_ObjectHideFlags: 0
@@ -1154,7 +1155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &855706063
 Rigidbody2D:
   serializedVersion: 4
@@ -1298,6 +1299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invincible: 1
   selected: 0
+  stopAction: 0
   maxHealth: 200
   currentHealth: 200
   attack: 10
@@ -1611,6 +1613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invincible: 1
   selected: 0
+  stopAction: 0
   maxHealth: 100
   currentHealth: 100
   attack: 10

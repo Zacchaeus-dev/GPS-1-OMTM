@@ -18,15 +18,6 @@ public class Enemy: MonoBehaviour
     {
         currentHealth = maxHealth;
     }
-
-    void Update() // For testing only, replace this with troop point & click attack once its done
-    {
-        if (Input.GetMouseButtonDown(0)) // left click
-        {
-            TakeDamage(10); //deals 10 damage
-        }
-    }
-
     public void TakeDamage(int damage)
     {
         if (invincible)
