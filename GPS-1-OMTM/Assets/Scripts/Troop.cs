@@ -27,6 +27,12 @@ public class Troop : MonoBehaviour
     private GameObject targetEnemy;
     private bool isAttacking;
 
+    //Fall damage
+    private bool isFalling = false;
+    private float fallStartHeight;
+    public float fallDamageThreshold = 1f; // Height at which fall damage starts to apply
+    public float fallDamageMultiplier = 5f; 
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -48,6 +54,36 @@ public class Troop : MonoBehaviour
         {
             MoveTowardsEnemy();
         }
+
+        CheckFalling();
+    }
+
+    void CheckFalling()
+    {
+        // Check if the troop is in the air
+        if (!isFalling && !IsGrounded())
+        {
+            isFalling = true;
+            fallStartHeight = transform.position.y;
+        }
+        // Check if the troop has hit the ground
+        else if (isFalling && IsGrounded())
+        {
+            isFalling = false;
+            float fallDistance = fallStartHeight - transform.position.y;
+
+            if (fallDistance > fallDamageThreshold)
+            {
+                float damage = (fallDistance - fallDamageThreshold) * fallDamageMultiplier;
+                TakeDamage((int)damage); //change fall damage to int
+            }
+        }
+    }
+
+    bool IsGrounded()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f); 
+        return hit.collider != null;
     }
 
     public void TakeDamage(int damage)

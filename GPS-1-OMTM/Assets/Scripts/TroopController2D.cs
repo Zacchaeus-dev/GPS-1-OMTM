@@ -48,17 +48,21 @@ public class TroopController2D : MonoBehaviour
     void SelectTroop()
     {
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero); //get all colliders under mouse cursor
 
-        if (hit.collider != null && hit.collider.CompareTag("Troop"))
+        foreach (var hit in hits) //search through all the hits and find collider with troop tag
         {
-            selectedTroop = hit.collider.gameObject;
-            selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
+            if (hit.collider != null && hit.collider.CompareTag("Troop"))
+            {
+                selectedTroop = hit.collider.gameObject;
+                selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
 
-            Troop troop = selectedTroop.GetComponent<Troop>(); //change selected bool in troop component to true
-            troop.selected = true;
+                Troop troop = selectedTroop.GetComponent<Troop>(); //change selected bool in troop component to true
+                troop.selected = true;
 
-            Debug.Log("Troop selected: " + selectedTroop.name);
+                Debug.Log("Troop selected: " + selectedTroop.name);
+                return; // Exit the loop once a troop is selected
+            }
         }
     }
 
