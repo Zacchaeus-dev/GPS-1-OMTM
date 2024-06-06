@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 32540111}
   - component: {fileID: 32540110}
   - component: {fileID: 32540109}
+  - component: {fileID: 32540115}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -309,6 +310,19 @@ MonoBehaviour:
   - {fileID: 891968470}
   - {fileID: 855706066}
   - {fileID: 816666625}
+--- !u!114 &32540115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 32540108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66826e04a487862449666aaebc010daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &57562246
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +920,7 @@ GameObject:
   - component: {fileID: 718704415}
   - component: {fileID: 718704414}
   - component: {fileID: 718704416}
+  - component: {fileID: 718704417}
   m_Layer: 0
   m_Name: TroopController
   m_TagString: Untagged
@@ -925,6 +940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29bc77827717d1e4685faf2de02cb9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedTroop: {fileID: 0}
   moveSpeed: 5
   ladderDetectionRange: 1
   attackRange: 1.5
@@ -956,6 +972,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+--- !u!114 &718704417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718704413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b55c71b8f6891c4cabcd926803139e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &816666624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,8 +1494,9 @@ GameObject:
   - component: {fileID: 891968471}
   - component: {fileID: 891968472}
   - component: {fileID: 891968475}
+  - component: {fileID: 891968476}
   m_Layer: 0
-  m_Name: Player 1(DPS)
+  m_Name: DPS
   m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1638,6 +1667,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+--- !u!114 &891968476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891968467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefea38c0b29cd14cb3e8babafad8cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 10
+  attackInterval: 1.03
+  attackRange: 5.92
 --- !u!1 &1214734466
 GameObject:
   m_ObjectHideFlags: 0
