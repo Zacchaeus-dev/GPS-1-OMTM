@@ -303,11 +303,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe51bffaa2a60a4a91ac5523c50a9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 8
-  stoppingDistance: 1
+  detectionRange: 20
+  stoppingDistance: 0
   potentialTargets:
   - {fileID: 891968470}
   - {fileID: 855706066}
+  - {fileID: 816666625}
 --- !u!1 &57562246
 GameObject:
   m_ObjectHideFlags: 0
