@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TroopClass : MonoBehaviour
@@ -16,7 +18,7 @@ public class TroopClass : MonoBehaviour
         isMoving = true;
     }
 
-    public void UpdateMovement()
+    public void Update()
     {
         if (isMoving)
         {
