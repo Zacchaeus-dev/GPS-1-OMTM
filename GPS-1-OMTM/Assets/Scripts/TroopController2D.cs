@@ -32,6 +32,10 @@ public class TroopController2D : MonoBehaviour
 
             if (hit.collider != null && hit.collider.CompareTag("Troop"))
             {
+                if (selectedTroop != null) //if already have a troop selected
+                {
+                    DeselectTroop(); //deselect old troop
+                }
                 SelectTroop(hit.collider.gameObject);
             }
         }
@@ -45,8 +49,15 @@ public class TroopController2D : MonoBehaviour
     {
         selectedTroop = troop;
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
+        selectedTroop.GetComponent<Troop>().selected = true;
         Debug.Log("Troop selected: " + selectedTroop.name);
     }
+
+    void DeselectTroop() //necessary for platform drop off to work as intended
+    {
+        selectedTroop.GetComponent<Troop>().selected = false;
+    }
+
 
     void SetTroopTargetPosition()
     {

@@ -128,7 +128,7 @@ public class Troop : MonoBehaviour
 
     void HandleDropOffInput()
     {
-        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
+        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform) //only drop off the selected troop if its on a platform
         {
             Debug.Log("Drop Off");
             collider.enabled = false;
