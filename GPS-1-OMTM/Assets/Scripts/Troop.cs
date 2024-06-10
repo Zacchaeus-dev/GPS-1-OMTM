@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Troop : MonoBehaviour
 {
+    public TroopController2D troopController2D;
     public bool invincible = false;
     public bool selected = false;
     public bool stopAction = false;
@@ -31,7 +32,7 @@ public class Troop : MonoBehaviour
     private bool isFalling = false;
     private float fallStartHeight;
     public float fallDamageThreshold = 1f; // Height at which fall damage starts to apply
-    public float fallDamageMultiplier = 5f; 
+    public float fallDamageMultiplier = 5f;
 
     void Start()
     {
@@ -107,7 +108,12 @@ public class Troop : MonoBehaviour
         // Put death animation or effects
 
         Debug.Log(gameObject.name + " is dead");
-        Destroy(gameObject);
+
+        // Notify troopController2D to respawn this troop
+        troopController2D.HandleRespawn(this);
+
+        // Deactivate the troop
+        gameObject.SetActive(false);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -184,8 +190,13 @@ public class Troop : MonoBehaviour
 
     IEnumerator AttackEnemy()
     {
-        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
+        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction) 
         {
+            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
+            {
+                break;
+            }
+
             targetEnemy.GetComponent<Enemy>().TakeDamage(attack); // enemy take damage equal to troop's attack
             Debug.Log("Attacking enemy: " + targetEnemy.name);
             yield return new WaitForSeconds(attackSpeed); 

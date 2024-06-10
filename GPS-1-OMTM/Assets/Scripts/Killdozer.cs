@@ -72,7 +72,5 @@ public class Killdozer : MonoBehaviour
         Debug.Log("Killdozer is dead");
 
         //lose screen
-
-        Destroy(gameObject);
     }
 }

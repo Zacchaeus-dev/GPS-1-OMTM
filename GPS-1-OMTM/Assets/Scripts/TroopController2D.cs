@@ -12,6 +12,11 @@ public class TroopController2D : MonoBehaviour
     public float ladderDetectionRange = 1f; // Range to detect ladders
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
 
+    //Troop Respawn 
+    public float respawnTime = 5f; // respawn delay for troops
+    public Vector2 respawnOffset; // offset from the killdozer's position for respawn
+    public Transform killdozer; // killdozer's transform position
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -106,5 +111,28 @@ public class TroopController2D : MonoBehaviour
                 Debug.Log("Enemy targeted: " + enemy.name);
             }
         }
+    }
+
+    public void HandleRespawn(Troop troop)
+    {
+        StartCoroutine(RespawnTroop(troop));
+    }
+
+    IEnumerator RespawnTroop(Troop troop)
+    {
+        yield return new WaitForSeconds(respawnTime);
+
+        Vector2 respawnPosition = (Vector2)killdozer.position + respawnOffset;
+
+        // Set the troop's position to the respawn location
+        troop.transform.position = respawnPosition;
+
+        // Reset troop health
+        troop.currentHealth = troop.maxHealth;
+
+        // Reactivate the troop
+        troop.gameObject.SetActive(true);
+
+        Debug.Log(troop.gameObject.name + " has respawned.");
     }
 }
