@@ -22,12 +22,26 @@ public class Enemy: MonoBehaviour
     //Attack troops
     private bool isAttacking;
 
-    public Transform killdozer;
+    public Transform killdozerTransform; //killdozer position
     public float killdozerStoppingDistance = 3.0f;
 
     private void Start()
     {
         currentHealth = maxHealth;
+
+        // Find all troops and add their transforms to the potentialTargets list
+        Troop[] allTroops = FindObjectsOfType<Troop>();
+        foreach (Troop troop in allTroops)
+        {
+            potentialTargets.Add(troop.transform);
+        }
+
+        Killdozer killdozer = FindObjectOfType<Killdozer>();
+        if (killdozer != null)
+        {
+            potentialTargets.Add(killdozer.transform);
+            killdozerTransform = killdozer.transform;
+        }
     }
 
     void Update()
@@ -62,7 +76,7 @@ public class Enemy: MonoBehaviour
     {
         if (closestTarget != null && closestTarget.gameObject.activeInHierarchy) // If have a closest target
         {
-            float stoppingDistanceToUse = closestTarget == killdozer ? killdozerStoppingDistance : troopStoppingDistance; // Choose stopping distance based on if the target is the killdozer
+            float stoppingDistanceToUse = closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance; // Choose stopping distance based on if the target is the killdozer
             float distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
 
             if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
@@ -81,9 +95,9 @@ public class Enemy: MonoBehaviour
 
     IEnumerator AttackTarget()
     {
-        while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozer ? killdozerStoppingDistance : troopStoppingDistance))
+        while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance))
         {
-            if (closestTarget == killdozer)
+            if (closestTarget == killdozerTransform)
             {
                 Killdozer killdozerScript = closestTarget.GetComponent<Killdozer>();
                 if (killdozerScript != null)
