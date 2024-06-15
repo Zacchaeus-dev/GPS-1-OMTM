@@ -13,15 +13,13 @@ public class TroopAutoAttackToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && troopController.selectedTroop != null)
         {
-            if (troopController != null && troopController.selectedTroop != null)
+            TroopAutoAttack autoAttack = troopController.selectedTroop.GetComponent<TroopAutoAttack>();
+            if (autoAttack != null)
             {
-                TroopAutoAttack autoAttack = troopController.selectedTroop.GetComponent<TroopAutoAttack>();
-                if (autoAttack != null)
-                {
-                    autoAttack.ToggleAutoAttack();
-                }
+                autoAttack.autoAttackEnabled = !autoAttack.autoAttackEnabled;
+                Debug.Log("Auto Attack " + (autoAttack.autoAttackEnabled ? "Enabled" : "Disabled"));
             }
         }
     }

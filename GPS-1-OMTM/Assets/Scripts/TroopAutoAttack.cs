@@ -4,77 +4,97 @@ using UnityEngine;
 
 public class TroopAutoAttack : MonoBehaviour
 {
-    public int attackDamage = 10; // Attack damage
-    public float attackInterval = 1.0f; // Time between attacks
+    public bool autoAttackEnabled = false;
+    public int attackDamage = 10; // Attack damage settable via Inspector
+    public float detectionRange = 3f; // Range within which the troop can detect enemies
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
-    private bool isAutoAttacking = false;
+    public float attackCooldown = 1f; // Time between attacks
+    public float moveSpeed = 2f; // Speed at which the troop moves towards the enemy
+
+    private float lastAttackTime = 0f;
     private GameObject targetEnemy;
-    private float attackTimer = 0f;
+    private Rigidbody2D rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
-        if (isAutoAttacking)
+        if (autoAttackEnabled)
         {
-            FindAndAttackEnemy();
-        }
-    }
-
-    public void ToggleAutoAttack()
-    {
-        isAutoAttacking = !isAutoAttacking;
-        if (!isAutoAttacking)
-        {
-            targetEnemy = null;
-        }
-        Debug.Log("Auto-attack toggled: " + isAutoAttacking);
-    }
-
-    private void FindAndAttackEnemy()
-    {
-        if (targetEnemy == null)
-        {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (var hitCollider in hitColliders)
+            if (targetEnemy == null)
             {
-                if (hitCollider.CompareTag("Enemy"))
-                {
-                    targetEnemy = hitCollider.gameObject;
-                    break;
-                }
+                FindTarget();
             }
-        }
-
-        if (targetEnemy != null)
-        {
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= attackInterval)
+            else
             {
-                Attack();
-                attackTimer = 0f;
+                MoveTowardsTarget();
+                AttackTarget();
             }
         }
     }
 
-    private void Attack()
+    void FindTarget()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Enemy"))
+            {
+                targetEnemy = hitCollider.gameObject;
+                break;
+            }
+        }
+    }
+
+    void MoveTowardsTarget()
     {
         if (targetEnemy != null)
         {
-            EnemyHealth enemyHealth = targetEnemy.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
+            if (distanceToEnemy > attackRange)
             {
-                enemyHealth.TakeDamage(attackDamage);
-                Debug.Log("Attacked enemy: " + targetEnemy.name + " for " + attackDamage + " damage.");
-
-                if (enemyHealth.health <= 0)
-                {
-                    targetEnemy = null;
-                }
+                Vector2 direction = (targetEnemy.transform.position - transform.position).normalized;
+                rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
             }
         }
     }
 
-    private void OnDrawGizmosSelected()
+    void AttackTarget()
     {
+        if (targetEnemy != null)
+        {
+            float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
+            if (distanceToEnemy <= attackRange)
+            {
+                if (Time.time >= lastAttackTime + attackCooldown)
+                {
+                    // Implement the damage dealing logic here
+                    targetEnemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    lastAttackTime = Time.time;
+                }
+            }
+            else
+            {
+                targetEnemy = null; // Lost range, find another target
+            }
+        }
+    }
+
+    public void SetTargetEnemy(GameObject enemy)
+    {
+        targetEnemy = enemy;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // Draw detection range
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        // Draw attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TroopController2D : MonoBehaviour
@@ -7,7 +8,7 @@ public class TroopController2D : MonoBehaviour
     private Camera mainCamera;
     public GameObject selectedTroop;
     private Vector2 targetPosition;
-    private bool canMoveY;
+    //private bool canMoveY;
     public float moveSpeed = 5f; // Speed of the troop movement
     public float ladderDetectionRange = 1f; // Range to detect ladders
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
@@ -16,6 +17,10 @@ public class TroopController2D : MonoBehaviour
     public float respawnTime = 5f; // respawn delay for troops
     public Vector2 respawnOffset; // offset from the killdozer's position for respawn
     public Transform killdozer; // killdozer's transform position
+
+    Collider2D nearestVert;
+    private Vector2 vertPosition;
+
 
     void Start()
     {
@@ -66,36 +71,127 @@ public class TroopController2D : MonoBehaviour
 
     void SetTroopTargetPosition()
     {
-        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+        if (selectedTroop.GetComponent<TroopClass>().onPlatform == 1)
+        {
+            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-        // Check if the target position is on a ladder
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-        if (hit.collider != null && hit.collider.CompareTag("Ladder"))
-        {
-            targetPosition = mousePosition; // Allow Y movement
-            canMoveY = true;
-        }
-        else
-        {
-            // Check for nearby ladders if target is not on a ladder
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(mousePosition, ladderDetectionRange);
-            foreach (var collider in colliders)
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+            if (hit.collider != null && hit.collider.CompareTag("[PF] Ground"))
             {
-                if (collider.CompareTag("Ladder"))
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+                Debug.Log("moving in ground plane");
+                vertPosition = Vector2.zero;
+                nearestVert = null;
+            }
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically"))
+            {
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+                Debug.Log("vertically but ground");
+                vertPosition = Vector2.zero;
+                nearestVert = null;
+            }
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground"))
+            {
+                GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically");
+
+                float closest = 200; //add your max range here
+                GameObject closestVert = null;
+                for (int i = 0; i < verts.Length; i++)  //list of gameObjects to search through
                 {
-                    targetPosition = new Vector2(collider.transform.position.x, mousePosition.y); // Move to ladder X position first
-                    canMoveY = true;
-                    break;
+                    float dist = Vector3.Distance(verts[i].transform.position, selectedTroop.transform.position);
+                    Debug.Log("found one!");
+                    if (dist < closest)
+                    {
+                        closest = dist;
+                        closestVert = verts[i];
+                    }
                 }
+
+
+                Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
+                nearestVert = closestVertCollider;
+                vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
+
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y);
+
+            }
+
+            if (selectedTroop != null)
+            {
+                selectedTroop.GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert);
             }
         }
 
-        if (selectedTroop != null)
+        if (selectedTroop.GetComponent<TroopClass>().onPlatform == 2)
         {
-            selectedTroop.GetComponent<TroopClass>().SetTargetPosition(targetPosition, canMoveY);
+            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+            if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground"))
+            {
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+                Debug.Log("moving in ground plane");
+                vertPosition = Vector2.zero;
+                nearestVert = null;
+            }
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically"))
+            {
+                GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically");
+
+                float closest = 200; //add your max range here
+                GameObject closestVert = null;
+                for (int i = 0; i < verts.Length; i++)  //list of gameObjects to search through
+                {
+                    float dist = Vector3.Distance(verts[i].transform.position, selectedTroop.transform.position);
+                    Debug.Log("found one!");
+                    if (dist < closest)
+                    {
+                        closest = dist;
+                        closestVert = verts[i];
+                    }
+                }
+
+
+                Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
+                nearestVert = closestVertCollider;
+                vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
+
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y);
+
+            }
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Ground"))
+            {
+                GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically");
+
+                float closest = 200; //add your max range here
+                GameObject closestVert = null;
+                for (int i = 0; i < verts.Length; i++)  //list of gameObjects to search through
+                {
+                    float dist = Vector3.Distance(verts[i].transform.position, selectedTroop.transform.position);
+                    Debug.Log("found one!");
+                    if (dist < closest)
+                    {
+                        closest = dist;
+                        closestVert = verts[i];
+                    }
+                }
+
+
+                Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
+                nearestVert = closestVertCollider;
+                vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
+
+                targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y);
+
+            }
+
+            if (selectedTroop != null)
+            {
+                selectedTroop.GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert);
+            }
         }
     }
+
 
     void HandleEnemySelection()
     {
@@ -136,3 +232,4 @@ public class TroopController2D : MonoBehaviour
         Debug.Log(troop.gameObject.name + " has respawned.");
     }
 }
+

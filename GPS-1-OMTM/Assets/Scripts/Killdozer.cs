@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Killdozer : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class Killdozer : MonoBehaviour
     {
         // Put death animation or effects
 
+        SceneManager.LoadScene(3);
         Debug.Log("Killdozer is dead");
 
         //lose screen
