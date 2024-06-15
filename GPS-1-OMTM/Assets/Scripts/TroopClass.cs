@@ -35,7 +35,7 @@ public class TroopClass : MonoBehaviour
 
         if (onPlatform == 1 && collision.tag == "[PF] Upper-Ground")
         {
-            Debug.Log("gihai");
+            Debug.Log("Upper Ground");
             canClimb = false;
             isMoving = true;
 
@@ -45,7 +45,7 @@ public class TroopClass : MonoBehaviour
 
         else if (onPlatform == 2 && collision.tag == "[PF] Ground Check")
         {
-            Debug.Log("fak");
+            Debug.Log("Ground Check");
             canClimb = false;
             isMoving = true;
 

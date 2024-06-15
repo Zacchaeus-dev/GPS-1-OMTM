@@ -21,8 +21,11 @@ public class Troop : MonoBehaviour
     public float moveSpeed = 5f;
 
     //Drop off platforms
-    private new Collider2D collider;
+    private Collider2D boxCollider;
+    private Collider2D capsuleCollider;
     private bool troopOnPlatform = false;
+    private bool troopOnGround = false;
+    private Rigidbody2D rb;
 
     //Attack enemy
     private GameObject targetEnemy;
@@ -37,7 +40,9 @@ public class Troop : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        collider = GetComponent<Collider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -57,6 +62,7 @@ public class Troop : MonoBehaviour
         }
 
         CheckFalling();
+        CheckGround();
     }
 
     void CheckFalling()
@@ -66,6 +72,7 @@ public class Troop : MonoBehaviour
         {
             isFalling = true;
             fallStartHeight = transform.position.y;
+            //rb.velocity = new Vector2(0, rb.velocity.y);
         }
         // Check if the troop has hit the ground
         else if (isFalling && IsGrounded())
@@ -83,7 +90,7 @@ public class Troop : MonoBehaviour
 
     bool IsGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f); 
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
         return hit.collider != null;
     }
 
@@ -116,37 +123,57 @@ public class Troop : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
         {
             troopOnPlatform = true;
         }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            troopOnGround = true;
+        }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
         {
             troopOnPlatform = false;
         }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            troopOnGround = false;
+        }
     }
 
     void HandleDropOffInput()
     {
-        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform) //only drop off the selected troop if its on a platform
+        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)  //only drop off the selected troop if its on a platform
         {
             Debug.Log("Drop Off");
-            collider.enabled = false;
+            boxCollider.enabled = false;
+            capsuleCollider.enabled = false;
+
+            rb.velocity = new Vector2(0, -10);
             StartCoroutine(EnableCollider());
         }
     }
 
     IEnumerator EnableCollider()
     {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.01f);
 
-        collider.enabled = true;
+        boxCollider.enabled = true;
+        capsuleCollider.enabled = true;
+    }
+
+    void CheckGround()
+    {
+        if (troopOnGround || troopOnPlatform) //if troop is on a floor, stops troop going down
+        {
+            rb.velocity = Vector2.zero;
+        }
     }
 
     public void SetTargetEnemy(GameObject enemy, float attackRange)

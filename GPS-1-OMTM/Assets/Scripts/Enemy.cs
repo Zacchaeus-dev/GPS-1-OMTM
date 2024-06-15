@@ -82,6 +82,7 @@ public class Enemy: MonoBehaviour
             if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
             {
                 Vector3 direction = (closestTarget.position - transform.position).normalized;
+                direction.y = 0; //only move horizontally
                 transform.position += direction * moveSpeed * Time.deltaTime;
             }
             else if (!isAttacking) // otherwise stop and attack

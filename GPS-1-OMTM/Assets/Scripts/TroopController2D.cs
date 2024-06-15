@@ -38,7 +38,8 @@ public class TroopController2D : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) // Left click
         {
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+            int layerMask = ~LayerMask.GetMask("Killdozer"); // LayerMask that ignores the Killdozer layer
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
             if (hit.collider != null && hit.collider.CompareTag("Troop"))
             {
@@ -68,7 +69,7 @@ public class TroopController2D : MonoBehaviour
         selectedTroop.GetComponent<Troop>().selected = false;
     }
 
-
+    /*
     void SetTroopTargetPosition()
     {
         if (selectedTroop.GetComponent<TroopClass>().onPlatform == 1)
@@ -83,14 +84,14 @@ public class TroopController2D : MonoBehaviour
                 vertPosition = Vector2.zero;
                 nearestVert = null;
             }
-            else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically"))
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically")) //ladder
             {
                 targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
                 Debug.Log("vertically but ground");
                 vertPosition = Vector2.zero;
                 nearestVert = null;
             }
-            else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground"))
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground")) //platforms
             {
                 GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically");
 
@@ -107,7 +108,6 @@ public class TroopController2D : MonoBehaviour
                     }
                 }
 
-
                 Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
                 nearestVert = closestVertCollider;
                 vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
@@ -122,7 +122,7 @@ public class TroopController2D : MonoBehaviour
             }
         }
 
-        if (selectedTroop.GetComponent<TroopClass>().onPlatform == 2)
+        if (selectedTroop.GetComponent<TroopClass>().onPlatform == 2) 
         {
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -151,7 +151,6 @@ public class TroopController2D : MonoBehaviour
                     }
                 }
 
-
                 Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
                 nearestVert = closestVertCollider;
                 vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
@@ -176,7 +175,6 @@ public class TroopController2D : MonoBehaviour
                     }
                 }
 
-
                 Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
                 nearestVert = closestVertCollider;
                 vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
@@ -191,7 +189,78 @@ public class TroopController2D : MonoBehaviour
             }
         }
     }
+    */
 
+    void SetTroopTargetPosition()
+    {
+        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+        if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground"))
+        {
+            // Check if the troop is already on an upper ground
+            if (selectedTroop.GetComponent<TroopClass>().onPlatform == 2)
+            {
+                // Move horizontally to the position
+                targetPosition = new Vector2(hit.collider.transform.position.x, selectedTroop.transform.position.y);
+                vertPosition = Vector2.zero;
+                nearestVert = null;
+                Debug.Log("Moving horizontally to upper ground");
+            }
+            else
+            {
+                // If troop is not on an upper ground, climb ladder
+                FindAndClimbNearestLadder(mousePosition);
+            }
+        }
+        else if (hit.collider != null && hit.collider.CompareTag("[PF] Ground"))
+        {
+            targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+            Debug.Log("Moving in ground plane");
+            vertPosition = Vector2.zero;
+            nearestVert = null;
+        }
+        else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically"))
+        {
+            targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y); // Default to only X movement
+            Debug.Log("Vertically but ground");
+            vertPosition = Vector2.zero;
+            nearestVert = null;
+        }
+
+        if (selectedTroop != null)
+        {
+            selectedTroop.GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert);
+        }
+    }
+
+    void FindAndClimbNearestLadder(Vector2 mousePosition)
+    {
+        GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically");
+
+        float closest = Mathf.Infinity; 
+        GameObject closestVert = null;
+        for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
+        {
+            float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
+            Debug.Log("found one!");
+            if (dist < closest)
+            {
+                closest = dist;
+                closestVert = verts[i];
+            }
+        }
+
+        if (closestVert != null)
+        {
+            Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
+            nearestVert = closestVertCollider;
+            vertPosition = new Vector2(closestVertCollider.transform.position.x, selectedTroop.transform.position.y); // Move to vert X position first
+            targetPosition = new Vector2(mousePosition.x, selectedTroop.transform.position.y);
+
+            Debug.Log("Climbing nearest ladder");
+        }
+    }
 
     void HandleEnemySelection()
     {
