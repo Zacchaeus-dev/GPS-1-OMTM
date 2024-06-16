@@ -68,7 +68,7 @@ public class TroopController2D : MonoBehaviour
     {
         selectedTroop.GetComponent<Troop>().selected = false;
     }
-
+    //----------------------------
     /*
     void SetTroopTargetPosition()
     {
@@ -190,7 +190,7 @@ public class TroopController2D : MonoBehaviour
         }
     }
     */
-
+    //---------------------------------------------------------------
     void SetTroopTargetPosition()
     {
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
