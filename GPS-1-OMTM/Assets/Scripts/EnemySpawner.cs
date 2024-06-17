@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemyToSpawn = enemies[randomEnemyIndex];
 
         Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation);
-        Debug.Log("Spawned: " + enemyToSpawn.name + " at " + spawnPoint.position);
+        //Debug.Log("Spawned: " + enemyToSpawn.name + " at " + spawnPoint.position);
         canSpawn = true;
     }
 

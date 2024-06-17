@@ -38,16 +38,20 @@ public class TroopController2D : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) // Left click
         {
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            int layerMask = ~LayerMask.GetMask("Killdozer"); // LayerMask that ignores the Killdozer layer
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
-            if (hit.collider != null && hit.collider.CompareTag("Troop"))
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero);
+
+            foreach (var hit in hits)
             {
-                if (selectedTroop != null) //if already have a troop selected
+                if (hit.collider != null && hit.collider.CompareTag("Troop"))
                 {
-                    DeselectTroop(); //deselect old troop
+                    if (selectedTroop != null) // If already have a troop selected
+                    {
+                        DeselectTroop(); // Deselect old troop
+                    }
+                    SelectTroop(hit.collider.gameObject);
+                    break; // Exit loop after selecting the troop
                 }
-                SelectTroop(hit.collider.gameObject);
             }
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click

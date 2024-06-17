@@ -1017,8 +1017,14 @@ MonoBehaviour:
   attackSpeed: 1
   attackRange: 1
   moveSpeed: 4
+  selectedWeapon: 3
   fallDamageThreshold: 1
   fallDamageMultiplier: 5
+  ability1: 3
+  ability2: 4
+  ability1Cooldown: 30
+  ability2Cooldown: 30
+  tankShield: {fileID: 8018167767708946997, guid: c92eb51c178456c418cc81e0b9bd4c16, type: 3}
 --- !u!1 &489624919
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,8 +2154,14 @@ MonoBehaviour:
   attackSpeed: 1
   attackRange: 4
   moveSpeed: 8
+  selectedWeapon: 0
   fallDamageThreshold: 1
   fallDamageMultiplier: 5
+  ability1: 1
+  ability2: 2
+  ability1Cooldown: 30
+  ability2Cooldown: 20
+  tankShield: {fileID: 8018167767708946997, guid: c92eb51c178456c418cc81e0b9bd4c16, type: 3}
 --- !u!114 &891968475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2955,7 +2967,7 @@ MonoBehaviour:
   killdozer: {fileID: 816666624}
   enemies:
   - {fileID: 5254630746095803410, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
-  spawnInterval: 5
+  spawnInterval: 10
   activationRange: 13
   spawnPoints:
   - {fileID: 1170489615}

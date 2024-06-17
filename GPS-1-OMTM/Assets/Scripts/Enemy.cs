@@ -67,7 +67,7 @@ public class Enemy: MonoBehaviour
                 // Update closest target to current target
                 closestDistanceSqr = distanceSqr;
                 closestTarget = target;
-                Debug.Log("Found " + closestTarget.name);
+                //Debug.Log("Found " + closestTarget.name);
             }
         }
     }
@@ -110,7 +110,7 @@ public class Enemy: MonoBehaviour
                     }
 
                     killdozerScript.TakeDamage(attack); // Killdozer takes damage equal to attack
-                    Debug.Log("Attacking killdozer");
+                    //Debug.Log("Attacking killdozer");
                 }
             }
             else
@@ -125,7 +125,7 @@ public class Enemy: MonoBehaviour
                     }
 
                     troopScript.TakeDamage(attack); // Troop takes damage equal to attack
-                    Debug.Log("Attacking troop: " + closestTarget.name);
+                    //Debug.Log("Attacking troop: " + closestTarget.name);
                 }
             }
 

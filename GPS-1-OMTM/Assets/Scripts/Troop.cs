@@ -27,7 +27,8 @@ public class Troop : MonoBehaviour
     private bool troopOnGround = false;
     private Rigidbody2D rb;
 
-    //Attack enemy
+    //Attacks
+    public Weapon selectedWeapon = Weapon.None;
     private GameObject targetEnemy;
     private bool isAttacking;
 
@@ -37,12 +38,49 @@ public class Troop : MonoBehaviour
     public float fallDamageThreshold = 1f; // Height at which fall damage starts to apply
     public float fallDamageMultiplier = 5f;
 
+    // Abilities
+    public Ability ability1 = Ability.None;
+    public Ability ability2 = Ability.None;
+    private bool ability1OnCooldown = false;
+    private bool ability2OnCooldown = false;
+    public float ability1Cooldown = 5f; 
+    public float ability2Cooldown = 10f;
+    public GameObject tankShield;
+
+    public enum Weapon
+    {
+        None,
+        Weapon1_DPS,
+        Weapon2_DPS,
+        Weapon1_Tank,
+        Weapon2_Tank,
+        Weapon1_CC,
+        Weapon2_CC,
+        Weapon1_Healer,
+        Weapon2_Healer
+    }
+
+    public enum Ability
+    {
+        None,
+        Ability1_DPS,
+        Ability2_DPS,
+        Ability1_Tank,
+        Ability2_Tank,
+        Ability1_CC,
+        Ability2_CC,
+        Ability1_Healer,
+        Ability2_Healer
+    }
+
     void Start()
     {
         currentHealth = maxHealth;
         boxCollider = GetComponent<BoxCollider2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
+
+        //assign weapon from equipment menu
     }
 
     void Update()
@@ -55,6 +93,7 @@ public class Troop : MonoBehaviour
         }
 
         HandleDropOffInput();
+        HandleAbilitiesInput();
 
         if (targetEnemy != null)
         {
@@ -63,6 +102,148 @@ public class Troop : MonoBehaviour
 
         CheckFalling();
         CheckGround();
+    }
+
+    void HandleAbilitiesInput()
+    {
+        if (selected && Input.GetKeyDown(KeyCode.Q) && !ability1OnCooldown)
+        {
+            StartCoroutine(UseAbility(ability1));
+        }
+        if (selected && Input.GetKeyDown(KeyCode.W) && !ability2OnCooldown)
+        {
+            StartCoroutine(UseAbility(ability2));
+        }
+    }
+
+    IEnumerator UseAbility(Ability ability)
+    {
+        switch (ability)
+        {
+            case Ability.Ability1_DPS:
+                yield return StartCoroutine(Ability1_DPS());
+                break;
+            case Ability.Ability2_DPS:
+                yield return StartCoroutine(Ability2_DPS());
+                break;
+            case Ability.Ability1_Tank:
+                yield return StartCoroutine(Ability1_Tank());
+                break;
+            case Ability.Ability2_Tank:
+                yield return StartCoroutine(Ability2_Tank());
+                break;
+            case Ability.Ability1_CC:
+                yield return StartCoroutine(Ability1_CC());
+                break;
+            case Ability.Ability2_CC:
+                yield return StartCoroutine(Ability2_CC());
+                break;
+            case Ability.Ability1_Healer:
+                yield return StartCoroutine(Ability1_Healer());
+                break;
+            case Ability.Ability2_Healer:
+                yield return StartCoroutine(Ability2_Healer());
+                break;
+        }
+    }
+
+    IEnumerator Ability1_DPS()
+    {
+        ability1OnCooldown = true;
+        Debug.Log("DPS Ability 1 Activated");
+
+        //teleportation
+
+        yield return new WaitForSeconds(ability1Cooldown);
+        ability1OnCooldown = false;
+    }
+
+    IEnumerator Ability2_DPS()
+    {
+        ability2OnCooldown = true;
+        Debug.Log("DPS Ability 2 Activated");
+
+        //berserk
+        //add attack and attack speed 
+        attack += 25;
+        yield return new WaitForSeconds(10f); // Ability duration
+        attack -= 25;
+
+        yield return new WaitForSeconds(ability2Cooldown);
+        ability2OnCooldown = false;
+    }
+
+    IEnumerator Ability1_Tank()
+    {
+        ability1OnCooldown = true;
+        Debug.Log("Tank Ability 1 Activated");
+
+        //Wall of olympus
+        Vector3 offset = new Vector3(1.5f, 0.1f, 0);
+        GameObject TankShield = Instantiate(tankShield, gameObject.transform.position + offset, Quaternion.Euler(0f,0f,0f), null);
+        yield return new WaitForSeconds(20f); 
+        Destroy(TankShield);
+
+        yield return new WaitForSeconds(ability1Cooldown);
+        ability1OnCooldown = false;
+    }
+
+    IEnumerator Ability2_Tank()
+    {
+        ability2OnCooldown = true;
+        Debug.Log("Tank Ability 2 Activated");
+
+        yield return new WaitForSeconds(ability2Cooldown);
+        ability2OnCooldown = false;
+    }
+
+    IEnumerator Ability1_CC()
+    {
+        ability1OnCooldown = true;
+        Debug.Log("CC Ability 1 Activated");
+
+        //friday
+        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(ability1Cooldown);
+        ability1OnCooldown = false;
+    }
+
+    IEnumerator Ability2_CC()
+    {
+        ability2OnCooldown = true;
+        Debug.Log("CC Ability 2 Activated");
+
+        yield return new WaitForSeconds(ability2Cooldown);
+        ability2OnCooldown = false;
+    }
+
+    IEnumerator Ability1_Healer()
+    {
+        ability1OnCooldown = true;
+        Debug.Log("Healer Ability 1 Activated");
+
+        //golden fleece
+        /*
+        int healAmount = 100;
+        for (int i = 0; i < 5; i++)
+        {
+            currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+            yield return new WaitForSeconds(1f);
+        }
+        */
+
+        yield return new WaitForSeconds(ability1Cooldown);
+        ability1OnCooldown = false;
+    }
+
+    IEnumerator Ability2_Healer()
+    {
+        ability2OnCooldown = true;
+        Debug.Log("Healer Ability 2 Activated");
+
+        yield return new WaitForSeconds(ability2Cooldown);
+        ability2OnCooldown = false;
     }
 
     void CheckFalling()
@@ -210,11 +391,42 @@ public class Troop : MonoBehaviour
             {
                 Debug.Log("Attacking");
                 isAttacking = true;
-                StartCoroutine(AttackEnemy());
+
+                switch (selectedWeapon)
+                {
+                    case (Weapon)1: //dps weapon 1
+
+                        break;
+
+                    case (Weapon)2: //dps weapon 2
+
+                        break;
+
+                    case (Weapon)3: //tank weapon 1
+                        StartCoroutine(TankWeapon1());
+                        break;
+
+                    case (Weapon)4: //tank weapon 2
+
+                        break;
+
+                    case (Weapon)5: //cc weapon 1
+
+                        break;
+
+                    case (Weapon)6: //cc weapon 2
+
+                        break;
+
+                    default:
+                        StartCoroutine(AttackEnemy()); //can be removed once all the attacks are finished
+                        break;
+                }
             }
         }
     }
 
+    
     IEnumerator AttackEnemy()
     {
         while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction) 
@@ -230,6 +442,27 @@ public class Troop : MonoBehaviour
         }
 
         targetEnemy = null; //deselect target enemy
+        isAttacking = false;
+    }
+    
+
+    //place troop weapon attacks here
+
+    IEnumerator TankWeapon1() //unfinalized
+    {
+        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
+        {
+            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
+            {
+                break;
+            }
+
+            targetEnemy.GetComponent<Enemy>().TakeDamage(attack); 
+            Debug.Log("Attacking enemy: " + targetEnemy.name);
+            yield return new WaitForSeconds(attackSpeed);
+        }
+
+        targetEnemy = null; 
         isAttacking = false;
     }
 }
