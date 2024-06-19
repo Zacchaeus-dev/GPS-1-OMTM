@@ -9,7 +9,7 @@ public class TroopAutoAttack : MonoBehaviour
     public float detectionRange = 3f; // Range within which the troop can detect enemies
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
-    public float moveSpeed = 2f; // Speed at which the troop moves towards the enemy
+    //public float moveSpeed = 2f; // Speed at which the troop moves towards the enemy
 
     private float lastAttackTime = 0f;
     private GameObject targetEnemy;
@@ -30,7 +30,7 @@ public class TroopAutoAttack : MonoBehaviour
             }
             else
             {
-                MoveTowardsTarget();
+                //MoveTowardsTarget();
                 AttackTarget();
             }
         }
@@ -49,7 +49,7 @@ public class TroopAutoAttack : MonoBehaviour
         }
     }
 
-    void MoveTowardsTarget()
+    /*void MoveTowardsTarget()
     {
         if (targetEnemy != null)
         {
@@ -60,7 +60,7 @@ public class TroopAutoAttack : MonoBehaviour
                 rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
             }
         }
-    }
+    }*/
 
     void AttackTarget()
     {
@@ -72,7 +72,20 @@ public class TroopAutoAttack : MonoBehaviour
                 if (Time.time >= lastAttackTime + attackCooldown)
                 {
                     // Implement the damage dealing logic here
-                    targetEnemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    Enemy enemy = targetEnemy.GetComponent<Enemy>();
+
+                    if (enemy != null)
+                    {
+                        targetEnemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    }
+                    else
+                    {
+                        targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
+                    }
+
+
+                    //targetEnemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
+                    //targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
                     lastAttackTime = Time.time;
                 }
             }
@@ -98,4 +111,5 @@ public class TroopAutoAttack : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+
 }

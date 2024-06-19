@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FlyingEnemy : MonoBehaviour
 {
-    public int maxHealth = 100; // Maximum health of the enemy
-    private int currentHealth;
+    public int maxHealth; // Maximum health of the enemy
+    public int currentHealth;
 
     public float speed = 5f; // Speed of the enemy
     public float detectionRange = 5f; // Range to detect troops
@@ -20,7 +20,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+       // currentHealth = maxHealth;
         lastAttackTime = Time.time;
     }
 

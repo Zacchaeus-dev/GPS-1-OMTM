@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -31,6 +32,7 @@ public class Troop : MonoBehaviour
     public Weapon selectedWeapon = Weapon.None;
     private GameObject targetEnemy;
     private bool isAttacking;
+    public bool canAttack = true;
 
     //Fall damage
     private bool isFalling = false;
@@ -166,8 +168,10 @@ public class Troop : MonoBehaviour
         //berserk
         //add attack and attack speed 
         attack += 25;
+        attackSpeed -= 0.5f;
         yield return new WaitForSeconds(10f); // Ability duration
         attack -= 25;
+        attackSpeed += 0.5f;
 
         yield return new WaitForSeconds(ability2Cooldown);
         ability2OnCooldown = false;
@@ -395,7 +399,7 @@ public class Troop : MonoBehaviour
                 switch (selectedWeapon)
                 {
                     case (Weapon)1: //dps weapon 1
-
+                     
                         break;
 
                     case (Weapon)2: //dps weapon 2
@@ -465,4 +469,7 @@ public class Troop : MonoBehaviour
         targetEnemy = null; 
         isAttacking = false;
     }
+
+   
+  
 }

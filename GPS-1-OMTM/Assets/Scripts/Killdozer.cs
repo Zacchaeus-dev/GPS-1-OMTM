@@ -15,6 +15,7 @@ public class Killdozer : MonoBehaviour
     public int currentHealth;
     public bool invincible = false;
 
+    public int directPathfinding;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -74,5 +75,42 @@ public class Killdozer : MonoBehaviour
         Debug.Log("Killdozer is dead");
 
         //lose screen
+    }
+
+
+    //FOR PATHFINDING FROM KILLDOZER MIDDLE-GROUND TO A UPPERGROUND
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "[PF] Upper-Ground 1")
+        {
+            directPathfinding = 1;
+            Debug.Log("ENTERING DIRECTPATHING 1 MODE" + directPathfinding);
+        }
+        if (collision.gameObject.tag == "[PF] Upper-Ground 2")
+        {
+            directPathfinding = 2;
+            Debug.Log("ENTERING DIRECTPATHING 2 MODE" + directPathfinding);
+        }
+        if (collision.gameObject.tag == "[PF] Upper-Ground 3")
+        {
+            directPathfinding = 3;
+            Debug.Log("ENTERING DIRECTPATHING 3  MODE" + directPathfinding);
+        }        
+        if (collision.gameObject.tag == "[PF] Upper-Ground 4")
+        {
+            directPathfinding = 4;
+            Debug.Log("ENTERING DIRECTPATHING 4  MODE" + directPathfinding);
+        }
+
+
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "[PF] Upper-Ground 1" || collision.gameObject.tag == "[PF] Upper-Ground 2" || collision.gameObject.tag == "[PF] Upper-Ground 3" || collision.gameObject.tag == "[PF] Upper-Ground 4")
+        {
+            directPathfinding = 0;
+            Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
+        }
     }
 }
