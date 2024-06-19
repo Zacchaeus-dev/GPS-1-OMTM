@@ -111,8 +111,9 @@ public class TroopController2D : MonoBehaviour
         // Set the troop's position to the respawn location
         troop.transform.position = respawnPosition;
 
-        // Reset troop health
+        // Reset troop health and target positions
         troop.currentHealth = troop.maxHealth;
+        troop.UpdateHUD();
 
         // Reactivate the troop
         troop.gameObject.SetActive(true);

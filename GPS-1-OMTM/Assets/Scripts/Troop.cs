@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Troop : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Troop : MonoBehaviour
     public bool invincible = false;
     public bool selected = false;
     public bool stopAction = false;
+
+    public TroopHUD troopHUD;
 
     //Troop stats
     public int maxHealth;
@@ -47,7 +50,25 @@ public class Troop : MonoBehaviour
     private bool ability2OnCooldown = false;
     public float ability1Cooldown = 5f; 
     public float ability2Cooldown = 10f;
+    public float ability1Duration = 0f;
+    public float ability2Duration = 0f;
     public GameObject tankShield;
+
+    // UI 
+    public Image ability1Image;
+    public Image ability1CooldownOverlay;
+    public Image ability1DurationOverlay;
+    public Image ability2Image;
+    public Image ability2CooldownOverlay;
+    public Image ability2DurationOverlay;
+
+    // Cooldown times
+    private float ability1CooldownTimeRemaining;
+    private float ability2CooldownTimeRemaining;
+
+    // Duration times
+    private float ability1DurationTimeRemaining;
+    private float ability2DurationTimeRemaining;
 
     public enum Weapon
     {
@@ -82,6 +103,8 @@ public class Troop : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
 
+        UpdateHUD();
+
         //assign weapon from equipment menu
     }
 
@@ -104,6 +127,7 @@ public class Troop : MonoBehaviour
 
         CheckFalling();
         CheckGround();
+        UpdateAbilityUI();
     }
 
     void HandleAbilitiesInput()
@@ -116,6 +140,15 @@ public class Troop : MonoBehaviour
         {
             StartCoroutine(UseAbility(ability2));
         }
+    }
+
+    public void UpdateHUD()
+    {
+        if (troopHUD != null)
+        {
+            troopHUD.SetHUD(this);
+        }
+
     }
 
     IEnumerator UseAbility(Ability ability)
@@ -149,12 +182,78 @@ public class Troop : MonoBehaviour
         }
     }
 
+    void UpdateAbilityUI()
+    {
+
+        if (ability1OnCooldown)
+        {
+            if (ability1DurationTimeRemaining > 0)
+            {
+                ability1DurationTimeRemaining -= Time.deltaTime;
+                ability1DurationOverlay.fillAmount = 1 - (ability1DurationTimeRemaining / ability1Duration); 
+                ability1DurationOverlay.enabled = true;
+            }
+            else
+            {
+                ability1DurationOverlay.fillAmount = 0;
+                ability1DurationOverlay.enabled = false;
+
+                ability1CooldownTimeRemaining -= Time.deltaTime;
+                ability1CooldownOverlay.fillAmount = 1 - (ability1CooldownTimeRemaining / ability1Cooldown);
+                ability1CooldownOverlay.enabled = true;
+            }
+        }
+        else
+        {
+            ability1CooldownOverlay.fillAmount = 0;
+            ability1CooldownOverlay.enabled = false;
+            ability1DurationOverlay.fillAmount = 0;
+            ability1DurationOverlay.enabled = false;
+        }
+
+        /* //add this when ability 2 is implemented
+        if (ability2OnCooldown)
+        {
+            if (ability2DurationTimeRemaining > 0)
+            {
+                ability2DurationTimeRemaining -= Time.deltaTime;
+                ability2DurationOverlay.fillAmount = 1 - (ability2DurationTimeRemaining / ability2Duration);
+                ability2DurationOverlay.enabled = true;
+            }
+            else
+            {
+                ability2DurationOverlay.fillAmount = 0;
+                ability2DurationOverlay.enabled = false;
+
+                ability2CooldownTimeRemaining -= Time.deltaTime;
+                ability2CooldownOverlay.fillAmount = 1 - (ability2CooldownTimeRemaining / ability2Cooldown);
+                ability2CooldownOverlay.enabled = true;
+            }
+        }
+        else
+        {
+            ability2CooldownOverlay.fillAmount = 0;
+            ability2CooldownOverlay.enabled = false;
+            ability2DurationOverlay.fillAmount = 0;
+            ability2DurationOverlay.enabled = false;
+        }
+        */
+    }
+
     IEnumerator Ability1_DPS()
     {
         ability1OnCooldown = true;
+        ability1CooldownTimeRemaining = ability1Cooldown;
+        ability1DurationTimeRemaining = ability1Duration;
         Debug.Log("DPS Ability 1 Activated");
 
-        //teleportation
+        //berserk
+        //add attack and attack speed 
+        attack += 25;
+        attackSpeed -= 0.5f;
+        yield return new WaitForSeconds(ability1Duration); //add this for all abilities that have a duration
+        attack -= 25;
+        attackSpeed += 0.5f;
 
         yield return new WaitForSeconds(ability1Cooldown);
         ability1OnCooldown = false;
@@ -163,15 +262,11 @@ public class Troop : MonoBehaviour
     IEnumerator Ability2_DPS()
     {
         ability2OnCooldown = true;
+        ability2CooldownTimeRemaining = ability2Cooldown;
+        ability2DurationTimeRemaining = ability2Duration;
         Debug.Log("DPS Ability 2 Activated");
 
-        //berserk
-        //add attack and attack speed 
-        attack += 25;
-        attackSpeed -= 0.5f;
-        yield return new WaitForSeconds(10f); // Ability duration
-        attack -= 25;
-        attackSpeed += 0.5f;
+        //teleportation
 
         yield return new WaitForSeconds(ability2Cooldown);
         ability2OnCooldown = false;
@@ -180,12 +275,14 @@ public class Troop : MonoBehaviour
     IEnumerator Ability1_Tank()
     {
         ability1OnCooldown = true;
+        ability1CooldownTimeRemaining = ability1Cooldown;
+        ability1DurationTimeRemaining = ability1Duration;
         Debug.Log("Tank Ability 1 Activated");
 
         //Wall of olympus
         Vector3 offset = new Vector3(1.5f, 0.1f, 0);
         GameObject TankShield = Instantiate(tankShield, gameObject.transform.position + offset, Quaternion.Euler(0f,0f,0f), null);
-        yield return new WaitForSeconds(20f); 
+        yield return new WaitForSeconds(ability1Duration); 
         Destroy(TankShield);
 
         yield return new WaitForSeconds(ability1Cooldown);
@@ -195,6 +292,8 @@ public class Troop : MonoBehaviour
     IEnumerator Ability2_Tank()
     {
         ability2OnCooldown = true;
+        ability2CooldownTimeRemaining = ability2Cooldown;
+        ability2DurationTimeRemaining = ability2Duration;
         Debug.Log("Tank Ability 2 Activated");
 
         yield return new WaitForSeconds(ability2Cooldown);
@@ -204,6 +303,8 @@ public class Troop : MonoBehaviour
     IEnumerator Ability1_CC()
     {
         ability1OnCooldown = true;
+        ability1CooldownTimeRemaining = ability1Cooldown;
+        ability1DurationTimeRemaining = ability1Duration;
         Debug.Log("CC Ability 1 Activated");
 
         //friday
@@ -216,6 +317,8 @@ public class Troop : MonoBehaviour
     IEnumerator Ability2_CC()
     {
         ability2OnCooldown = true;
+        ability2CooldownTimeRemaining = ability2Cooldown;
+        ability2DurationTimeRemaining = ability2Duration;
         Debug.Log("CC Ability 2 Activated");
 
         yield return new WaitForSeconds(ability2Cooldown);
@@ -225,6 +328,8 @@ public class Troop : MonoBehaviour
     IEnumerator Ability1_Healer()
     {
         ability1OnCooldown = true;
+        ability1CooldownTimeRemaining = ability1Cooldown;
+        ability1DurationTimeRemaining = ability1Duration;
         Debug.Log("Healer Ability 1 Activated");
 
         //golden fleece
@@ -244,6 +349,8 @@ public class Troop : MonoBehaviour
     IEnumerator Ability2_Healer()
     {
         ability2OnCooldown = true;
+        ability2CooldownTimeRemaining = ability2Cooldown;
+        ability2DurationTimeRemaining = ability2Duration;
         Debug.Log("Healer Ability 2 Activated");
 
         yield return new WaitForSeconds(ability2Cooldown);
@@ -289,6 +396,8 @@ public class Troop : MonoBehaviour
         currentHealth -= damage;
         Debug.Log(gameObject.name + " took " + damage + " damage.");
 
+        troopHUD.SetHUD(this);
+
         if (currentHealth <= 0)
         {
             Death();
@@ -318,6 +427,11 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = true;
         }
+        if (collision.gameObject.CompareTag("Killdozer"))
+        {
+            transform.SetParent(collision.transform); //set troop as kd's child
+            Debug.Log("On");
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -329,6 +443,11 @@ public class Troop : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             troopOnGround = false;
+        }
+        if (collision.gameObject.CompareTag("Killdozer"))
+        {
+            transform.SetParent(null); //remove troop from kd's child
+            Debug.Log("Off");
         }
     }
 
