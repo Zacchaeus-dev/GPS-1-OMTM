@@ -16,10 +16,15 @@ public class Killdozer : MonoBehaviour
     public bool invincible = false;
 
     public int directPathfinding;
+
+    public GameObject KDUI;
+    KDHealthUI KDUIScript;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
+        KDUIScript = KDUI.GetComponent<KDHealthUI>();
     }
 
     void Update()
@@ -54,6 +59,7 @@ public class Killdozer : MonoBehaviour
     }
     */
 
+    
     public void TakeDamage(int damage)
     {
         if (invincible)
@@ -68,6 +74,8 @@ public class Killdozer : MonoBehaviour
         {
             Death();
         }
+
+        KDUIScript.KDHealthText();
     }
 
     void Death()

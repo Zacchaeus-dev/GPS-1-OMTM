@@ -70,6 +70,9 @@ public class Troop : MonoBehaviour
     private float ability1DurationTimeRemaining;
     private float ability2DurationTimeRemaining;
 
+    // Animation
+    //public Animator attackAnimation;
+
     public enum Weapon
     {
         None,
@@ -135,6 +138,7 @@ public class Troop : MonoBehaviour
         if (selected && Input.GetKeyDown(KeyCode.Q) && !ability1OnCooldown)
         {
             StartCoroutine(UseAbility(ability1));
+            //attackAnimation.SetBool("Attack", true);
         }
         if (selected && Input.GetKeyDown(KeyCode.W) && !ability2OnCooldown)
         {
@@ -257,6 +261,8 @@ public class Troop : MonoBehaviour
 
         yield return new WaitForSeconds(ability1Cooldown);
         ability1OnCooldown = false;
+
+        
     }
 
     IEnumerator Ability2_DPS()

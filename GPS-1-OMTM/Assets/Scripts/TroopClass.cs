@@ -30,6 +30,9 @@ public class TroopClass : MonoBehaviour
     public RaycastHit2D hit;
     public Transform killdozer;
 
+    float timer;
+    public Animator attackAnimation;
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -850,12 +853,13 @@ public class TroopClass : MonoBehaviour
         isMoving = true;
     }
 
-    float timer;
+
     public void Update()
     {
         if (isMoving)
         {
             Move();
+            attackAnimation.SetBool("Attack", false);
         }
         if (canClimb)
         {

@@ -49,13 +49,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincible: 0
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 40
+  currentHealth: 40
   attack: 10
   attackSpeed: 1
   attackRange: 1
   moveSpeed: 2
-  detectionRange: 10
+  detectionRange: 20
   troopStoppingDistance: 1
   potentialTargets:
   - {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
   killdozerStoppingDistance: 6.5
   enemy: {fileID: 6599155213906096576}
   DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
-  NormalColor: {r: 0, g: 0, b: 0, a: 1}
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!212 &6599155213906096576
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -107,8 +107,8 @@ SpriteRenderer:
   m_SortingLayerID: -1310919259
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: ee545250fb7cf2d409acaac9245594bc, type: 3}
+  m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -160,7 +160,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

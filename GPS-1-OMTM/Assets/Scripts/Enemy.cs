@@ -31,6 +31,7 @@ public class Enemy: MonoBehaviour
     public Color NormalColor;
     float timer;
     bool tookdamage;
+    Vector3 normalScale;
 
     private void Start()
     {
@@ -49,6 +50,8 @@ public class Enemy: MonoBehaviour
             potentialTargets.Add(killdozer.transform);
             killdozerTransform = killdozer.transform;
         }
+
+        normalScale = transform.localScale;
     }
 
     void Update()
@@ -58,11 +61,15 @@ public class Enemy: MonoBehaviour
 
         if (tookdamage == true)
         {
+            
             enemy.color = DamagedColor;
             timer = timer + Time.deltaTime;
-            if (timer >= 0.5)
+            transform.localScale += transform.localScale / 1000;
+
+            if (timer >= 0.3)
             {
                 enemy.color = NormalColor;
+                transform.localScale = normalScale;
                 timer = 0;
                 tookdamage = false;
             }

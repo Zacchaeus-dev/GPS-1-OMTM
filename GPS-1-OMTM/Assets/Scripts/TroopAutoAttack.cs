@@ -14,6 +14,7 @@ public class TroopAutoAttack : MonoBehaviour
     private float lastAttackTime = 0f;
     private GameObject targetEnemy;
     private Rigidbody2D rb;
+    public Animator attackAnimation; 
 
     void Start()
     {
@@ -94,6 +95,9 @@ public class TroopAutoAttack : MonoBehaviour
                 targetEnemy = null; // Lost range, find another target
             }
         }
+
+        //chg gun up sprite
+        attackAnimation.SetBool("Attack", true);
     }
 
     public void SetTargetEnemy(GameObject enemy)
