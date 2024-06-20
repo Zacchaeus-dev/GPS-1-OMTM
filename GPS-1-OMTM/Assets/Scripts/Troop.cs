@@ -427,11 +427,13 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = true;
         }
-        if (collision.gameObject.CompareTag("Killdozer"))
-        {
-            transform.SetParent(collision.transform); //set troop as kd's child
-            //Debug.Log("On");
-        }
+            /*if (collision.gameObject.CompareTag("Killdozer"))
+            {
+                transform.SetParent(collision.transform); //set troop as kd's child
+                //Debug.Log("On");
+            }*/
+
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -444,20 +446,20 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = false;
         }
-        if (collision.gameObject.CompareTag("Killdozer"))
+        /*if (collision.gameObject.CompareTag("Killdozer"))
         {
             transform.SetParent(null); //remove troop from kd's child
             //Debug.Log("Off");
-        }
+        }*/
     }
 
     void HandleDropOffInput()
     {
-        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
+        /*if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
         {
             Debug.Log("Drop Off");
             StartCoroutine(DisableAndEnableColliders());
-        }
+        }*/
     }
 
     IEnumerator DisableAndEnableColliders()

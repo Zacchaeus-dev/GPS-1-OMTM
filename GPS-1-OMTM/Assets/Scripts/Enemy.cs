@@ -23,7 +23,7 @@ public class Enemy: MonoBehaviour
     private bool isAttacking;
 
     public Transform killdozerTransform; //killdozer position
-    public float killdozerStoppingDistance = 3.0f;
+    public float killdozerStoppingDistance = 5.0f;
 
     private void Start()
     {

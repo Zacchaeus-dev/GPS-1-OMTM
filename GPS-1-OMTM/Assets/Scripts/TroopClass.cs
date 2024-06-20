@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using UnityEngine;
 
 public class TroopClass : MonoBehaviour
@@ -22,8 +23,11 @@ public class TroopClass : MonoBehaviour
     public GameObject TroopController2D;
     TroopController2D controllerScript;
 
-    Vector2 mousePosition = new Vector2(10000,10000);
-    RaycastHit2D hit;
+    public GameObject OnKDCollider;
+    OnKDDetector OnKDScript;
+
+    public Vector2 mousePosition = new Vector2(10000,10000);
+    public RaycastHit2D hit;
     public Transform killdozer;
 
     private void Start()
@@ -31,6 +35,7 @@ public class TroopClass : MonoBehaviour
         mainCamera = Camera.main;
         rb = gameObject.GetComponent<Rigidbody2D>();
         controllerScript = TroopController2D.GetComponent<TroopController2D>();
+        OnKDScript = OnKDCollider.GetComponent<OnKDDetector>();
     }
 
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
@@ -71,7 +76,7 @@ public class TroopClass : MonoBehaviour
                     {
                         if (onPlatform != "Ground")
                         {
-                            Debug.Log("WTF");
+
                             FindAndGoToNearestVertically1(mousePosition);
                         }
                     }
@@ -551,6 +556,7 @@ public class TroopClass : MonoBehaviour
 
             
         }
+        
     }
 
     void FindAndGoToNearestVertically1(Vector2 mousePosition)
@@ -745,6 +751,7 @@ public class TroopClass : MonoBehaviour
             onPlatform = "KD Ground";
             SetTroopTargetPosition(mousePosition, hit);
         }
+
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -752,46 +759,46 @@ public class TroopClass : MonoBehaviour
         {
             if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 1")
             {
-
+                
                 canClimb = false;
-                isMoving = true;
+                //isMoving = true;
 
                 nearestVert = null;
                 onPlatform = "Upper-Ground 1";
-                SetTroopTargetPosition(mousePosition, hit);
+                //SetTroopTargetPosition(mousePosition, hit);
 
             }
             if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 2")
             {
 
                 canClimb = false;
-                isMoving = true;
+                //isMoving = true;
 
                 nearestVert = null;
                 onPlatform = "Upper-Ground 2";
-                SetTroopTargetPosition(mousePosition, hit);
+                //SetTroopTargetPosition(mousePosition, hit);
 
             }
             if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 3")
             {
 
                 canClimb = false;
-                isMoving = true;
+                //isMoving = true;
 
                 nearestVert = null;
                 onPlatform = "Upper-Ground 3";
-                SetTroopTargetPosition(mousePosition, hit);
+                //SetTroopTargetPosition(mousePosition, hit);
 
             }
             if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 4")
             {
 
                 canClimb = false;
-                isMoving = true;
+                //isMoving = true;
 
                 nearestVert = null;
                 onPlatform = "Upper-Ground 4";
-                SetTroopTargetPosition(mousePosition, hit);
+                //SetTroopTargetPosition(mousePosition, hit);
 
             }
         }
@@ -802,12 +809,13 @@ public class TroopClass : MonoBehaviour
         {
            
             canClimb = false;
-            isMoving = true;
+           //isMoving = true;
 
             nearestVert = null;
             onPlatform = "KD Middle-Ground";
-            SetTroopTargetPosition(mousePosition, hit);
-            
+            FindAndGoToNearestVerticallyKD(mousePosition);
+           //SetTroopTargetPosition(mousePosition, hit);
+
         }
 
 
@@ -842,6 +850,7 @@ public class TroopClass : MonoBehaviour
         isMoving = true;
     }
 
+    float timer;
     public void Update()
     {
         if (isMoving)
@@ -852,6 +861,24 @@ public class TroopClass : MonoBehaviour
         {
             ClimbAndMove();
         }
+
+        // To move with Killdozer
+        if (OnKDScript.onKD == true) // || onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4")
+        {
+            transform.SetParent(killdozer);
+        }
+        else
+        {
+            transform.SetParent(null);
+        }
+
+/*        timer = timer + Time.deltaTime;
+        if (timer >= 1)
+        {
+            Debug.Log("WHOOOOO");
+            Move();
+            timer = 0;
+        }*/
     }
 
     void Move()

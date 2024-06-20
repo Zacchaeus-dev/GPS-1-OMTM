@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class TroopController2D : MonoBehaviour
@@ -32,7 +33,7 @@ public class TroopController2D : MonoBehaviour
     void Update()
     {
         HandleMouseInput();
-        HandleEnemySelection();
+        //HandleEnemySelection();
     }
 
     void HandleMouseInput()
@@ -63,7 +64,7 @@ public class TroopController2D : MonoBehaviour
                 selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
             }
 
-            Debug.Log(hit.collider.gameObject);
+            //Debug.Log(hit.collider.gameObject);
         }
     }
 
@@ -80,8 +81,8 @@ public class TroopController2D : MonoBehaviour
         selectedTroop.GetComponent<Troop>().selected = false;
     }
 
-
-    void HandleEnemySelection()
+ 
+/*    void HandleEnemySelection()
     {
         if (selectedTroop != null && Input.GetKeyDown(KeyCode.A))
         {
@@ -95,7 +96,7 @@ public class TroopController2D : MonoBehaviour
                 Debug.Log("Enemy targeted: " + enemy.name);
             }
         }
-    }
+    }*/
 
     public void HandleRespawn(Troop troop)
     {
@@ -119,6 +120,9 @@ public class TroopController2D : MonoBehaviour
         troop.gameObject.SetActive(true);
 
         Debug.Log(troop.gameObject.name + " has respawned.");
+
+        //reset mouse position
+        troop.GetComponent<TroopClass>().mousePosition = killdozer.position;
     }
 }
 

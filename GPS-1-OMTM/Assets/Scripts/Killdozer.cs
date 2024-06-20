@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Killdozer : MonoBehaviour
 {
-    public float speed = 2f;
+    public float speed;
     public Transform destination; // Destination point
 
     private Rigidbody2D rb;
@@ -88,32 +88,33 @@ public class Killdozer : MonoBehaviour
         if (collision.gameObject.tag == "[PF] Upper-Ground 1")
         {
             directPathfinding = 1;
-            Debug.Log("ENTERING DIRECTPATHING 1 MODE" + directPathfinding);
+            //Debug.Log("ENTERING DIRECTPATHING 1 MODE" + directPathfinding);
         }
         if (collision.gameObject.tag == "[PF] Upper-Ground 2")
         {
             directPathfinding = 2;
-            Debug.Log("ENTERING DIRECTPATHING 2 MODE" + directPathfinding);
+            //Debug.Log("ENTERING DIRECTPATHING 2 MODE" + directPathfinding);
         }
         if (collision.gameObject.tag == "[PF] Upper-Ground 3")
         {
             directPathfinding = 3;
-            Debug.Log("ENTERING DIRECTPATHING 3  MODE" + directPathfinding);
+            //Debug.Log("ENTERING DIRECTPATHING 3  MODE" + directPathfinding);
         }        
         if (collision.gameObject.tag == "[PF] Upper-Ground 4")
         {
             directPathfinding = 4;
-            Debug.Log("ENTERING DIRECTPATHING 4  MODE" + directPathfinding);
+            //Debug.Log("ENTERING DIRECTPATHING 4  MODE" + directPathfinding);
         }
 
-
     }
+
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "[PF] Upper-Ground 1" || collision.gameObject.tag == "[PF] Upper-Ground 2" || collision.gameObject.tag == "[PF] Upper-Ground 3" || collision.gameObject.tag == "[PF] Upper-Ground 4")
         {
             directPathfinding = 0;
-            Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
+            //Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
         }
     }
 }

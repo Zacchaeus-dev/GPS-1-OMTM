@@ -62,7 +62,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   killdozerTransform: {fileID: 0}
-  killdozerStoppingDistance: 5.5
+  killdozerStoppingDistance: 6.5
 --- !u!212 &6599155213906096576
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
