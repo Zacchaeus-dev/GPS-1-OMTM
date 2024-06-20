@@ -71,7 +71,7 @@ public class Troop : MonoBehaviour
     private float ability2DurationTimeRemaining;
 
     // Animation
-    //public Animator attackAnimation;
+    public Animator attackAnimation;
 
     public enum Weapon
     {
@@ -138,7 +138,7 @@ public class Troop : MonoBehaviour
         if (selected && Input.GetKeyDown(KeyCode.Q) && !ability1OnCooldown)
         {
             StartCoroutine(UseAbility(ability1));
-            //attackAnimation.SetBool("Attack", true);
+            
         }
         if (selected && Input.GetKeyDown(KeyCode.W) && !ability2OnCooldown)
         {
@@ -255,7 +255,9 @@ public class Troop : MonoBehaviour
         //add attack and attack speed 
         attack += 25;
         attackSpeed -= 0.5f;
+        attackAnimation.SetBool("Berserk", true);
         yield return new WaitForSeconds(ability1Duration); //add this for all abilities that have a duration
+        attackAnimation.SetBool("Berserk", false);
         attack -= 25;
         attackSpeed += 0.5f;
 
