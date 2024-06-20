@@ -394,7 +394,7 @@ public class Troop : MonoBehaviour
         }
 
         currentHealth -= damage;
-        Debug.Log(gameObject.name + " took " + damage + " damage.");
+        //Debug.Log(gameObject.name + " took " + damage + " damage.");
 
         troopHUD.SetHUD(this);
 
@@ -430,7 +430,7 @@ public class Troop : MonoBehaviour
         if (collision.gameObject.CompareTag("Killdozer"))
         {
             transform.SetParent(collision.transform); //set troop as kd's child
-            Debug.Log("On");
+            //Debug.Log("On");
         }
     }
 
@@ -447,26 +447,27 @@ public class Troop : MonoBehaviour
         if (collision.gameObject.CompareTag("Killdozer"))
         {
             transform.SetParent(null); //remove troop from kd's child
-            Debug.Log("Off");
+            //Debug.Log("Off");
         }
     }
 
     void HandleDropOffInput()
     {
-        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)  //only drop off the selected troop if its on a platform
+        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
         {
             Debug.Log("Drop Off");
-            boxCollider.enabled = false;
-            capsuleCollider.enabled = false;
-
-            rb.velocity = new Vector2(0, -10);
-            StartCoroutine(EnableCollider());
+            StartCoroutine(DisableAndEnableColliders());
         }
     }
 
-    IEnumerator EnableCollider()
+    IEnumerator DisableAndEnableColliders()
     {
-        yield return new WaitForSeconds(0.01f);
+        boxCollider.enabled = false;
+        capsuleCollider.enabled = false;
+
+        rb.velocity = new Vector2(0, -30);
+
+        yield return new WaitForSeconds(0.05f);
 
         boxCollider.enabled = true;
         capsuleCollider.enabled = true;

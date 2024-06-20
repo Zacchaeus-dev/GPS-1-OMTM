@@ -34,7 +34,10 @@ public class Killdozer : MonoBehaviour
             if (Vector2.Distance(transform.position, destination.position) < 0.1f)
             {
                 Debug.Log("Killdozer has reached the destination.");
-                isMoving = false; 
+                isMoving = false;
+
+                //win screen
+                SceneManager.LoadScene("WinScreen");
             }
         }
     }
@@ -71,10 +74,10 @@ public class Killdozer : MonoBehaviour
     {
         // Put death animation or effects
 
-        SceneManager.LoadScene(3);
         Debug.Log("Killdozer is dead");
 
         //lose screen
+        SceneManager.LoadScene("GameOver");
     }
 
 

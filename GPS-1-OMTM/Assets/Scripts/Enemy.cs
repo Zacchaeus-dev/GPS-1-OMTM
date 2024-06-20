@@ -87,7 +87,7 @@ public class Enemy: MonoBehaviour
             }
             else if (!isAttacking) // otherwise stop and attack
             {
-                Debug.Log("Attacking target");
+                //Debug.Log("Attacking target");
                 isAttacking = true;
                 StartCoroutine(AttackTarget());
             }
