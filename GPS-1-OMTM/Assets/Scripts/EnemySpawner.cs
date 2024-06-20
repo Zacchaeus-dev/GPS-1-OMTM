@@ -18,8 +18,9 @@ public class EnemySpawner : MonoBehaviour
 
     void CheckKilldozerDistance()
     {
-        foreach (Transform spawnPoint in spawnPoints)
+        for(int i = spawnPoints.Count - 1; i >= 0; i--)
         {
+            Transform spawnPoint = spawnPoints[i];
             float distanceToKilldozer = Vector3.Distance(spawnPoint.position, killdozer.transform.position);
 
             if (distanceToKilldozer <= activationRange && canSpawn)
@@ -27,6 +28,12 @@ public class EnemySpawner : MonoBehaviour
                 SpawnEnemy(spawnPoint);
                 canSpawn = false;
                 StartCoroutine(SpawnDelay(spawnPoint));
+            }
+
+            // Remove spawn point if the killdozer has passed it
+            if (killdozer.transform.position.x > spawnPoint.position.x)
+            {
+                spawnPoints.RemoveAt(i);
             }
         }
     }
