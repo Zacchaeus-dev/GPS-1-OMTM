@@ -25,6 +25,13 @@ public class Enemy: MonoBehaviour
     public Transform killdozerTransform; //killdozer position
     public float killdozerStoppingDistance = 5.0f;
 
+    //visual effect from damaged
+    public SpriteRenderer enemy;
+    public Color DamagedColor;
+    public Color NormalColor;
+    float timer;
+    bool tookdamage;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -48,6 +55,18 @@ public class Enemy: MonoBehaviour
     {
         FindClosestTarget();
         MoveTowardsTarget();
+
+        if (tookdamage == true)
+        {
+            enemy.color = DamagedColor;
+            timer = timer + Time.deltaTime;
+            if (timer >= 0.5)
+            {
+                enemy.color = NormalColor;
+                timer = 0;
+                tookdamage = false;
+            }
+        }
     }
 
     void FindClosestTarget()
@@ -156,7 +175,10 @@ public class Enemy: MonoBehaviour
         {
             Death();
         }
+
+        tookdamage = true;
     }
+
 
     void Death()
     {

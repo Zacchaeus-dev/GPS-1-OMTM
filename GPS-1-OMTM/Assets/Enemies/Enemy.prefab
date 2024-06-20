@@ -63,6 +63,9 @@ MonoBehaviour:
   - {fileID: 0}
   killdozerTransform: {fileID: 0}
   killdozerStoppingDistance: 6.5
+  enemy: {fileID: 6599155213906096576}
+  DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
+  NormalColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!212 &6599155213906096576
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -157,7 +160,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

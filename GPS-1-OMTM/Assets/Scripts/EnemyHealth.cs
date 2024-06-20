@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
     public int health = 100;
+
+
 
     public void TakeDamage(int damage)
     {
@@ -13,6 +16,8 @@ public class EnemyHealth : MonoBehaviour
         {
             Die();
         }
+
+
     }
 
     void Die()
@@ -20,5 +25,7 @@ public class EnemyHealth : MonoBehaviour
         // Handle enemy death
         Destroy(gameObject);
     }
+
+
 }
 

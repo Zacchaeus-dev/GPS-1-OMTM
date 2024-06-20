@@ -918,7 +918,7 @@ Transform:
   m_GameObject: {fileID: 282516944}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.714, y: -2.735, z: 0}
+  m_LocalPosition: {x: 5.714, y: -2.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -956,7 +956,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0054192543, y: -0.07993531}
+  m_Offset: {x: -0.0054192543, y: -0.1156}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -967,7 +967,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9891615, y: 0.037136555}
+  m_Size: {x: 0.9891615, y: 0.1086}
   m_EdgeRadius: 0
 --- !u!1 &308940410
 GameObject:
@@ -4280,7 +4280,7 @@ Transform:
   m_GameObject: {fileID: 814725737}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.714, y: -2.735, z: 0}
+  m_LocalPosition: {x: 5.714, y: -2.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4318,7 +4318,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0054192543, y: -0.07993531}
+  m_Offset: {x: -0.0054192543, y: -0.1156}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4329,7 +4329,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9891615, y: 0.037136555}
+  m_Size: {x: 0.9891615, y: 0.1086}
   m_EdgeRadius: 0
 --- !u!1 &816666624
 GameObject:
@@ -5793,7 +5793,7 @@ Transform:
   m_GameObject: {fileID: 930037850}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.714, y: -2.735, z: 0}
+  m_LocalPosition: {x: 5.714, y: -2.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5831,7 +5831,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0054192543, y: -0.07993531}
+  m_Offset: {x: -0.0054192543, y: -0.1156}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5842,7 +5842,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9891615, y: 0.037136555}
+  m_Size: {x: 0.9891615, y: 0.1086}
   m_EdgeRadius: 0
 --- !u!1 &949010931
 GameObject:
@@ -7727,7 +7727,7 @@ Transform:
   m_GameObject: {fileID: 1439843192}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.714, y: -2.735, z: 0}
+  m_LocalPosition: {x: 5.714, y: -2.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7765,7 +7765,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0054192543, y: -0.07993531}
+  m_Offset: {x: -0.0054192543, y: -0.1156}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7776,7 +7776,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9891615, y: 0.037136555}
+  m_Size: {x: 0.9891615, y: 0.1086}
   m_EdgeRadius: 0
 --- !u!1 &1531940488
 GameObject:
@@ -10421,6 +10421,38 @@ PrefabInstance:
     - target: {fileID: 4064590977300128009, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: NormalColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: NormalColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: NormalColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: NormalColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: DamagedColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: DamagedColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: DamagedColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4530887168777485784, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
+      propertyPath: DamagedColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5254630746095803410, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
       propertyPath: m_Name
