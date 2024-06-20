@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public float activationRange = 10f; // Range within which the spawner activates
     public List<Transform> spawnPoints;
     private bool canSpawn = true;
+    public float killdozerOffset = 2.5f;
 
     void Update()
     {
@@ -31,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
             }
 
             // Remove spawn point if the killdozer has passed it
-            if (killdozer.transform.position.x > spawnPoint.position.x)
+            if (killdozer.transform.position.x > spawnPoint.position.x - killdozerOffset)
             {
                 spawnPoints.RemoveAt(i);
             }
