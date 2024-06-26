@@ -7,11 +7,12 @@ public class EnergySystem : MonoBehaviour
     public float maxEnergy = 100f; // Maximum energy value
     public float regenRate = 1f; // Energy regeneration rate per second
 
-    private float currentEnergy;
+    public float currentEnergy;
     public Text energyText; // Reference to UI Text to display energy
 
     void Start()
     {
+        Debug.Log(gameObject.name);
         currentEnergy = 50f;
     }
 

@@ -44,34 +44,29 @@ public class Troop : MonoBehaviour
     public float fallDamageMultiplier = 5f;
 
     // Abilities
-    public Ability ability1 = Ability.None;
-    public Ability ability2 = Ability.None;
-    private bool ability1OnCooldown = false;
-    private bool ability2OnCooldown = false;
-    public float ability1Cooldown = 5f; 
-    public float ability2Cooldown = 10f;
-    public float ability1Duration = 0f;
-    public float ability2Duration = 0f;
+    public Ultimate ultimate = Ultimate.None;
+    private bool ultimateOnCooldown = false;
+    public float ultimateCooldown = 5f; 
+    public float ultimateDuration = 0f;
     public GameObject tankShield;
 
     // UI 
-    public Image ability1Image;
-    public Image ability1CooldownOverlay;
-    public Image ability1DurationOverlay;
-    public Image ability2Image;
-    public Image ability2CooldownOverlay;
-    public Image ability2DurationOverlay;
+    public Image ultimateImage;
+    public Image ultimateCooldownOverlay;
+    public Image ultimateDurationOverlay;
+    public GameObject ultimateReady;
 
-    // Cooldown times
-    private float ability1CooldownTimeRemaining;
-    private float ability2CooldownTimeRemaining;
+    // Cooldown time
+    private float ultimateCooldownTimeRemaining;
 
-    // Duration times
-    private float ability1DurationTimeRemaining;
-    private float ability2DurationTimeRemaining;
+    // Duration time
+    private float ultimateDurationTimeRemaining;
 
     // Animation
     public Animator attackAnimation;
+
+    // Highlight
+    public GameObject highlight;
 
     public enum Weapon
     {
@@ -86,17 +81,13 @@ public class Troop : MonoBehaviour
         Weapon2_Healer
     }
 
-    public enum Ability
+    public enum Ultimate
     {
         None,
-        Ability1_DPS,
-        Ability2_DPS,
-        Ability1_Tank,
-        Ability2_Tank,
-        Ability1_CC,
-        Ability2_CC,
-        Ability1_Healer,
-        Ability2_Healer
+        Ultimate_DPS,
+        Ultimate_Tank,
+        Ultimate_CC,
+        Ultimate_Healer,
     }
 
     void Start()
@@ -130,19 +121,14 @@ public class Troop : MonoBehaviour
 
         CheckFalling();
         CheckGround();
-        UpdateAbilityUI();
+        UpdateUltimateUI();
     }
 
     void HandleAbilitiesInput()
     {
-        if (selected && Input.GetKeyDown(KeyCode.Q) && !ability1OnCooldown)
+        if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
         {
-            StartCoroutine(UseAbility(ability1));
-            
-        }
-        if (selected && Input.GetKeyDown(KeyCode.W) && !ability2OnCooldown)
-        {
-            StartCoroutine(UseAbility(ability2));
+            StartCoroutine(UseUltimate(ultimate));    //use the ultimate set in the inspector 
         }
     }
 
@@ -155,190 +141,115 @@ public class Troop : MonoBehaviour
 
     }
 
-    IEnumerator UseAbility(Ability ability)
+    IEnumerator UseUltimate(Ultimate _ultimate)
     {
-        switch (ability)
+        switch (_ultimate)
         {
-            case Ability.Ability1_DPS:
-                yield return StartCoroutine(Ability1_DPS());
+            case Ultimate.Ultimate_DPS:
+                yield return StartCoroutine(Ultimate_DPS());
                 break;
-            case Ability.Ability2_DPS:
-                yield return StartCoroutine(Ability2_DPS());
+            case Ultimate.Ultimate_Tank:
+                yield return StartCoroutine(Ultimate_Tank());
                 break;
-            case Ability.Ability1_Tank:
-                yield return StartCoroutine(Ability1_Tank());
+            case Ultimate.Ultimate_CC:
+                yield return StartCoroutine(Ultimate_CC());
                 break;
-            case Ability.Ability2_Tank:
-                yield return StartCoroutine(Ability2_Tank());
-                break;
-            case Ability.Ability1_CC:
-                yield return StartCoroutine(Ability1_CC());
-                break;
-            case Ability.Ability2_CC:
-                yield return StartCoroutine(Ability2_CC());
-                break;
-            case Ability.Ability1_Healer:
-                yield return StartCoroutine(Ability1_Healer());
-                break;
-            case Ability.Ability2_Healer:
-                yield return StartCoroutine(Ability2_Healer());
+            case Ultimate.Ultimate_Healer:
+                yield return StartCoroutine(Ultimate_Healer());
                 break;
         }
     }
 
-    void UpdateAbilityUI()
+    void UpdateUltimateUI()
     {
 
-        if (ability1OnCooldown)
+        if (ultimateOnCooldown)
         {
-            if (ability1DurationTimeRemaining > 0)
+            if (ultimateDurationTimeRemaining > 0)
             {
-                ability1DurationTimeRemaining -= Time.deltaTime;
-                ability1DurationOverlay.fillAmount = 1 - (ability1DurationTimeRemaining / ability1Duration); 
-                ability1DurationOverlay.enabled = true;
+                ultimateReady.SetActive(false);
+                ultimateDurationTimeRemaining -= Time.deltaTime;
+                ultimateDurationOverlay.fillAmount = 1 - (ultimateDurationTimeRemaining / ultimateDuration);
+                ultimateDurationOverlay.enabled = true;
             }
             else
             {
-                ability1DurationOverlay.fillAmount = 0;
-                ability1DurationOverlay.enabled = false;
+                ultimateDurationOverlay.fillAmount = 0;
+                ultimateDurationOverlay.enabled = false;
 
-                ability1CooldownTimeRemaining -= Time.deltaTime;
-                ability1CooldownOverlay.fillAmount = 1 - (ability1CooldownTimeRemaining / ability1Cooldown);
-                ability1CooldownOverlay.enabled = true;
+                ultimateCooldownTimeRemaining -= Time.deltaTime;
+                ultimateCooldownOverlay.fillAmount = 1 - (ultimateCooldownTimeRemaining / ultimateCooldown);
+                ultimateCooldownOverlay.enabled = true;
             }
         }
         else
         {
-            ability1CooldownOverlay.fillAmount = 0;
-            ability1CooldownOverlay.enabled = false;
-            ability1DurationOverlay.fillAmount = 0;
-            ability1DurationOverlay.enabled = false;
+            ultimateCooldownOverlay.fillAmount = 0;
+            ultimateCooldownOverlay.enabled = false;
+            ultimateDurationOverlay.fillAmount = 0;
+            ultimateDurationOverlay.enabled = false;
+            ultimateReady.SetActive(true);
         }
-
-        /* //add this when ability 2 is implemented
-        if (ability2OnCooldown)
-        {
-            if (ability2DurationTimeRemaining > 0)
-            {
-                ability2DurationTimeRemaining -= Time.deltaTime;
-                ability2DurationOverlay.fillAmount = 1 - (ability2DurationTimeRemaining / ability2Duration);
-                ability2DurationOverlay.enabled = true;
-            }
-            else
-            {
-                ability2DurationOverlay.fillAmount = 0;
-                ability2DurationOverlay.enabled = false;
-
-                ability2CooldownTimeRemaining -= Time.deltaTime;
-                ability2CooldownOverlay.fillAmount = 1 - (ability2CooldownTimeRemaining / ability2Cooldown);
-                ability2CooldownOverlay.enabled = true;
-            }
-        }
-        else
-        {
-            ability2CooldownOverlay.fillAmount = 0;
-            ability2CooldownOverlay.enabled = false;
-            ability2DurationOverlay.fillAmount = 0;
-            ability2DurationOverlay.enabled = false;
-        }
-        */
     }
 
-    IEnumerator Ability1_DPS()
+    IEnumerator Ultimate_DPS()
     {
-        ability1OnCooldown = true;
-        ability1CooldownTimeRemaining = ability1Cooldown;
-        ability1DurationTimeRemaining = ability1Duration;
-        Debug.Log("DPS Ability 1 Activated");
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("DPS Ultimate Activated");
 
         //berserk
         //add attack and attack speed 
         attack += 25;
         attackSpeed -= 0.5f;
         attackAnimation.SetBool("Berserk", true);
-        yield return new WaitForSeconds(ability1Duration); //add this for all abilities that have a duration
+        yield return new WaitForSeconds(ultimateDuration); //add this for all abilities that have a duration
         attackAnimation.SetBool("Berserk", false);
         attack -= 25;
         attackSpeed += 0.5f;
 
-        yield return new WaitForSeconds(ability1Cooldown);
-        ability1OnCooldown = false;
-
-        
+        yield return new WaitForSeconds(ultimateCooldown);
+        ultimateOnCooldown = false;    
     }
 
-    IEnumerator Ability2_DPS()
+    IEnumerator Ultimate_Tank()
     {
-        ability2OnCooldown = true;
-        ability2CooldownTimeRemaining = ability2Cooldown;
-        ability2DurationTimeRemaining = ability2Duration;
-        Debug.Log("DPS Ability 2 Activated");
-
-        //teleportation
-
-        yield return new WaitForSeconds(ability2Cooldown);
-        ability2OnCooldown = false;
-    }
-
-    IEnumerator Ability1_Tank()
-    {
-        ability1OnCooldown = true;
-        ability1CooldownTimeRemaining = ability1Cooldown;
-        ability1DurationTimeRemaining = ability1Duration;
-        Debug.Log("Tank Ability 1 Activated");
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("Tank Ultimate Activated");
 
         //Wall of olympus
         Vector3 offset = new Vector3(1.5f, 0.1f, 0);
         GameObject TankShield = Instantiate(tankShield, gameObject.transform.position + offset, Quaternion.Euler(0f,0f,0f), null);
-        yield return new WaitForSeconds(ability1Duration); 
+        yield return new WaitForSeconds(ultimateDuration); 
         Destroy(TankShield);
 
-        yield return new WaitForSeconds(ability1Cooldown);
-        ability1OnCooldown = false;
+        yield return new WaitForSeconds(ultimateCooldown);
+        ultimateOnCooldown = false;
     }
 
-    IEnumerator Ability2_Tank()
+    IEnumerator Ultimate_CC()
     {
-        ability2OnCooldown = true;
-        ability2CooldownTimeRemaining = ability2Cooldown;
-        ability2DurationTimeRemaining = ability2Duration;
-        Debug.Log("Tank Ability 2 Activated");
-
-        yield return new WaitForSeconds(ability2Cooldown);
-        ability2OnCooldown = false;
-    }
-
-    IEnumerator Ability1_CC()
-    {
-        ability1OnCooldown = true;
-        ability1CooldownTimeRemaining = ability1Cooldown;
-        ability1DurationTimeRemaining = ability1Duration;
-        Debug.Log("CC Ability 1 Activated");
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("CC Ultimate Activated");
 
         //friday
         yield return new WaitForSeconds(3f);
 
-        yield return new WaitForSeconds(ability1Cooldown);
-        ability1OnCooldown = false;
+        yield return new WaitForSeconds(ultimateCooldown);
+        ultimateOnCooldown = false;
     }
 
-    IEnumerator Ability2_CC()
+    IEnumerator Ultimate_Healer()
     {
-        ability2OnCooldown = true;
-        ability2CooldownTimeRemaining = ability2Cooldown;
-        ability2DurationTimeRemaining = ability2Duration;
-        Debug.Log("CC Ability 2 Activated");
-
-        yield return new WaitForSeconds(ability2Cooldown);
-        ability2OnCooldown = false;
-    }
-
-    IEnumerator Ability1_Healer()
-    {
-        ability1OnCooldown = true;
-        ability1CooldownTimeRemaining = ability1Cooldown;
-        ability1DurationTimeRemaining = ability1Duration;
-        Debug.Log("Healer Ability 1 Activated");
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("Healer Ultimate Activated");
 
         //golden fleece
         /*
@@ -350,19 +261,8 @@ public class Troop : MonoBehaviour
         }
         */
 
-        yield return new WaitForSeconds(ability1Cooldown);
-        ability1OnCooldown = false;
-    }
-
-    IEnumerator Ability2_Healer()
-    {
-        ability2OnCooldown = true;
-        ability2CooldownTimeRemaining = ability2Cooldown;
-        ability2DurationTimeRemaining = ability2Duration;
-        Debug.Log("Healer Ability 2 Activated");
-
-        yield return new WaitForSeconds(ability2Cooldown);
-        ability2OnCooldown = false;
+        yield return new WaitForSeconds(ultimateCooldown);
+        ultimateOnCooldown = false;
     }
 
     void CheckFalling()

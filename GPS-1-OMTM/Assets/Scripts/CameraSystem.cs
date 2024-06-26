@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -8,8 +9,25 @@ public class CameraSystem : MonoBehaviour
     public GameObject killdozer; // Reference to the Killdozer
     public float maxDistanceFromKilldozer = 50f; // Maximum allowed distance from the Killdozer
 
+    // Zoom feature
+    public bool isZoomedOut = false;
+    private float originalCameraSize;
+    public float zoomOutSize = 50f; 
+    public CinemachineVirtualCamera vcam;
+    public TroopController2D troopController2D;
+
+    private void Start()
+    {
+        var camera = Camera.main;
+        var brain = (camera == null) ? null : camera.GetComponent<CinemachineBrain>();
+        vcam = (brain == null) ? null : brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        originalCameraSize = vcam.m_Lens.OrthographicSize;
+    }
+
     void Update()
     {
+        HandleZoomInput();
+
         if (cameraMovement)
         {
             Vector3 inputDir = new Vector3(0, 0, 0);
@@ -44,5 +62,28 @@ public class CameraSystem : MonoBehaviour
                 transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
             }
         }
+    }
+
+    void HandleZoomInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ToggleZoom();
+        }
+    }
+
+    public void ToggleZoom()
+    {
+        if (isZoomedOut)
+        {
+            vcam.m_Lens.OrthographicSize = originalCameraSize; //zoom in
+            Time.timeScale = 1f;
+        }
+        else if (troopController2D.selectedTroop != null)
+        {
+            vcam.m_Lens.OrthographicSize = zoomOutSize; //zoom out
+            Time.timeScale = 0.75f; //affects animation speed, change their update mode in animators to unscaled time to prevent this code affecting them
+        }
+        isZoomedOut = !isZoomedOut;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 //using UnityEditor.Timeline;
 using UnityEngine;
@@ -24,6 +25,14 @@ public class TroopController2D : MonoBehaviour
     Collider2D nearestVert;
     private Vector2 vertPosition;
 
+    //troops
+    public GameObject troop1;
+    public GameObject troop2;
+    //public GameObject troop3;
+    //public GameObject troop4;
+
+    public CameraSystem cameraSystem;
+    public EnergySystem energySystem;
 
     void Start()
     {
@@ -33,6 +42,7 @@ public class TroopController2D : MonoBehaviour
     void Update()
     {
         HandleMouseInput();
+        HandleNumberKeyInput();
         //HandleEnemySelection();
     }
 
@@ -43,7 +53,7 @@ public class TroopController2D : MonoBehaviour
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             int layerMask = LayerMask.GetMask("Troop"); 
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
-            
+
             if (hit.collider != null && hit.collider.CompareTag("Troop"))
             {
                 if (selectedTroop != null) //if already have a troop selected
@@ -51,6 +61,42 @@ public class TroopController2D : MonoBehaviour
                     DeselectTroop(); //deselect old troop
                 }
                 SelectTroop(hit.collider.gameObject);
+            }
+            else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
+            {
+                Vector3 newPosition = selectedTroop.transform.position;
+                Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+                foreach (var Hit in hits)
+                {
+                    if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
+                    {
+                        if (Hit.collider != null)
+                        {
+                            if (Hit.collider.CompareTag("[TP] Ground"))
+                            {
+                                newPosition.x = MousePosition.x;
+                                newPosition.y = -1; //Y value for ground
+                            }
+                            else if (Hit.collider.CompareTag("[TP] Platform"))
+                            {
+                                newPosition.x = MousePosition.x;
+                                newPosition.y = 5; //Y value for platform
+                            }
+                            else
+                            {
+                                newPosition.x = MousePosition.x;
+                            }
+                        }
+                        break; 
+                    }
+                }
+
+                selectedTroop.transform.position = newPosition;
+                Debug.Log("Troop Teleported");
+                energySystem.UseEnergy(50f);
+                cameraSystem.ToggleZoom();
             }
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
@@ -63,8 +109,42 @@ public class TroopController2D : MonoBehaviour
             {
                 selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
             }
+        }
+    }
 
-            //Debug.Log(hit.collider.gameObject);
+    void HandleNumberKeyInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) 
+        {
+            if (selectedTroop != null) 
+            {
+                DeselectTroop(); 
+            }
+            SelectTroop(troop1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        {
+            if (selectedTroop != null)
+            {
+                DeselectTroop();
+            }
+            SelectTroop(troop2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (selectedTroop != null)
+            {
+                DeselectTroop();
+            }
+            //SelectTroop(troop3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (selectedTroop != null)
+            {
+                DeselectTroop();
+            }
+            //SelectTroop(troop4);
         }
     }
 
@@ -73,12 +153,14 @@ public class TroopController2D : MonoBehaviour
         selectedTroop = troop;
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
         selectedTroop.GetComponent<Troop>().selected = true;
+        selectedTroop.GetComponent<Troop>().highlight.SetActive(true);
         Debug.Log("Troop selected: " + selectedTroop.name);
     }
 
-    void DeselectTroop() //necessary for platform drop off to work as intended
+    void DeselectTroop() 
     {
-        selectedTroop.GetComponent<Troop>().selected = false;
+        selectedTroop.GetComponent<Troop>().selected = false; //necessary for platform drop off to work as intended
+        selectedTroop.GetComponent<Troop>().highlight.SetActive(false);
     }
 
  
