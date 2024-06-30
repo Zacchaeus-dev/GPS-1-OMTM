@@ -41,12 +41,15 @@ public class TroopClass : MonoBehaviour
         OnKDScript = OnKDCollider.GetComponent<OnKDDetector>();
     }
 
+    public void SetTargetPositionHere() //used after teleporting
+    {
+        targetPosition = transform.position;
+    }
+
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
         mousePosition = mP;
         hit = h;
-
-
 
             // 1. if click on any part of killdozer
             if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground"))

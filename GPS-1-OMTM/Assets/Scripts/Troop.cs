@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class Troop : MonoBehaviour
 {
+    private Camera mainCamera;
     public TroopController2D troopController2D;
     public bool invincible = false;
     public bool selected = false;
@@ -36,19 +37,27 @@ public class Troop : MonoBehaviour
     private GameObject targetEnemy;
     private bool isAttacking;
     public bool canAttack = true;
-
+    
+    /*
     //Fall damage
     private bool isFalling = false;
     private float fallStartHeight;
     public float fallDamageThreshold = 1f; // Height at which fall damage starts to apply
     public float fallDamageMultiplier = 5f;
+    */
 
-    // Abilities
+    // Ultimate
     public Ultimate ultimate = Ultimate.None;
     private bool ultimateOnCooldown = false;
     public float ultimateCooldown = 5f; 
     public float ultimateDuration = 0f;
+    private bool clickingOnLocation = false; //CC's Ultimate
+
+    // Ultimate Objects
     public GameObject tankShield;
+    public GameObject tauntMine;
+    //public int tauntMineDamage;
+    //public float tauntMineRadius;
 
     // UI 
     public Image ultimateImage;
@@ -92,14 +101,13 @@ public class Troop : MonoBehaviour
 
     void Start()
     {
+        mainCamera = Camera.main;
         currentHealth = maxHealth;
         boxCollider = GetComponent<BoxCollider2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
 
         UpdateHUD();
-
-        //assign weapon from equipment menu
     }
 
     void Update()
@@ -111,24 +119,72 @@ public class Troop : MonoBehaviour
             StopAllCoroutines(); // Stop attacking coroutine
         }
 
-        HandleDropOffInput();
-        HandleAbilitiesInput();
+        //HandleDropOffInput();
+        HandleUltimateInput();
 
         if (targetEnemy != null)
         {
             MoveTowardsEnemy();
         }
 
-        CheckFalling();
+        //CheckFalling();
         CheckGround();
         UpdateUltimateUI();
     }
 
-    void HandleAbilitiesInput()
+    void HandleUltimateInput()
     {
-        if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
+        if (selected && Input.GetKeyDown(KeyCode.R) && clickingOnLocation)
         {
-            StartCoroutine(UseUltimate(ultimate));    //use the ultimate set in the inspector 
+            // Cancel clicking on location if it's already active
+            clickingOnLocation = false;
+            Debug.Log("Ultimate targeting cancelled.");
+        }
+        else if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
+        {
+            // Start the ultimate if not on cooldown
+            StartCoroutine(UseUltimate(ultimate));
+        }
+        if (clickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
+        {
+            Vector3 newPosition = transform.position;
+            Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+            foreach (var Hit in hits)
+            {
+                if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
+                {
+                    if (Hit.collider != null)
+                    {
+                        if (Hit.collider.CompareTag("[TP] Ground"))
+                        {
+                            newPosition.x = MousePosition.x;
+                            newPosition.y = -3; //Y value for ground
+                        }
+                        else if (Hit.collider.CompareTag("[TP] Platform"))
+                        {
+                            newPosition.x = MousePosition.x;
+                            newPosition.y = 3; //Y value for platform
+                        }
+                        else
+                        {
+                            newPosition.x = MousePosition.x;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            Instantiate(tauntMine, newPosition, Quaternion.Euler(0f, 0f, 0f), null);
+            clickingOnLocation = false; 
+
+            ultimateOnCooldown = true;
+            ultimateCooldownTimeRemaining = ultimateCooldown;
+            ultimateDurationTimeRemaining = ultimateDuration;
+            Debug.Log("CC Ultimate Activated");
+
+            StartCoroutine(Ultimate_CC_End());
         }
     }
 
@@ -152,7 +208,7 @@ public class Troop : MonoBehaviour
                 yield return StartCoroutine(Ultimate_Tank());
                 break;
             case Ultimate.Ultimate_CC:
-                yield return StartCoroutine(Ultimate_CC());
+                Ultimate_CC();
                 break;
             case Ultimate.Ultimate_Healer:
                 yield return StartCoroutine(Ultimate_Healer());
@@ -230,15 +286,16 @@ public class Troop : MonoBehaviour
         ultimateOnCooldown = false;
     }
 
-    IEnumerator Ultimate_CC()
+    void Ultimate_CC()
     {
-        ultimateOnCooldown = true;
-        ultimateCooldownTimeRemaining = ultimateCooldown;
-        ultimateDurationTimeRemaining = ultimateDuration;
-        Debug.Log("CC Ultimate Activated");
+        clickingOnLocation = true;
+    }
 
-        //friday
-        yield return new WaitForSeconds(3f);
+    IEnumerator Ultimate_CC_End()
+    {
+        yield return new WaitForSeconds(ultimateDuration);
+
+        //explosion is in taunt mine script
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -261,10 +318,12 @@ public class Troop : MonoBehaviour
         }
         */
 
+        yield return new WaitForSeconds(ultimateDuration);
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
     }
 
+    /*
     void CheckFalling()
     {
         // Check if the troop is in the air
@@ -287,12 +346,14 @@ public class Troop : MonoBehaviour
             }
         }
     }
+    
 
     bool IsGrounded()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
         return hit.collider != null;
     }
+    */
 
     public void TakeDamage(int damage)
     {
@@ -335,13 +396,10 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = true;
         }
-            /*if (collision.gameObject.CompareTag("Killdozer"))
-            {
-                transform.SetParent(collision.transform); //set troop as kd's child
-                //Debug.Log("On");
-            }*/
-
-
+        /*if (collision.gameObject.CompareTag("Killdozer"))
+        {
+            transform.SetParent(collision.transform); //set troop as kd's child
+        }*/
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -357,17 +415,17 @@ public class Troop : MonoBehaviour
         /*if (collision.gameObject.CompareTag("Killdozer"))
         {
             transform.SetParent(null); //remove troop from kd's child
-            //Debug.Log("Off");
         }*/
     }
 
+    /*
     void HandleDropOffInput()
     {
-        /*if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
+        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
         {
             Debug.Log("Drop Off");
             StartCoroutine(DisableAndEnableColliders());
-        }*/
+        }
     }
 
     IEnumerator DisableAndEnableColliders()
@@ -382,6 +440,7 @@ public class Troop : MonoBehaviour
         boxCollider.enabled = true;
         capsuleCollider.enabled = true;
     }
+    */
 
     void CheckGround()
     {
@@ -426,6 +485,7 @@ public class Troop : MonoBehaviour
                 Debug.Log("Attacking");
                 isAttacking = true;
 
+                /*
                 switch (selectedWeapon)
                 {
                     case (Weapon)1: //dps weapon 1
@@ -445,7 +505,7 @@ public class Troop : MonoBehaviour
                         break;
 
                     case (Weapon)5: //cc weapon 1
-
+                        StartCoroutine(CCWeapon1());
                         break;
 
                     case (Weapon)6: //cc weapon 2
@@ -456,11 +516,12 @@ public class Troop : MonoBehaviour
                         StartCoroutine(AttackEnemy()); //can be removed once all the attacks are finished
                         break;
                 }
+                */
             }
         }
     }
 
-    
+    /*
     IEnumerator AttackEnemy()
     {
         while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction) 
@@ -478,11 +539,8 @@ public class Troop : MonoBehaviour
         targetEnemy = null; //deselect target enemy
         isAttacking = false;
     }
-    
 
-    //place troop weapon attacks here
-
-    IEnumerator TankWeapon1() //unfinalized
+    IEnumerator TankWeapon1() 
     {
         while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
         {
@@ -500,6 +558,24 @@ public class Troop : MonoBehaviour
         isAttacking = false;
     }
 
-   
-  
+    IEnumerator CCWeapon1()
+    {
+        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
+        {
+            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
+            {
+                break;
+            }
+
+            Enemy enemy = targetEnemy.GetComponent<Enemy>();
+            enemy.TakeDamage(attack);
+            enemy.MarkForDeathStart();
+            Debug.Log("Attacking enemy: " + targetEnemy.name);
+            yield return new WaitForSeconds(attackSpeed);
+        }
+
+        targetEnemy = null;
+        isAttacking = false;
+    }
+    */
 }

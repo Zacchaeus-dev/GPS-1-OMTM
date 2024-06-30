@@ -14,7 +14,17 @@ public class TroopAutoAttack : MonoBehaviour
     private float lastAttackTime = 0f;
     private GameObject targetEnemy;
     private Rigidbody2D rb;
-    public Animator attackAnimation; 
+    public Animator attackAnimation;
+
+    public Troop troop;
+    public TroopCharacter troopCharacter;
+
+    public enum TroopCharacter
+    {
+        DPS,
+        Tank,
+        CC,
+    }
 
     void Start()
     {
@@ -77,13 +87,27 @@ public class TroopAutoAttack : MonoBehaviour
 
                     if (enemy != null)
                     {
-                        targetEnemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                        switch (troopCharacter) //do different attack based on the troop
+                        {
+                            case TroopCharacter.DPS:
+                                enemy.TakeDamage(attackDamage);
+                                break;
+                            case TroopCharacter.Tank:
+                                enemy.TakeDamage(attackDamage);
+                                break;
+                            case TroopCharacter.CC:
+                                enemy.TakeDamage(attackDamage);
+                                enemy.MarkForDeathStart();
+                                break;
+                            default:
+                                enemy.TakeDamage(attackDamage);
+                                break;
+                        }
                     }
                     else
                     {
                         targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
                     }
-
 
                     //targetEnemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
                     //targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);

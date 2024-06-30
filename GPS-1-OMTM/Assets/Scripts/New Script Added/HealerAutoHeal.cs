@@ -57,6 +57,7 @@ public class HealerAutoHeal : MonoBehaviour
             if (distanceToAlly > healRange)
             {
                 Vector2 direction = (targetAlly.transform.position - transform.position).normalized;
+                direction.y = 0;
                 rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
             }
         }

@@ -10,7 +10,6 @@ public class TroopController2D : MonoBehaviour
 {
     private Camera mainCamera;
     public GameObject selectedTroop;
-    private Vector2 targetPosition;
 
     public float moveSpeed = 5f; // Speed of the troop movement
     public float ladderDetectionRange = 1f; // Range to detect ladders
@@ -20,16 +19,12 @@ public class TroopController2D : MonoBehaviour
     public float respawnTime = 5f; // respawn delay for troops
     public Vector2 respawnOffset; // offset from the killdozer's position for respawn
     public Transform killdozer; // killdozer's transform position
-    //public GameObject killdozerScript;
-
-    Collider2D nearestVert;
-    private Vector2 vertPosition;
 
     //troops
     public GameObject troop1;
     public GameObject troop2;
-    //public GameObject troop3;
-    //public GameObject troop4;
+    public GameObject troop3;
+    public GameObject troop4;
 
     public CameraSystem cameraSystem;
     public EnergySystem energySystem;
@@ -94,6 +89,7 @@ public class TroopController2D : MonoBehaviour
                 }
 
                 selectedTroop.transform.position = newPosition;
+                selectedTroop.GetComponent<TroopClass>().SetTargetPositionHere();
                 Debug.Log("Troop Teleported");
                 energySystem.UseEnergy(50f);
                 cameraSystem.ToggleZoom();
@@ -136,7 +132,7 @@ public class TroopController2D : MonoBehaviour
             {
                 DeselectTroop();
             }
-            //SelectTroop(troop3);
+            SelectTroop(troop3);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
@@ -144,7 +140,7 @@ public class TroopController2D : MonoBehaviour
             {
                 DeselectTroop();
             }
-            //SelectTroop(troop4);
+            SelectTroop(troop4);
         }
     }
 

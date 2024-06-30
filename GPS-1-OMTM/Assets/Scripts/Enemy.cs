@@ -13,6 +13,8 @@ public class Enemy: MonoBehaviour
     public float attackSpeed;
     public float attackRange;
     public float moveSpeed = 2f;
+    public bool markedForDeath = false;
+    public bool slowed = false;
 
     public float detectionRange = 10f; // enemy detection range
     public float troopStoppingDistance = 1f; // distance which the enemy stops moving towards the target 
@@ -32,6 +34,9 @@ public class Enemy: MonoBehaviour
     float timer;
     bool tookdamage;
     Vector3 normalScale;
+
+    public GameObject markForDeathIcon;
+    public float slowEffectRadius = 5f;
 
     private void Start()
     {
@@ -120,6 +125,29 @@ public class Enemy: MonoBehaviour
         }
     }
 
+    public void AddTargetToList(Transform objectTransform)
+    {
+        potentialTargets.RemoveAll(target => target == null); //removes null transforms in potential target list, so that enemy can always find a real transform
+        potentialTargets.Add(objectTransform);
+
+        closestTarget = null; // Start with no target
+        float closestDistanceSqr = Mathf.Infinity;
+
+        foreach (Transform target in potentialTargets) // For each target in the list
+        {
+            if (!target.gameObject.activeSelf) continue; // Skip inactive (dead) targets
+
+            float distanceSqr = (target.position - transform.position).sqrMagnitude; // Calculate distance between enemy position and target position
+            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange) // If current target is closer than other targets and if target is within enemy detection range
+            {
+                // Update closest target to current target
+                closestDistanceSqr = distanceSqr;
+                closestTarget = target;
+                //Debug.Log("Found " + closestTarget.name);
+            }
+        }
+    }
+
     IEnumerator AttackTarget()
     {
         while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance))
@@ -161,11 +189,13 @@ public class Enemy: MonoBehaviour
         isAttacking = false;
     }
 
-    // visualize enemy detection range in editor
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.red; //enemy detection range
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.white; //enemy slowed affected range
+        Gizmos.DrawWireSphere(transform.position, slowEffectRadius);
     }
 
     public void TakeDamage(int damage)
@@ -173,6 +203,11 @@ public class Enemy: MonoBehaviour
         if (invincible)
         {
             return;
+        }
+
+        if (markedForDeath)
+        {
+            damage = damage * 2;
         }
 
         currentHealth -= damage;
@@ -193,5 +228,65 @@ public class Enemy: MonoBehaviour
 
         Debug.Log("Enemy is dead");
         Destroy(gameObject);
+    }
+
+    public void MarkForDeathStart()
+    {
+        if (markedForDeath) //no effect if enemy is already marked for death
+        {
+            return;
+        }
+
+        markedForDeath = true;
+        markForDeathIcon.SetActive(true);
+        SlowNearbyEnemies();
+        StartCoroutine((MarkForDeathEnd()));
+    }
+
+    IEnumerator MarkForDeathEnd()
+    {
+        yield return new WaitForSeconds(10000f);
+
+        if (gameObject != null)
+        {
+            markedForDeath = false;
+            markForDeathIcon.SetActive(false);
+        }
+    }
+
+    void SlowNearbyEnemies()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, slowEffectRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            Enemy enemy = hitCollider.GetComponent<Enemy>();
+            if (enemy != null && enemy != this && !enemy.slowed)
+            {
+                enemy.SlowedSpeedStart();
+            }
+        }
+    }
+
+    public void SlowedSpeedStart()
+    {
+        if (slowed) //no effect if enemy is already slowed
+        {
+            return;
+        }
+
+        slowed = true;
+        moveSpeed = moveSpeed / 2;
+        StartCoroutine((SlowedSpeedEnd()));
+    }
+
+    IEnumerator SlowedSpeedEnd()
+    {
+        yield return new WaitForSeconds(10000f);
+
+        if (gameObject != null)
+        {
+            moveSpeed = moveSpeed * 2;
+            slowed = false;
+        }
     }
 }
