@@ -15,9 +15,12 @@ public class HealerAutoHeal : MonoBehaviour
     private GameObject targetAlly;
     private Rigidbody2D rb;
 
+    private TroopEnergy troopEnergy;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        troopEnergy = GetComponent<TroopEnergy>();
     }
 
     void Update()
@@ -78,6 +81,7 @@ public class HealerAutoHeal : MonoBehaviour
                         allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
                         lastHealTime = Time.time;
                         Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                        troopEnergy.GainEnergy();
                     }
                 }
             }

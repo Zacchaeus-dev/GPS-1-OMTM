@@ -226,7 +226,7 @@ public class Enemy: MonoBehaviour
     {
         // Put death animation or effects
 
-        Debug.Log("Enemy is dead");
+        //Debug.Log("Enemy is dead");
         Destroy(gameObject);
     }
 

@@ -12,7 +12,6 @@ public class EnergySystem : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(gameObject.name);
         currentEnergy = 50f;
     }
 

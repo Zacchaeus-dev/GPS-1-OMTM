@@ -150,7 +150,7 @@ public class TroopController2D : MonoBehaviour
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
         selectedTroop.GetComponent<Troop>().selected = true;
         selectedTroop.GetComponent<Troop>().highlight.SetActive(true);
-        Debug.Log("Troop selected: " + selectedTroop.name);
+        //Debug.Log("Troop selected: " + selectedTroop.name);
     }
 
     void DeselectTroop() 
@@ -196,7 +196,7 @@ public class TroopController2D : MonoBehaviour
 
         // Reactivate the troop
         troop.gameObject.SetActive(true);
-
+        troop.GetComponent<TroopClass>().SetTargetPositionHere();
         Debug.Log(troop.gameObject.name + " has respawned.");
 
         //reset mouse position

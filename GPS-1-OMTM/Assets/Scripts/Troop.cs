@@ -77,6 +77,15 @@ public class Troop : MonoBehaviour
     // Highlight
     public GameObject highlight;
 
+    // Energy
+    private TroopEnergy troopEnergy;
+
+    // Shield
+    public int maxShield;
+    public int currentShield;
+    public bool shieldOn = false;
+    public bool reducingShield = false;
+
     public enum Weapon
     {
         None,
@@ -106,6 +115,7 @@ public class Troop : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
+        troopEnergy = GetComponent<TroopEnergy>();
 
         UpdateHUD();
     }
@@ -130,6 +140,38 @@ public class Troop : MonoBehaviour
         //CheckFalling();
         CheckGround();
         UpdateUltimateUI();
+
+        if (shieldOn && reducingShield && currentShield > 0)
+        {
+            currentShield = currentShield - 50;
+            Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
+            reducingShield = false;
+            StartCoroutine(ReduceShieldOverTime());
+        }
+    }
+
+    IEnumerator ReduceShieldOverTime()
+    {
+        /*
+        reducingShield = true;
+        while (currentShield > 0)
+        {
+            currentShield = Mathf.Max(0, currentShield - 10);
+            Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
+            yield return new WaitForSeconds(10f);
+        }
+        reducingShield = false;
+        shieldOn = false;
+        */
+
+        yield return new WaitForSeconds(1f);
+
+        if (currentShield <= 0)
+        {
+            shieldOn = false;
+        }
+
+        reducingShield = true;
     }
 
     void HandleUltimateInput()
@@ -177,7 +219,9 @@ public class Troop : MonoBehaviour
             }
 
             Instantiate(tauntMine, newPosition, Quaternion.Euler(0f, 0f, 0f), null);
-            clickingOnLocation = false; 
+            clickingOnLocation = false;
+
+            troopEnergy.UseAllEnergy();
 
             ultimateOnCooldown = true;
             ultimateCooldownTimeRemaining = ultimateCooldown;
@@ -199,18 +243,27 @@ public class Troop : MonoBehaviour
 
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
+        if (troopEnergy.currentEnergy < troopEnergy.maxEnergy)
+        {
+            Debug.Log("Not enough energy");
+            yield break;
+        }
+
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
+                troopEnergy.UseAllEnergy();
                 yield return StartCoroutine(Ultimate_DPS());
                 break;
             case Ultimate.Ultimate_Tank:
+                troopEnergy.UseAllEnergy();
                 yield return StartCoroutine(Ultimate_Tank());
                 break;
             case Ultimate.Ultimate_CC:
                 Ultimate_CC();
                 break;
             case Ultimate.Ultimate_Healer:
+                troopEnergy.UseAllEnergy();
                 yield return StartCoroutine(Ultimate_Healer());
                 break;
         }
@@ -218,7 +271,6 @@ public class Troop : MonoBehaviour
 
     void UpdateUltimateUI()
     {
-
         if (ultimateOnCooldown)
         {
             if (ultimateDurationTimeRemaining > 0)
@@ -309,18 +361,23 @@ public class Troop : MonoBehaviour
         Debug.Log("Healer Ultimate Activated");
 
         //golden fleece
-        /*
-        int healAmount = 100;
-        for (int i = 0; i < 5; i++)
-        {
-            currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
-            yield return new WaitForSeconds(1f);
-        }
-        */
+        GainShield(troopController2D.troop1);
+        GainShield(troopController2D.troop2);
+        GainShield(troopController2D.troop3);
+        GainShield(gameObject);
 
         yield return new WaitForSeconds(ultimateDuration);
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
+    }
+
+    void GainShield(GameObject go)
+    {
+        Troop troop = go.GetComponent<Troop>();
+        troop.maxShield = 500;
+        troop.currentShield = 500;
+        troop.shieldOn = true;
+        troop.reducingShield = true;
     }
 
     /*
@@ -362,14 +419,28 @@ public class Troop : MonoBehaviour
             return;
         }
 
-        currentHealth -= damage;
-        //Debug.Log(gameObject.name + " took " + damage + " damage.");
+        if (currentShield > 0)
+        {
+            currentShield = currentShield - damage;
+        }
+        else
+        {
+            currentHealth -= damage;
+        }
 
         troopHUD.SetHUD(this);
 
         if (currentHealth <= 0)
         {
             Death();
+        }
+
+        if (troopEnergy != null)
+        {
+            if (troopEnergy.energyMethod == TroopEnergy.EnergyMethod.Tank)
+            {
+                troopEnergy.GainEnergy();
+            }
         }
     }
 

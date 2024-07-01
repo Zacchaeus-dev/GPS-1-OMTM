@@ -22,6 +22,8 @@ public class TroopAutoAttack : MonoBehaviour
     public TroopCharacter troopCharacter;
     public TroopClass troopClass;
 
+    public TroopEnergy troopEnergy;
+
     public enum TroopCharacter
     {
         DPS,
@@ -32,6 +34,7 @@ public class TroopAutoAttack : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        troopEnergy = GetComponent<TroopEnergy>();
     }
 
     void Update()
@@ -95,6 +98,7 @@ public class TroopAutoAttack : MonoBehaviour
                                 case TroopCharacter.DPS:
                                     enemy.TakeDamage(attackDamage);
                                     DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+                                    troopEnergy.GainEnergy();
                                     break;
                                 case TroopCharacter.Tank:
                                     enemy.TakeDamage(attackDamage);
@@ -104,6 +108,7 @@ public class TroopAutoAttack : MonoBehaviour
                                     enemy.TakeDamage(attackDamage);
                                     enemy.MarkForDeathStart();
                                     DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+                                    troopEnergy.GainEnergy();
                                     break;
                                 default:
                                     enemy.TakeDamage(attackDamage);
