@@ -17,10 +17,18 @@ public class HealerAutoHeal : MonoBehaviour
 
     private TroopEnergy troopEnergy;
 
+    // Public references for LineRenderer and start position offset
+    public LineRenderer lineRenderer;
+    public Vector3 startPositionOffset;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         troopEnergy = GetComponent<TroopEnergy>();
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false; // Initially disable the line renderer
+        }
     }
 
     void Update()
@@ -42,14 +50,23 @@ public class HealerAutoHeal : MonoBehaviour
     void FindTarget()
     {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+        float closestDistance = Mathf.Infinity;
+        GameObject closestAlly = null;
+
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Troop") && hitCollider.gameObject != this.gameObject)
             {
-                targetAlly = hitCollider.gameObject;
-                break;
+                float distanceToAlly = Vector2.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToAlly < closestDistance)
+                {
+                    closestDistance = distanceToAlly;
+                    closestAlly = hitCollider.gameObject;
+                }
             }
         }
+
+        targetAlly = closestAlly;
     }
 
     void MoveTowardsTarget()
@@ -82,6 +99,7 @@ public class HealerAutoHeal : MonoBehaviour
                         lastHealTime = Time.time;
                         Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                         troopEnergy.GainEnergy();
+                        StartCoroutine(ShowHealTracer(targetAlly.transform));
                     }
                 }
             }
@@ -89,6 +107,27 @@ public class HealerAutoHeal : MonoBehaviour
             {
                 targetAlly = null; // Lost range, find another target
             }
+        }
+    }
+
+    IEnumerator ShowHealTracer(Transform target)
+    {
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, transform.position + startPositionOffset);
+            lineRenderer.SetPosition(1, target.position);
+
+            float elapsedTime = 0f;
+            float tracerDuration = 0.5f; // Duration for which the tracer is visible
+
+            while (elapsedTime < tracerDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            lineRenderer.enabled = false;
         }
     }
 
@@ -101,5 +140,9 @@ public class HealerAutoHeal : MonoBehaviour
         // Draw heal range
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, healRange);
+
+        // Draw start position offset
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position + startPositionOffset, 0.1f);
     }
 }

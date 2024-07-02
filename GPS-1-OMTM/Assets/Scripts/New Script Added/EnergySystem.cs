@@ -4,11 +4,13 @@ using UnityEngine.UI;
 public class EnergySystem : MonoBehaviour
 {
     [Header("Energy Settings")]
-    public float maxEnergy = 100f; // Maximum energy value
+    public float maxEnergy = 5000f; // Maximum energy value
     public float regenRate = 1f; // Energy regeneration rate per second
 
     public float currentEnergy;
     public Text energyText; // Reference to UI Text to display energy
+
+    public int energyAmount = 10; // Amount of energy to add to the troop
 
     void Start()
     {
@@ -75,4 +77,6 @@ public class EnergySystem : MonoBehaviour
             energyText.text = Mathf.FloorToInt(currentEnergy).ToString();
         }
     }
+
+   
 }

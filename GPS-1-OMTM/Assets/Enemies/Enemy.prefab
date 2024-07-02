@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7797885612375523985}
   - component: {fileID: 4064590977300128009}
   - component: {fileID: 4530887168777485784}
+  - component: {fileID: 4183063064124180584}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -198,6 +199,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+--- !u!114 &4183063064124180584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254630746095803410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a65b7e6be7f9c2a4babf20df7e86e887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyOrbPrefab: {fileID: 2952589855345581881, guid: 7cf5b22087f69234db7788bd35817799, type: 3}
 --- !u!1 &7463564859065588448
 GameObject:
   m_ObjectHideFlags: 0
