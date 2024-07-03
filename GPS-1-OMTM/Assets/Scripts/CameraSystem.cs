@@ -7,6 +7,7 @@ public class CameraSystem : MonoBehaviour
 {
     public bool cameraMovement = true;
     public GameObject killdozer; // Reference to the Killdozer
+    public bool limitCameraMovement = false;
     public float maxDistanceFromKilldozer = 50f; // Maximum allowed distance from the Killdozer
 
     // Zoom feature
@@ -15,6 +16,11 @@ public class CameraSystem : MonoBehaviour
     public float zoomOutSize = 50f; 
     public CinemachineVirtualCamera vcam;
     public TroopController2D troopController2D;
+
+    // Focus on Troops
+    private GameObject focusedTroop;
+    private Vector3 velocity = Vector3.zero;
+    public float moveTime = 0.3f;
 
     private void Start()
     {
@@ -28,34 +34,43 @@ public class CameraSystem : MonoBehaviour
     {
         HandleZoomInput();
 
-        if (cameraMovement)
+        if (cameraMovement && focusedTroop == null) // Disable manual movement when focusing on a troop
         {
-            Vector3 inputDir = new Vector3(0, 0, 0);
-            int edgeScrollSize = 20;
+            HandleCameraMovement();
+            LimitCameraMovement();
+        }
+    }
 
-            if (Input.mousePosition.x < edgeScrollSize) // Move left
-            {
-                inputDir.x = -1f;
-            }
-            if (Input.mousePosition.x > Screen.width - edgeScrollSize) // Move right
-            {
-                inputDir.x = 1f;
-            }
+    void HandleCameraMovement()
+    {
+        Vector3 inputDir = new Vector3(0, 0, 0);
+        int edgeScrollSize = 20;
 
-            Vector3 moveDir = transform.right * inputDir.x;
+        if (Input.mousePosition.x < edgeScrollSize) // Move left
+        {
+            inputDir.x = -1f;
+        }
+        if (Input.mousePosition.x > Screen.width - edgeScrollSize) // Move right
+        {
+            inputDir.x = 1f;
+        }
 
-            float moveSpeed = 10f; // Camera movement speed
-            Vector3 newPosition = transform.position + moveDir * moveSpeed * Time.deltaTime;
+        Vector3 moveDir = transform.right * inputDir.x;
+        float moveSpeed = 10f; // Camera movement speed
+        transform.position += moveDir * moveSpeed * Time.deltaTime;
+    }
+
+    void LimitCameraMovement()
+    {
+        if (limitCameraMovement)
+        {
+            Vector3 newPosition = transform.position;
 
             // Calculate the horizontal distance between the new camera position and the Killdozer
             float horizontalDistanceFromKilldozer = Mathf.Abs(newPosition.x - killdozer.transform.position.x);
 
             // Check if the new position is within the range
-            if (horizontalDistanceFromKilldozer <= maxDistanceFromKilldozer)
-            {
-                transform.position = newPosition;
-            }
-            else
+            if (horizontalDistanceFromKilldozer > maxDistanceFromKilldozer)
             {
                 // bring the camera back within range
                 float clampedX = Mathf.Clamp(newPosition.x, killdozer.transform.position.x - maxDistanceFromKilldozer, killdozer.transform.position.x + maxDistanceFromKilldozer);
@@ -82,8 +97,39 @@ public class CameraSystem : MonoBehaviour
         else if (troopController2D.selectedTroop != null)
         {
             vcam.m_Lens.OrthographicSize = zoomOutSize; //zoom out
-            Time.timeScale = 0.75f; //affects animation speed, change their update mode in animators to unscaled time to prevent this code affecting them
+            Time.timeScale = 0.75f; 
         }
         isZoomedOut = !isZoomedOut;
+    }
+
+    public void FocusOnTroop(GameObject troop)
+    {
+        if (focusedTroop == troop)
+        {
+            // Unfocus the troop if it's already focused
+            focusedTroop = null;
+        }
+        else
+        {
+            focusedTroop = troop;
+        }
+
+        StopAllCoroutines(); // Stop any existing focus coroutine
+        StartCoroutine(FocusCamera());
+    }
+
+    public void DefocusTroop()
+    {
+        focusedTroop = null;
+    }
+
+    private IEnumerator FocusCamera()
+    {
+        while (focusedTroop != null)
+        {
+            Vector3 targetPosition = new Vector3(focusedTroop.transform.position.x, transform.position.y, transform.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, moveTime);
+            yield return null;
+        }
     }
 }

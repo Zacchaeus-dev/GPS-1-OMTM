@@ -4331,7 +4331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &487812628
 Transform:
   m_ObjectHideFlags: 0
@@ -13306,13 +13306,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad04de84f238e84fb86ebfa63db608f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMovement: 0
+  cameraMovement: 1
   killdozer: {fileID: 816666624}
+  limitCameraMovement: 0
   maxDistanceFromKilldozer: 20
   isZoomedOut: 0
   zoomOutSize: 20
   vcam: {fileID: 57562247}
   troopController2D: {fileID: 718704414}
+  moveTime: 0.3
 --- !u!1 &1346695979
 GameObject:
   m_ObjectHideFlags: 0

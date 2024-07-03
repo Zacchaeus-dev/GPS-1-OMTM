@@ -122,12 +122,14 @@ public class Troop : MonoBehaviour
 
     void Update()
     {
+        /*
         // Check if the stop key is pressed and troop is selected
         if (selected && Input.GetKeyDown(KeyCode.S))
         {
             stopAction = true;
             StopAllCoroutines(); // Stop attacking coroutine
         }
+        */
 
         //HandleDropOffInput();
         HandleUltimateInput();

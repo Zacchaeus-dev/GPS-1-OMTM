@@ -26,6 +26,12 @@ public class TroopController2D : MonoBehaviour
     public GameObject troop3;
     public GameObject troop4;
 
+    private float lastClickTime;
+    private const float doubleClickTime = 0.3f;
+    private KeyCode lastKeyPressed;
+    private float lastKeyPressTime;
+    private float doublePressTime = 0.3f;
+
     public CameraSystem cameraSystem;
     public EnergySystem energySystem;
 
@@ -39,6 +45,7 @@ public class TroopController2D : MonoBehaviour
         HandleMouseInput();
         HandleNumberKeyInput();
         //HandleEnemySelection();
+        DetectDoubleClick();
     }
 
     void HandleMouseInput()
@@ -108,39 +115,69 @@ public class TroopController2D : MonoBehaviour
         }
     }
 
+    void DetectDoubleClick() //focus camera on troop
+    {
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            float timeSinceLastClick = Time.time - lastClickTime;
+            lastClickTime = Time.time;
+
+            if (timeSinceLastClick <= doubleClickTime)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+                if (hit.collider != null && hit.collider.CompareTag("Troop")) 
+                {
+                    selectedTroop = hit.collider.gameObject;
+                    cameraSystem.FocusOnTroop(selectedTroop);
+                }
+            }
+        }
+    }
+
     void HandleNumberKeyInput()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (selectedTroop != null) 
-            {
-                DeselectTroop(); 
-            }
-            SelectTroop(troop1);
+            HandleKeyPress(KeyCode.Alpha1, troop1);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (selectedTroop != null)
-            {
-                DeselectTroop();
-            }
-            SelectTroop(troop2);
+            HandleKeyPress(KeyCode.Alpha2, troop2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (selectedTroop != null)
-            {
-                DeselectTroop();
-            }
-            SelectTroop(troop3);
+            HandleKeyPress(KeyCode.Alpha3, troop3);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            HandleKeyPress(KeyCode.Alpha4, troop4);
+        }
+    }
+
+    void HandleKeyPress(KeyCode key, GameObject troop)
+    {
+        if (key == lastKeyPressed && Time.time - lastKeyPressTime < doublePressTime)
+        {
+            // Double press
+            CameraSystem cameraSystem = FindObjectOfType<CameraSystem>();
+            if (cameraSystem != null)
+            {
+                cameraSystem.FocusOnTroop(troop);
+            }
+        }
+        else
+        {
+            // Single press
             if (selectedTroop != null)
             {
                 DeselectTroop();
             }
-            SelectTroop(troop4);
+            SelectTroop(troop);
+
+            lastKeyPressed = key;
+            lastKeyPressTime = Time.time;
         }
     }
 
@@ -157,6 +194,7 @@ public class TroopController2D : MonoBehaviour
     {
         selectedTroop.GetComponent<Troop>().selected = false; //necessary for platform drop off to work as intended
         selectedTroop.GetComponent<Troop>().highlight.SetActive(false);
+        cameraSystem.DefocusTroop();
     }
 
  
