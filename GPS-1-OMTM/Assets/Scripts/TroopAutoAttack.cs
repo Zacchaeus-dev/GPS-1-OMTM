@@ -24,6 +24,7 @@ public class TroopAutoAttack : MonoBehaviour
 
     public TroopEnergy troopEnergy;
 
+    private int tankAttackCounter = 0;
     public enum TroopCharacter
     {
         DPS,
@@ -88,7 +89,7 @@ public class TroopAutoAttack : MonoBehaviour
                 {
                     if (Time.time >= lastAttackTime + attackCooldown)
                     {
-                        // Implement the damage dealing logic here
+                        // Implement the attack here
                         Enemy enemy = targetEnemy.GetComponent<Enemy>();
 
                         if (enemy != null)
@@ -101,8 +102,7 @@ public class TroopAutoAttack : MonoBehaviour
                                     troopEnergy.GainEnergy();
                                     break;
                                 case TroopCharacter.Tank:
-                                    enemy.TakeDamage(attackDamage);
-                                    DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+                                    TankAttack(enemy);
                                     break;
                                 case TroopCharacter.CC:
                                     enemy.TakeDamage(attackDamage);
@@ -135,6 +135,23 @@ public class TroopAutoAttack : MonoBehaviour
             attackAnimation.SetBool("Attack", true);
         }
 
+    }
+
+    void TankAttack(Enemy enemy)
+    {
+        tankAttackCounter++;
+        if (tankAttackCounter < 3)
+        {
+            // No damage for the first two attacks
+            Debug.Log("Attack: " +  tankAttackCounter);
+        }
+        else
+        {
+            // Third attack deals damage and applies knockback
+            enemy.TakeDamage(attackDamage);
+            enemy.ApplyKnockback(transform.position);
+            tankAttackCounter = 0; // Reset the counter
+        }
     }
 
     void DrawBulletTracer(Vector3 start, Vector3 end)

@@ -3697,24 +3697,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 487812627}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fefea38c0b29cd14cb3e8babafad8cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoAttackEnabled: 0
-  attackDamage: 0
-  detectionRange: 0
-  attackRange: 0
-  attackCooldown: 0
+  autoAttackEnabled: 1
+  attackDamage: 10
+  detectionRange: 3
+  attackRange: 3
+  attackCooldown: 1
   startOffset: {x: 0, y: 0, z: 0}
   lineRendererPrefab: {fileID: 0}
   tracerFadeDuration: 0.5
   attackAnimation: {fileID: 487812636}
   troop: {fileID: 0}
   troopCharacter: 1
-  troopClass: {fileID: 0}
-  troopEnergy: {fileID: 0}
+  troopClass: {fileID: 487812630}
+  troopEnergy: {fileID: 487812637}
 --- !u!114 &487812630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11859,7 +11859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5254630746095803410, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

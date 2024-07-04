@@ -37,9 +37,15 @@ public class Enemy: MonoBehaviour
 
     public GameObject markForDeathIcon;
     public float slowEffectRadius = 5f;
+    private Rigidbody2D rb;
+
+    private bool isKnockedBack = false;
+    private bool isStunned = false;
+    private bool facingRight = false;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody2D>();   
         currentHealth = maxHealth;
 
         // Find all troops and add their transforms to the potentialTargets list
@@ -105,10 +111,12 @@ public class Enemy: MonoBehaviour
 
     void MoveTowardsTarget()
     {
-        if (closestTarget != null && closestTarget.gameObject.activeInHierarchy) // If have a closest target
+        if (closestTarget != null && closestTarget.gameObject.activeInHierarchy && !isStunned) // If have a closest target
         {
             float stoppingDistanceToUse = closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance; // Choose stopping distance based on if the target is the killdozer
             float distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
+
+            facingRight = closestTarget.position.x > transform.position.x; //check facing direction
 
             if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
             {
@@ -150,7 +158,7 @@ public class Enemy: MonoBehaviour
 
     IEnumerator AttackTarget()
     {
-        while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance))
+        while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance) && !isStunned)
         {
             if (closestTarget == killdozerTransform)
             {
@@ -288,5 +296,42 @@ public class Enemy: MonoBehaviour
             moveSpeed = moveSpeed * 2;
             slowed = false;
         }
+    }
+
+    public void ApplyKnockback(Vector3 attackerPosition)
+    {
+        if (!isKnockedBack)
+        {
+            StartCoroutine(KnockbackCoroutine(attackerPosition));
+        }
+    }
+
+    private IEnumerator KnockbackCoroutine(Vector3 attackerPosition)
+    {
+        isKnockedBack = true;
+        Vector2 knockbackDirection;
+
+        float knockbackForce = 10f;
+
+        if (facingRight)
+        {
+            rb.AddForce(Vector2.left * knockbackForce, ForceMode2D.Impulse);
+        }
+        else
+        {
+            rb.AddForce(Vector2.right * knockbackForce, ForceMode2D.Impulse);
+        }
+
+        yield return new WaitForSeconds(0.3f); // Knockback effect duration
+
+        // Stop the knockback by setting velocity to zero
+        rb.velocity = new Vector2(0, rb.velocity.y);
+
+        isKnockedBack = false;
+    }
+
+    public void Stun(bool stun)
+    {
+        isStunned = stun;
     }
 }
