@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
+
 //using UnityEditor.Timeline;
 using UnityEngine;
 
@@ -63,6 +65,7 @@ public class TroopController2D : MonoBehaviour
                     DeselectTroop(); //deselect old troop
                 }
                 SelectTroop(hit.collider.gameObject);
+                
             }
             else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
             {
@@ -101,6 +104,11 @@ public class TroopController2D : MonoBehaviour
                 energySystem.UseEnergy(50f);
                 cameraSystem.ToggleZoom();
             }
+            else if (selectedTroop != null) // clicking elsewhere should deselect the troop
+            {
+                DeselectTroop();
+            }
+
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
         {

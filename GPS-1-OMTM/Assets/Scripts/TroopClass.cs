@@ -147,6 +147,27 @@ public class TroopClass : MonoBehaviour
                     }
 
                 }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+
+
+                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 1 === //
+                    if (killdozer.GetComponent<Killdozer>().directPathfinding == 1)
+                    {
+                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
+                        vertPosition = Vector2.zero;
+                        nearestVert = null;
+                    }
+                    else
+                    {
+                        if (onPlatform != "Ground")
+                        {
+                            FindAndGoToNearestVertically0(mousePosition);
+                        }
+                    }
+
+                }
+
             }
 
             // 2a. if click on UG 1
@@ -161,6 +182,14 @@ public class TroopClass : MonoBehaviour
                     vertPosition = Vector2.zero;
                     nearestVert = null;
                     
+                }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    if (onPlatform != "Ground")
+                    {
+                        FindAndGoToNearestVertically0(mousePosition);
+                    }
+
                 }
                 else if (onPlatform == "Upper-Ground 2")
                 {
@@ -240,6 +269,14 @@ public class TroopClass : MonoBehaviour
                     nearestVert = null;
                     
                 }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    if (onPlatform != "Ground")
+                    {
+                        FindAndGoToNearestVertically0(mousePosition);
+                    }
+
+                }
                 else if (onPlatform == "Upper-Ground 1")
                 {
                     if (onPlatform != "Ground")
@@ -317,6 +354,14 @@ public class TroopClass : MonoBehaviour
                     nearestVert = null;
                     
                 }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    if (onPlatform != "Ground")
+                    {
+                        FindAndGoToNearestVertically0(mousePosition);
+                    }
+
+                }
                 else if (onPlatform == "Upper-Ground 1")
                 {
                     if (onPlatform != "Ground")
@@ -391,6 +436,14 @@ public class TroopClass : MonoBehaviour
                     vertPosition = Vector2.zero;
                     nearestVert = null;
                     
+                }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    if (onPlatform != "Ground")
+                    {
+                        FindAndGoToNearestVertically0(mousePosition);
+                    }
+
                 }
                 else if (onPlatform == "Upper-Ground 1")
                 {
@@ -468,6 +521,10 @@ public class TroopClass : MonoBehaviour
 
                     FindAndGoToNearestVerticallyKD(mousePosition);
                 }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    FindAndGoToNearestVertically0(mousePosition);
+                }
                 else if (onPlatform == "Upper-Ground 1")
                 {
                     FindAndGoToNearestVertically1(mousePosition);
@@ -502,6 +559,10 @@ public class TroopClass : MonoBehaviour
                 {
 
                     FindAndGoToNearestVerticallyKD(mousePosition);
+                }
+                else if (onPlatform == "Upper-Ground 0")
+                {
+                    FindAndGoToNearestVertically0(mousePosition);
                 }
                 else if (onPlatform == "Upper-Ground 1")
                 {
@@ -563,6 +624,34 @@ public class TroopClass : MonoBehaviour
             
         }
         
+    }
+    void FindAndGoToNearestVertically0(Vector2 mousePosition)
+    {
+        GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 0");
+
+        float closest = Mathf.Infinity;
+        GameObject closestVert = null;
+        for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
+        {
+            //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
+            if (dist < closest)
+            {
+                closest = dist;
+                closestVert = verts[i];
+            }
+        }
+
+        if (closestVert != null)
+        {
+            Collider2D closestVertCollider = closestVert.GetComponent<BoxCollider2D>();
+            nearestVert = closestVertCollider;
+            vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
+            targetPosition = new Vector2(mousePosition.x, transform.position.y);
+
+
+        }
     }
 
     void FindAndGoToNearestVertically1(Vector2 mousePosition)
@@ -683,8 +772,18 @@ public class TroopClass : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
- 
-        if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 1")
+
+        if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 0")
+        {
+            Debug.Log("Upper Ground 0");
+            canClimb = false;
+            isMoving = true;
+
+            nearestVert = null;
+            onPlatform = "Upper-Ground 0";
+            SetTroopTargetPosition(mousePosition, hit);
+        }
+        else if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 1")
         {
             Debug.Log("Upper Ground 1");
             canClimb = false;
@@ -734,7 +833,8 @@ public class TroopClass : MonoBehaviour
             onPlatform = "KD Middle-Ground";
             SetTroopTargetPosition(mousePosition, hit);
         }
-        else if (onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Ground Check"
+        else if (onPlatform == "Upper-Ground 0" && collision.tag == "[PF] Ground Check" 
+            || onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Ground Check"
             || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] Ground Check"
             || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] Ground Check"
             || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Ground Check")
@@ -763,6 +863,17 @@ public class TroopClass : MonoBehaviour
     {
         if (isMoving == false)
         {
+            if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 0")
+            {
+
+                canClimb = false;
+                //isMoving = true;
+
+                nearestVert = null;
+                onPlatform = "Upper-Ground 0";
+                //SetTroopTargetPosition(mousePosition, hit);
+
+            }
             if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 1")
             {
                 
@@ -808,7 +919,8 @@ public class TroopClass : MonoBehaviour
 
             }
         }
-        if (onPlatform == "Upper-Ground 1" && collision.tag == "[PF] KD Middle-Ground"
+        if (onPlatform == "Upper-Ground 0" && collision.tag == "[PF] KD Middle-Ground"
+            || onPlatform == "Upper-Ground 1" && collision.tag == "[PF] KD Middle-Ground"
             || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] KD Middle-Ground"
             || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] KD Middle-Ground"
             || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] KD Middle-Ground")
@@ -919,7 +1031,7 @@ public class TroopClass : MonoBehaviour
             }
         }
 
-        else if (onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4" || onPlatform == "KD Middle-Ground")
+        else if (onPlatform == "Upper-Ground 0" || onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4" || onPlatform == "KD Middle-Ground")
         {
             if (nearestVert != null)
             {
@@ -958,7 +1070,7 @@ public class TroopClass : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y + 20), moveSpeed * Time.deltaTime);
         }
-        else if (onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4" || onPlatform == "KD Middle-Ground")
+        else if (onPlatform =="Upper-Ground 0" || onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4" || onPlatform == "KD Middle-Ground");
         {
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y - 20), moveSpeed * Time.deltaTime);
         }
