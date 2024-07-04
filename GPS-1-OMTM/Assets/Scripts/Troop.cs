@@ -150,6 +150,8 @@ public class Troop : MonoBehaviour
             reducingShield = false;
             StartCoroutine(ReduceShieldOverTime());
         }
+
+        Debug.Log(transform.localScale.x);
     }
 
     IEnumerator ReduceShieldOverTime()
@@ -330,14 +332,51 @@ public class Troop : MonoBehaviour
         ultimateDurationTimeRemaining = ultimateDuration;
         Debug.Log("Tank Ultimate Activated");
 
-        //Wall of olympus
-        Vector3 offset = new Vector3(1.5f, 0.1f, 0);
-        GameObject TankShield = Instantiate(tankShield, gameObject.transform.position + offset, Quaternion.Euler(0f,0f,0f), null);
-        yield return new WaitForSeconds(ultimateDuration); 
+        /*
+        // Determine the facing direction of the tank
+        Vector3 facingDirection = transform.localScale.x > 0 ? Vector3.right : Vector3.left;
+        Vector3 offset = facingDirection * 10f;
+        */
+
+        //delay for animations
+        yield return new WaitForSeconds(0.2f);
+
+        Vector3 offset = new Vector3(10f, 0f, 0);
+
+        // Spawn the shield at a distance apart from the tank
+        GameObject TankShield = Instantiate(tankShield, transform.position + offset, Quaternion.identity);
+
+        // Find all enemies between the tank and the shield
+        Vector3 shieldPosition = TankShield.transform.position;
+        Vector3 tankPosition = transform.position;
+        Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
+
+        yield return new WaitForSeconds(0.2f);
+
+        foreach (var enemyCollider in enemiesInRange)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(50); 
+                StartCoroutine(StunEnemy(enemy, 2f)); //stun duration
+            }
+        }
+
+        yield return new WaitForSeconds(ultimateDuration);
+
+        // Destroy the shield
         Destroy(TankShield);
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
+    }
+
+    private IEnumerator StunEnemy(Enemy enemy, float duration)
+    {
+        enemy.Stun(true); 
+        yield return new WaitForSeconds(duration);
+        enemy.Stun(false);
     }
 
     void Ultimate_CC()
