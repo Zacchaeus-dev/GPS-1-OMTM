@@ -13,9 +13,14 @@ public class CameraSystem : MonoBehaviour
     // Zoom feature
     public bool isZoomedOut = false;
     private float originalCameraSize;
-    public float zoomOutSize = 50f; 
+    public float zoomOutSize = 50f;
+    private bool isZooming = false;
+    public GameObject zoomDim;
     public CinemachineVirtualCamera vcam;
     public TroopController2D troopController2D;
+    public EnergySystem energySystem;
+    public Texture2D zoomedOutCursor; 
+    public Texture2D normalCursor;
 
     // Focus on Troops
     private GameObject focusedTroop;
@@ -28,6 +33,8 @@ public class CameraSystem : MonoBehaviour
         var brain = (camera == null) ? null : camera.GetComponent<CinemachineBrain>();
         vcam = (brain == null) ? null : brain.ActiveVirtualCamera as CinemachineVirtualCamera;
         originalCameraSize = vcam.m_Lens.OrthographicSize;
+
+        Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
     }
 
     void Update()
@@ -51,6 +58,14 @@ public class CameraSystem : MonoBehaviour
             inputDir.x = -1f;
         }
         if (Input.mousePosition.x > Screen.width - edgeScrollSize) // Move right
+        {
+            inputDir.x = 1f;
+        }
+        if (Input.GetKey(KeyCode.A)) // Move left
+        {
+            inputDir.x = -1f;
+        }
+        if (Input.GetKey(KeyCode.D)) // Move right
         {
             inputDir.x = 1f;
         }
@@ -81,6 +96,12 @@ public class CameraSystem : MonoBehaviour
 
     void HandleZoomInput()
     {
+        //can only zoom out if enough energy
+        if(energySystem.currentEnergy < 50f)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ToggleZoom();
@@ -89,17 +110,41 @@ public class CameraSystem : MonoBehaviour
 
     public void ToggleZoom()
     {
+        if (isZooming) return;
+
         if (isZoomedOut)
         {
-            vcam.m_Lens.OrthographicSize = originalCameraSize; //zoom in
-            Time.timeScale = 1f;
+            StartCoroutine(ZoomCamera(originalCameraSize, 1f, 0.3f)); // Zoom in
+            zoomDim.SetActive(false);
+            Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
         }
         else if (troopController2D.selectedTroop != null)
         {
-            vcam.m_Lens.OrthographicSize = zoomOutSize; //zoom out
-            Time.timeScale = 0.75f; 
+            StartCoroutine(ZoomCamera(zoomOutSize, 0.25f, 0.3f)); // Zoom out
+            zoomDim.SetActive(true);
+            Cursor.SetCursor(zoomedOutCursor, Vector2.zero, CursorMode.Auto);
         }
         isZoomedOut = !isZoomedOut;
+    }
+
+    private IEnumerator ZoomCamera(float targetSize, float targetTimeScale, float duration)
+    {
+        float startSize = vcam.m_Lens.OrthographicSize;
+        float startTimeScale = Time.timeScale;
+        float elapsedTime = 0f;
+        isZooming = true;
+
+        while (elapsedTime < duration)
+        {
+            vcam.m_Lens.OrthographicSize = Mathf.Lerp(startSize, targetSize, elapsedTime / duration);
+            Time.timeScale = Mathf.Lerp(startTimeScale, targetTimeScale, elapsedTime / duration);
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        vcam.m_Lens.OrthographicSize = targetSize;
+        Time.timeScale = targetTimeScale;
+        isZooming = false;
     }
 
     public void FocusOnTroop(GameObject troop)

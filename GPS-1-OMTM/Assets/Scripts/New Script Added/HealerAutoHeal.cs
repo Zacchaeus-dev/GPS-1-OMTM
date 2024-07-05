@@ -98,7 +98,7 @@ public class HealerAutoHeal : MonoBehaviour
                         allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
                         lastHealTime = Time.time;
                         Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
-                        troopEnergy.GainEnergy();
+                        troopEnergy.GainPower();
                         StartCoroutine(ShowHealTracer(targetAlly.transform));
                     }
                 }
