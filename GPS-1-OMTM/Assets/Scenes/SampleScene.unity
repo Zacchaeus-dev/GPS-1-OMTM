@@ -3967,11 +3967,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1229b4dcca895e64fa28fa7f52eb7521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 150
-  currentEnergy: 0
-  energyGainAmount: 10
-  energyMethod: 1
-  energyText: {fileID: 1947968049}
+  maxPower: 150
+  currentPower: 0
+  powerGainAmount: 10
+  powerPercent: 0
+  powerMethod: 1
+  powerText: {fileID: 1947968049}
 --- !u!1 &489624919
 GameObject:
   m_ObjectHideFlags: 0
@@ -6660,7 +6661,7 @@ GameObject:
   - component: {fileID: 796912191}
   - component: {fileID: 796912190}
   m_Layer: 0
-  m_Name: EnergyText
+  m_Name: PowerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8278,11 +8279,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1229b4dcca895e64fa28fa7f52eb7521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 120
-  currentEnergy: 0
-  energyGainAmount: 1
-  energyMethod: 0
-  energyText: {fileID: 1618789105}
+  maxPower: 120
+  currentPower: 0
+  powerGainAmount: 10
+  powerPercent: 0
+  powerMethod: 0
+  powerText: {fileID: 1618789105}
 --- !u!1 &896036654
 GameObject:
   m_ObjectHideFlags: 0
@@ -11365,7 +11367,7 @@ GameObject:
   - component: {fileID: 1269967876}
   - component: {fileID: 1269967875}
   m_Layer: 0
-  m_Name: EnergyText
+  m_Name: PowerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11662,8 +11664,12 @@ MonoBehaviour:
   maxDistanceFromKilldozer: 20
   isZoomedOut: 0
   zoomOutSize: 20
+  zoomDim: {fileID: 1364588244}
   vcam: {fileID: 57562247}
   troopController2D: {fileID: 718704414}
+  energySystem: {fileID: 424514742}
+  zoomedOutCursor: {fileID: 2800000, guid: a0b76022f0233014ebfceb75e5d7e9ae, type: 3}
+  normalCursor: {fileID: 0}
   moveTime: 0.3
 --- !u!1 &1347568698
 GameObject:
@@ -11902,6 +11908,81 @@ RectTransform:
   m_AnchoredPosition: {x: 0.10889435, y: 0}
   m_SizeDelta: {x: -9.782, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1364588244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1364588245}
+  - component: {fileID: 1364588247}
+  - component: {fileID: 1364588246}
+  m_Layer: 0
+  m_Name: ZoomDim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1364588245
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364588244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1814590992}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1364588246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364588244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.23529412}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1364588247
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364588244}
+  m_CullTransparentMesh: 1
 --- !u!1 &1397774096
 GameObject:
   m_ObjectHideFlags: 0
@@ -12253,11 +12334,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1229b4dcca895e64fa28fa7f52eb7521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 150
-  currentEnergy: 0
-  energyGainAmount: 10
-  energyMethod: 0
-  energyText: {fileID: 796912190}
+  maxPower: 150
+  currentPower: 0
+  powerGainAmount: 10
+  powerPercent: 0
+  powerMethod: 0
+  powerText: {fileID: 796912190}
 --- !u!120 &1417248968
 LineRenderer:
   serializedVersion: 2
@@ -13611,7 +13693,7 @@ GameObject:
   - component: {fileID: 1618789106}
   - component: {fileID: 1618789105}
   m_Layer: 0
-  m_Name: EnergyText
+  m_Name: PowerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14899,11 +14981,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1229b4dcca895e64fa28fa7f52eb7521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 200
-  currentEnergy: 0
-  energyGainAmount: 10
-  energyMethod: 0
-  energyText: {fileID: 1269967875}
+  maxPower: 200
+  currentPower: 0
+  powerGainAmount: 10
+  powerPercent: 0
+  powerMethod: 0
+  powerText: {fileID: 1269967875}
 --- !u!1 &1700242879
 GameObject:
   m_ObjectHideFlags: 0
@@ -15651,6 +15734,7 @@ RectTransform:
   - {fileID: 1666226475}
   - {fileID: 1546583464}
   - {fileID: 204748116}
+  - {fileID: 1364588245}
   m_Father: {fileID: 1094971774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -15941,7 +16025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5254630746095803410, guid: d0adf152f6cae344f834f64c594c70fe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16814,7 +16898,7 @@ GameObject:
   - component: {fileID: 1947968050}
   - component: {fileID: 1947968049}
   m_Layer: 0
-  m_Name: EnergyText
+  m_Name: PowerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

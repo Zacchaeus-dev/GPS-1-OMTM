@@ -309,7 +309,6 @@ public class Enemy: MonoBehaviour
     private IEnumerator KnockbackCoroutine(Vector3 attackerPosition)
     {
         isKnockedBack = true;
-        Vector2 knockbackDirection;
 
         float knockbackForce = 10f;
 

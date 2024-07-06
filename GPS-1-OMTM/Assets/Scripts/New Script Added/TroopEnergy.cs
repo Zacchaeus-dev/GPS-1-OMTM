@@ -5,42 +5,48 @@ using TMPro;
 
 public class TroopEnergy : MonoBehaviour
 {
-    public int maxEnergy;
-    public int currentEnergy;
-    public int energyGainAmount;
-    public EnergyMethod energyMethod;
-    public TextMeshProUGUI energyText;
+    public int maxPower;
+    public int currentPower;
+    public int powerGainAmount;
+    public float powerPercent;
+    public PowerMethod powerMethod;
+    public TextMeshProUGUI powerText;
 
-    public enum EnergyMethod
+    public enum PowerMethod
     {
-        DPS_CC_Healer, 
-        Tank, 
+        DPS_CC_Healer,
+        Tank,
     }
 
     void Start()
     {
-        currentEnergy = 0;
+        currentPower = 0;
         UpdateText();
     }
 
     public void UpdateText()
     {
-        energyText.text = currentEnergy.ToString();
+        powerText.text = currentPower.ToString();
     }
 
-    public void GainEnergy()
+    public void GainPower()
     {
-        if (currentEnergy + energyGainAmount <= maxEnergy)
+        if (currentPower + powerGainAmount <= maxPower)
         {
-            currentEnergy = currentEnergy + energyGainAmount;
+            currentPower = currentPower + powerGainAmount;
         }
 
         UpdateText();
     }
 
-    public void UseAllEnergy()
+    public void UseAllPower()
     {
-        currentEnergy = 0;
+        currentPower = 0;
         UpdateText();
+    }
+
+    public void GetPowerPercentage()
+    {
+        powerPercent = (currentPower / maxPower * 100f);
     }
 }

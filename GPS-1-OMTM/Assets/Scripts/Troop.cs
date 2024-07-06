@@ -150,8 +150,6 @@ public class Troop : MonoBehaviour
             reducingShield = false;
             StartCoroutine(ReduceShieldOverTime());
         }
-
-        Debug.Log(transform.localScale.x);
     }
 
     IEnumerator ReduceShieldOverTime()
@@ -225,7 +223,7 @@ public class Troop : MonoBehaviour
             Instantiate(tauntMine, newPosition, Quaternion.Euler(0f, 0f, 0f), null);
             clickingOnLocation = false;
 
-            troopEnergy.UseAllEnergy();
+            troopEnergy.UseAllPower();
 
             ultimateOnCooldown = true;
             ultimateCooldownTimeRemaining = ultimateCooldown;
@@ -247,7 +245,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
-        if (troopEnergy.currentEnergy < troopEnergy.maxEnergy)
+        if (troopEnergy.currentPower < troopEnergy.maxPower)
         {
             Debug.Log("Not enough energy");
             yield break;
@@ -256,18 +254,18 @@ public class Troop : MonoBehaviour
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
-                troopEnergy.UseAllEnergy();
+                troopEnergy.UseAllPower();
                 yield return StartCoroutine(Ultimate_DPS());
                 break;
             case Ultimate.Ultimate_Tank:
-                troopEnergy.UseAllEnergy();
+                troopEnergy.UseAllPower();
                 yield return StartCoroutine(Ultimate_Tank());
                 break;
             case Ultimate.Ultimate_CC:
                 Ultimate_CC();
                 break;
             case Ultimate.Ultimate_Healer:
-                troopEnergy.UseAllEnergy();
+                troopEnergy.UseAllPower();
                 yield return StartCoroutine(Ultimate_Healer());
                 break;
         }
@@ -478,9 +476,9 @@ public class Troop : MonoBehaviour
 
         if (troopEnergy != null)
         {
-            if (troopEnergy.energyMethod == TroopEnergy.EnergyMethod.Tank)
+            if (troopEnergy.powerMethod == TroopEnergy.PowerMethod.Tank)
             {
-                troopEnergy.GainEnergy();
+                troopEnergy.GainPower();
             }
         }
     }

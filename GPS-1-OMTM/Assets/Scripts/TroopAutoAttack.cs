@@ -99,16 +99,16 @@ public class TroopAutoAttack : MonoBehaviour
                                 case TroopCharacter.DPS:
                                     enemy.TakeDamage(attackDamage);
                                     DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
-                                    troopEnergy.GainEnergy();
+                                    troopEnergy.GainPower();
                                     break;
                                 case TroopCharacter.Tank:
-                                    TankAttack(enemy);
+                                    TankAttack();
                                     break;
                                 case TroopCharacter.CC:
                                     enemy.TakeDamage(attackDamage);
                                     enemy.MarkForDeathStart();
                                     DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
-                                    troopEnergy.GainEnergy();
+                                    troopEnergy.GainPower();
                                     break;
                                 default:
                                     enemy.TakeDamage(attackDamage);
@@ -137,8 +137,9 @@ public class TroopAutoAttack : MonoBehaviour
 
     }
 
-    void TankAttack(Enemy enemy)
+    void TankAttack()
     {
+        /* //single attack
         tankAttackCounter++;
         if (tankAttackCounter < 3)
         {
@@ -150,6 +151,30 @@ public class TroopAutoAttack : MonoBehaviour
             // Third attack deals damage and applies knockback
             enemy.TakeDamage(attackDamage);
             enemy.ApplyKnockback(transform.position);
+            tankAttackCounter = 0; // Reset the counter
+        }
+        */
+
+        //aoe
+        tankAttackCounter++;
+        if (tankAttackCounter < 3)
+        {
+            // No damage for the first two attacks
+            Debug.Log("Attack: " + tankAttackCounter);
+        }
+        else
+        {
+            // Third attack deals AoE damage and applies knockback
+            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(transform.position, attackRange, LayerMask.GetMask("Enemy"));
+            foreach (Collider2D enemyCollider in enemiesHit)
+            {
+                Enemy enemy = enemyCollider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(attackDamage);
+                    enemy.ApplyKnockback(transform.position);
+                }
+            }
             tankAttackCounter = 0; // Reset the counter
         }
     }

@@ -69,40 +69,7 @@ public class TroopController2D : MonoBehaviour
             }
             else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
             {
-                Vector3 newPosition = selectedTroop.transform.position;
-                Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
-
-                foreach (var Hit in hits)
-                {
-                    if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
-                    {
-                        if (Hit.collider != null)
-                        {
-                            if (Hit.collider.CompareTag("[TP] Ground"))
-                            {
-                                newPosition.x = MousePosition.x;
-                                newPosition.y = -1; //Y value for ground
-                            }
-                            else if (Hit.collider.CompareTag("[TP] Platform"))
-                            {
-                                newPosition.x = MousePosition.x;
-                                newPosition.y = 5; //Y value for platform
-                            }
-                            else
-                            {
-                                newPosition.x = MousePosition.x;
-                            }
-                        }
-                        break; 
-                    }
-                }
-
-                selectedTroop.transform.position = newPosition;
-                selectedTroop.GetComponent<TroopClass>().SetTargetPositionHere();
-                Debug.Log("Troop Teleported");
-                energySystem.UseEnergy(50f);
-                cameraSystem.ToggleZoom();
+                StartCoroutine(Teleportation());
             }
             else if (selectedTroop != null) // clicking elsewhere should deselect the troop
             {
@@ -247,6 +214,49 @@ public class TroopController2D : MonoBehaviour
 
         //reset mouse position
         troop.GetComponent<TroopClass>().mousePosition = killdozer.position;
+    }
+
+    IEnumerator Teleportation()
+    {
+        Vector3 newPosition = selectedTroop.transform.position;
+        Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+        foreach (var Hit in hits)
+        {
+            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
+            {
+                if (Hit.collider != null)
+                {
+                    if (Hit.collider.CompareTag("[TP] Ground"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = -1; //Y value for ground
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Platform"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 5; //Y value for platform
+                    }
+                    else
+                    {
+                        newPosition.x = MousePosition.x;
+                    }
+                }
+                break;
+            }
+        }
+
+        yield return new WaitForSeconds(0.125f); //tp delay (slowed by 0.25 speed so its 0.5 seconds delay)
+
+        selectedTroop.transform.position = newPosition;
+        selectedTroop.GetComponent<TroopClass>().SetTargetPositionHere();
+        Debug.Log("Troop Teleported");
+        energySystem.UseEnergy(50f);
+
+        yield return new WaitForSeconds(0.05f); //small delay before zooming in 
+
+        cameraSystem.ToggleZoom();
     }
 }
 
