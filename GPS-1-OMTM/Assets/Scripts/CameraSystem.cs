@@ -5,6 +5,8 @@ using Cinemachine;
 
 public class CameraSystem : MonoBehaviour
 {
+    public float cameraSpeed;
+
     public bool cameraMovement = true;
     public GameObject killdozer; // Reference to the Killdozer
     public bool limitCameraMovement = false;
@@ -71,7 +73,7 @@ public class CameraSystem : MonoBehaviour
         }
 
         Vector3 moveDir = transform.right * inputDir.x;
-        float moveSpeed = 10f; // Camera movement speed
+        float moveSpeed = cameraSpeed; // Camera movement speed
         transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
 

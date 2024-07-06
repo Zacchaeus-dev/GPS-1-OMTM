@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Killdozer : MonoBehaviour
 {
-    public float speed;
+   /* public float speed;
     public Transform destination; // Destination point
 
     private Rigidbody2D rb;
-    public bool isMoving = true;
+    public bool isMoving = true;*/
 
     public int maxHealth;
     public int currentHealth;
@@ -17,19 +17,19 @@ public class Killdozer : MonoBehaviour
 
     public int directPathfinding;
 
-    public GameObject KDUI;
-    KDHealthUI KDUIScript;
+    /*public GameObject KDUI;
+    KDHealthUI KDUIScript;*/
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
-        KDUIScript = KDUI.GetComponent<KDHealthUI>();
+        //KDUIScript = KDUI.GetComponent<KDHealthUI>();
     }
 
     void Update()
     {
-        if (isMoving)
+/*        if (isMoving)
         {
             // Move the Killdozer towards the destination
             Vector2 position = Vector2.MoveTowards(transform.position, destination.position, speed * Time.fixedDeltaTime);
@@ -44,7 +44,7 @@ public class Killdozer : MonoBehaviour
                 //win screen
                 SceneManager.LoadScene("WinScreen");
             }
-        }
+        }*/
     }
 
     /* // Use this when a stop point is made
@@ -75,7 +75,7 @@ public class Killdozer : MonoBehaviour
             Death();
         }
 
-        KDUIScript.KDHealthText();
+        //KDUIScript.KDHealthText();
     }
 
     void Death()
@@ -119,7 +119,8 @@ public class Killdozer : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "[PF] Upper-Ground 1" || collision.gameObject.tag == "[PF] Upper-Ground 2" || collision.gameObject.tag == "[PF] Upper-Ground 3" || collision.gameObject.tag == "[PF] Upper-Ground 4")
+        if (collision.gameObject.tag == "[PF] Upper-Ground 1" || collision.gameObject.tag == "[PF] Upper-Ground 2" 
+            || collision.gameObject.tag == "[PF] Upper-Ground 3" || collision.gameObject.tag == "[PF] Upper-Ground 4")
         {
             directPathfinding = 0;
             //Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
