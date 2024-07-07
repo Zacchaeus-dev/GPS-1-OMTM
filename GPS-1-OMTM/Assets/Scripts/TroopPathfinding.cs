@@ -31,11 +31,11 @@ public class TroopClass : MonoBehaviour
     public RaycastHit2D hit;
     public Transform killdozer;
 
-    float timer;
-    public Animator attackAnimation;
+    
+    //public Animator attackAnimation;
 
     bool teleported;
- 
+    float timer;
 
     private void Start()
     {
@@ -2051,7 +2051,6 @@ public class TroopClass : MonoBehaviour
         if (isMoving)
         {
             Move();
-            attackAnimation.SetBool("Attack", false);
         }
         if (canClimb)
         {
