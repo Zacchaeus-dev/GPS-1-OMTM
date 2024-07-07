@@ -251,7 +251,7 @@ public class TroopController2D : MonoBehaviour
 
         selectedTroop.transform.position = newPosition;
         selectedTroop.GetComponent<TroopClass>().SetTargetPositionHere();
-        Debug.Log("Troop Teleported");
+        //Debug.Log("Troop Teleported");
         energySystem.UseEnergy(50f);
 
         yield return new WaitForSeconds(0.05f); //small delay before zooming in 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +43,7 @@ public class Enemy: MonoBehaviour
     private bool isKnockedBack = false;
     private bool isStunned = false;
     private bool facingRight = false;
+    public event Action onDeath;
 
     private void Start()
     {
@@ -230,11 +232,12 @@ public class Enemy: MonoBehaviour
     }
 
 
-    void Death()
+    public void Death()
     {
         // Put death animation or effects
 
-        //Debug.Log("Enemy is dead");
+        onDeath.Invoke();
+
         Destroy(gameObject);
     }
 

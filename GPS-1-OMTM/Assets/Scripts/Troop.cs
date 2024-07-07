@@ -11,6 +11,7 @@ public class Troop : MonoBehaviour
 {
     private Camera mainCamera;
     public TroopController2D troopController2D;
+    private TroopAutoAttack troopAutoAttack;
     public bool invincible = false;
     public bool selected = false;
     public bool stopAction = false;
@@ -23,7 +24,7 @@ public class Troop : MonoBehaviour
     public int attack;
     public float attackSpeed;
     public float attackRange;
-    public float moveSpeed = 5f;
+    public float moveSpeed = 1f;
 
     //Drop off platforms
     private Collider2D boxCollider;
@@ -37,14 +38,6 @@ public class Troop : MonoBehaviour
     private GameObject targetEnemy;
     private bool isAttacking;
     public bool canAttack = true;
-    
-    /*
-    //Fall damage
-    private bool isFalling = false;
-    private float fallStartHeight;
-    public float fallDamageThreshold = 1f; // Height at which fall damage starts to apply
-    public float fallDamageMultiplier = 5f;
-    */
 
     // Ultimate
     public Ultimate ultimate = Ultimate.None;
@@ -52,6 +45,9 @@ public class Troop : MonoBehaviour
     public float ultimateCooldown = 5f; 
     public float ultimateDuration = 0f;
     private bool clickingOnLocation = false; //CC's Ultimate
+    private bool isDPSUltimateActive = false;
+    private float powerDrainRate = 5f;
+    private float powerDrainAccumulator = 0f; // Accumulates the drained power over time
 
     // Ultimate Objects
     public GameObject tankShield;
@@ -116,6 +112,7 @@ public class Troop : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         troopEnergy = GetComponent<TroopEnergy>();
+        troopAutoAttack = GetComponent<TroopAutoAttack>();  
 
         UpdateHUD();
     }
@@ -132,6 +129,8 @@ public class Troop : MonoBehaviour
         */
 
         //HandleDropOffInput();
+
+        DrainPower(); //DPS's Ultimate
         HandleUltimateInput();
 
         if (targetEnemy != null)
@@ -139,33 +138,13 @@ public class Troop : MonoBehaviour
             MoveTowardsEnemy();
         }
 
-        //CheckFalling();
         CheckGround();
         UpdateUltimateUI();
-
-        if (shieldOn && reducingShield && currentShield > 0)
-        {
-            currentShield = currentShield - 50;
-            Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
-            reducingShield = false;
-            StartCoroutine(ReduceShieldOverTime());
-        }
+        DrainShield();
     }
 
     IEnumerator ReduceShieldOverTime()
     {
-        /*
-        reducingShield = true;
-        while (currentShield > 0)
-        {
-            currentShield = Mathf.Max(0, currentShield - 10);
-            Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
-            yield return new WaitForSeconds(10f);
-        }
-        reducingShield = false;
-        shieldOn = false;
-        */
-
         yield return new WaitForSeconds(1f);
 
         if (currentShield <= 0)
@@ -178,12 +157,18 @@ public class Troop : MonoBehaviour
 
     void HandleUltimateInput()
     {
-        if (selected && Input.GetKeyDown(KeyCode.R) && clickingOnLocation)
+        if (selected && Input.GetKeyDown(KeyCode.R) && clickingOnLocation) // Cancel clicking on location if it's already active (CC's Ultimate)
         {
-            // Cancel clicking on location if it's already active
             clickingOnLocation = false;
             Debug.Log("Ultimate targeting cancelled.");
         }
+        /*
+        else if (troopController2D.selectedTroop == troopController2D.troop1 && isDPSUltimateActive && Input.GetKeyDown(KeyCode.R)) //cancel dps's ultimate
+        {
+            //isDPSUltimateActive = false;
+            //EndUltimateDPS();
+        }
+        */
         else if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
         {
             // Start the ultimate if not on cooldown
@@ -240,22 +225,26 @@ public class Troop : MonoBehaviour
         {
             troopHUD.SetHUD(this);
         }
-
     }
 
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
+        //check if dps ultimate is on
+
+        /*
         if (troopEnergy.currentPower < troopEnergy.maxPower)
         {
             Debug.Log("Not enough energy");
             yield break;
         }
+        */
 
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
-                troopEnergy.UseAllPower();
-                yield return StartCoroutine(Ultimate_DPS());
+                //troopEnergy.UseAllPower();
+                //yield return StartCoroutine(Ultimate_DPS());
+                StartCoroutine(Ultimate_DPS());
                 break;
             case Ultimate.Ultimate_Tank:
                 troopEnergy.UseAllPower();
@@ -273,6 +262,38 @@ public class Troop : MonoBehaviour
 
     void UpdateUltimateUI()
     {
+        /*
+        if (ultimate == Ultimate.Ultimate_DPS)
+        {
+            if (ultimateDurationTimeRemaining > 0 && !isDPSUltimateActive)
+            {
+                Debug.Log("A");
+                ultimateReady.SetActive(false);
+                ultimateDurationTimeRemaining -= Time.deltaTime;
+                ultimateDurationOverlay.fillAmount = 1 - (ultimateDurationTimeRemaining / ultimateDuration);
+                ultimateDurationOverlay.enabled = true;
+            }
+            else if (ultimateCooldownTimeRemaining > 0 && !isDPSUltimateActive) //enter cooldown
+            {
+                Debug.Log("B");
+                ultimateDurationOverlay.fillAmount = 0;
+                ultimateDurationOverlay.enabled = false;
+
+                ultimateCooldownTimeRemaining -= Time.deltaTime;
+                ultimateCooldownOverlay.fillAmount = 1 - (ultimateCooldownTimeRemaining / ultimateCooldown);
+                ultimateCooldownOverlay.enabled = true;
+            }
+            else //ultimate ready
+            {
+                ultimateCooldownOverlay.fillAmount = 0;
+                ultimateCooldownOverlay.enabled = false;
+                ultimateDurationOverlay.fillAmount = 0;
+                ultimateDurationOverlay.enabled = false;
+                ultimateReady.SetActive(true);
+            }
+        }  
+        */
+
         if (ultimateOnCooldown)
         {
             if (ultimateDurationTimeRemaining > 0)
@@ -304,6 +325,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator Ultimate_DPS()
     {
+        isDPSUltimateActive = true;
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
@@ -311,16 +333,60 @@ public class Troop : MonoBehaviour
 
         //berserk
         //add attack and attack speed 
-        attack += 25;
-        attackSpeed -= 0.5f;
+        troopAutoAttack.attackDamage += 25;
+        troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
         attackAnimation.SetBool("Berserk", true);
-        yield return new WaitForSeconds(ultimateDuration); //add this for all abilities that have a duration
-        attackAnimation.SetBool("Berserk", false);
-        attack -= 25;
-        attackSpeed += 0.5f;
+
+        while (isDPSUltimateActive)
+        {
+            if (troopEnergy.currentPower <= 0)
+            {
+                isDPSUltimateActive = false;
+                EndUltimateDPS();
+            }
+
+            yield return null;
+        }
 
         yield return new WaitForSeconds(ultimateCooldown);
-        ultimateOnCooldown = false;    
+        ultimateOnCooldown = false;
+    }
+
+    void DrainPower()
+    {
+        if (isDPSUltimateActive)
+        {
+            float powerToDrain = powerDrainRate * Time.deltaTime;
+            powerDrainAccumulator += powerToDrain;
+
+            // Convert the accumulated power drain to an integer and subtract from currentPower
+            int integerPowerDrain = (int)powerDrainAccumulator;
+            if (integerPowerDrain > 0)
+            {
+                troopEnergy.currentPower -= integerPowerDrain;
+                powerDrainAccumulator -= integerPowerDrain; // Subtract the used portion
+
+                // Update the power display
+                troopEnergy.UpdateText();
+            }
+
+            // Check if the ultimate should be cancelled
+            if (troopController2D.selectedTroop == troopController2D.troop1 && (Input.GetKeyDown(KeyCode.R) || troopEnergy.currentPower <= 0))
+            {
+                isDPSUltimateActive = false;
+                EndUltimateDPS();
+            }
+        }
+
+    }
+
+    private void EndUltimateDPS()
+    {
+        ultimateDuration = 0;   
+        attackAnimation.SetBool("Berserk", false);
+        troopAutoAttack.attackDamage -= 25;
+        troopAutoAttack.attackCooldown += 0.075f;
+        isDPSUltimateActive = false;
     }
 
     IEnumerator Ultimate_Tank()
@@ -419,37 +485,16 @@ public class Troop : MonoBehaviour
         troop.reducingShield = true;
     }
 
-    /*
-    void CheckFalling()
+    void DrainShield()
     {
-        // Check if the troop is in the air
-        if (!isFalling && !IsGrounded())
+        if (shieldOn && reducingShield && currentShield > 0) //reduce shield over time
         {
-            isFalling = true;
-            fallStartHeight = transform.position.y;
-            //rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-        // Check if the troop has hit the ground
-        else if (isFalling && IsGrounded())
-        {
-            isFalling = false;
-            float fallDistance = fallStartHeight - transform.position.y;
-
-            if (fallDistance > fallDamageThreshold)
-            {
-                float damage = (fallDistance - fallDamageThreshold) * fallDamageMultiplier;
-                TakeDamage((int)damage); //change fall damage to int
-            }
+            currentShield = currentShield - 50;
+            Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
+            reducingShield = false;
+            StartCoroutine(ReduceShieldOverTime());
         }
     }
-    
-
-    bool IsGrounded()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
-        return hit.collider != null;
-    }
-    */
 
     public void TakeDamage(int damage)
     {
@@ -594,98 +639,7 @@ public class Troop : MonoBehaviour
             {
                 Debug.Log("Attacking");
                 isAttacking = true;
-
-                /*
-                switch (selectedWeapon)
-                {
-                    case (Weapon)1: //dps weapon 1
-                     
-                        break;
-
-                    case (Weapon)2: //dps weapon 2
-
-                        break;
-
-                    case (Weapon)3: //tank weapon 1
-                        StartCoroutine(TankWeapon1());
-                        break;
-
-                    case (Weapon)4: //tank weapon 2
-
-                        break;
-
-                    case (Weapon)5: //cc weapon 1
-                        StartCoroutine(CCWeapon1());
-                        break;
-
-                    case (Weapon)6: //cc weapon 2
-
-                        break;
-
-                    default:
-                        StartCoroutine(AttackEnemy()); //can be removed once all the attacks are finished
-                        break;
-                }
-                */
             }
         }
     }
-
-    /*
-    IEnumerator AttackEnemy()
-    {
-        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction) 
-        {
-            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
-            {
-                break;
-            }
-
-            targetEnemy.GetComponent<Enemy>().TakeDamage(attack); // enemy take damage equal to troop's attack
-            Debug.Log("Attacking enemy: " + targetEnemy.name);
-            yield return new WaitForSeconds(attackSpeed); 
-        }
-
-        targetEnemy = null; //deselect target enemy
-        isAttacking = false;
-    }
-
-    IEnumerator TankWeapon1() 
-    {
-        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
-        {
-            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
-            {
-                break;
-            }
-
-            targetEnemy.GetComponent<Enemy>().TakeDamage(attack); 
-            Debug.Log("Attacking enemy: " + targetEnemy.name);
-            yield return new WaitForSeconds(attackSpeed);
-        }
-
-        targetEnemy = null; 
-        isAttacking = false;
-    }
-
-    IEnumerator CCWeapon1()
-    {
-        while (targetEnemy != null && Vector2.Distance(transform.position, targetEnemy.transform.position) <= attackRange && !stopAction)
-        {
-            if (targetEnemy.GetComponent<Enemy>().currentHealth <= 0)
-            {
-                break;
-            }
-
-            Enemy enemy = targetEnemy.GetComponent<Enemy>();
-            enemy.TakeDamage(attack);
-            enemy.MarkForDeathStart();
-            Debug.Log("Attacking enemy: " + targetEnemy.name);
-            yield return new WaitForSeconds(attackSpeed);
-        }
-
-        targetEnemy = null;
-        isAttacking = false;
-    }
-    */
 }

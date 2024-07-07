@@ -160,7 +160,7 @@ public class TroopAutoAttack : MonoBehaviour
         if (tankAttackCounter < 3)
         {
             // No damage for the first two attacks
-            Debug.Log("Attack: " + tankAttackCounter);
+            //Debug.Log("Attack: " + tankAttackCounter);
         }
         else
         {

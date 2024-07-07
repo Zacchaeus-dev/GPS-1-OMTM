@@ -10,7 +10,7 @@ public class CameraSystem : MonoBehaviour
     public bool cameraMovement = true;
     public GameObject killdozer; // Reference to the Killdozer
     public bool limitCameraMovement = false;
-    public float maxDistanceFromKilldozer = 50f; // Maximum allowed distance from the Killdozer
+    public float maxDistanceFromKilldozer = 35f; // Maximum allowed distance from the Killdozer
 
     // Zoom feature
     public bool isZoomedOut = false;
