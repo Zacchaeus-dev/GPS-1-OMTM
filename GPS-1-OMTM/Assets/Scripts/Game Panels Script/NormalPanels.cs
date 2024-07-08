@@ -6,10 +6,7 @@ using UnityEngine.UI;
 
 public class NormalPanels : MonoBehaviour
 {
- 
     public GameObject settingsPanel;
-
-  
 
     public void OpenSettingsPanel()
     {
@@ -20,6 +17,4 @@ public class NormalPanels : MonoBehaviour
     {
         settingsPanel.SetActive(false);
     }
-
-
 }

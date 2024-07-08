@@ -13,39 +13,41 @@ public class EnergySystem : MonoBehaviour
 
     public int energyAmount = 10; // Amount of energy to add to the troop
 
+    public WaveSystem waveSystem;
 
     void Start()
     {
         currentEnergy = 0f;
-        StartCoroutine(RegenerateEnergy());
+        //StartCoroutine(RegenerateEnergy());
     }
 
     void Update()
     {
         RegenerateEnergy();
         UpdateEnergyUI();
-       
     }
 
-
+    /*
     IEnumerator RegenerateEnergy()
     {
-        while(true) 
+        while (waveSystem.currentState == WaveSystem.WaveState.InWave || waveSystem.currentState == WaveSystem.WaveState.Break))
         {
             currentEnergy = currentEnergy + 1;
             yield return new WaitForSeconds(0.1f);
         }
         
     }
+    */
+
     // Method to regenerate energy over time
-    /*private void RegenerateEnergy()
+    private void RegenerateEnergy()
     {
-        if (currentEnergy < maxEnergy)
+        if (currentEnergy < maxEnergy && (waveSystem.currentState == WaveSystem.WaveState.InWave || waveSystem.currentState == WaveSystem.WaveState.Break))
         {
             currentEnergy += regenRate * Time.deltaTime;
             currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy); // Ensure energy does not exceed maximum
         }
-    }*/
+    }
 
     // Method to use energy, returns true if there was enough energy to use, false otherwise
     public bool UseEnergy(float amount)

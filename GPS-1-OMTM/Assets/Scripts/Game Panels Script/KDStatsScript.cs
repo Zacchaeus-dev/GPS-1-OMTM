@@ -11,12 +11,9 @@ public class KDStatsScript : MonoBehaviour
     public EnergySystem energy;
 
     public Text maxHealthKD;
-    public Text totalenergy;
-    //public Text maxHealthKDText;
+    public Text totalEnergy;
+    public Text currentHealthKD;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         KDScript = KD.GetComponent<Killdozer>();
@@ -25,11 +22,12 @@ public class KDStatsScript : MonoBehaviour
         UpdateUI();
     }
 
-    // Update is called once per frame
     public void UpdateUI()
-    {
-      
-        //maxHealthKD.text = "Max Health: " + KDScript.maxHealth.ToString();
-        totalenergy.text = "TotalEnergy: " + energy.currentEnergy.ToString();
+    {     
+        maxHealthKD.text = "Max Health: " + KDScript.maxHealth.ToString();
+        currentHealthKD.text = "Current Health: " + KDScript.currentHealth.ToString();
+
+        int CurrentEnergy = (int)energy.currentEnergy; //show energy in int
+        totalEnergy.text = "Total Energy: " + CurrentEnergy.ToString();
     }
 }

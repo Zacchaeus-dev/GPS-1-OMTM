@@ -73,8 +73,7 @@ public class Enemy: MonoBehaviour
         MoveTowardsTarget();
 
         if (tookdamage == true)
-        {
-            
+        {         
             enemy.color = DamagedColor;
             timer = timer + Time.deltaTime;
             transform.localScale += transform.localScale / 1000;

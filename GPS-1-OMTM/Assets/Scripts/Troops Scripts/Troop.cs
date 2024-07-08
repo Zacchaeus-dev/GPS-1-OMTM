@@ -21,10 +21,10 @@ public class Troop : MonoBehaviour
     //Troop stats
     public int maxHealth;
     public int currentHealth;
-    public int attack;
-    public float attackSpeed;
-    public float attackRange;
-    public float moveSpeed = 1f;
+    //public int attack;
+    //public float attackSpeed;
+    //public float attackRange;
+    //public float moveSpeed = 1f;
 
     //Drop off platforms
     private Collider2D boxCollider;
@@ -42,9 +42,10 @@ public class Troop : MonoBehaviour
     // Ultimate
     public Ultimate ultimate = Ultimate.None;
     private bool ultimateOnCooldown = false;
-    public float ultimateCooldown = 5f; 
+    public float ultimateCooldown = 5f;
     public float ultimateDuration = 0f;
-    private bool clickingOnLocation = false; //CC's Ultimate
+    private bool ccClickingOnLocation = false;
+    private bool tankClickingOnLocation = false;
     private bool isDPSUltimateActive = false;
     private float powerDrainRate = 5f;
     private float powerDrainAccumulator = 0f; // Accumulates the drained power over time
@@ -112,7 +113,7 @@ public class Troop : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         troopEnergy = GetComponent<TroopEnergy>();
-        troopAutoAttack = GetComponent<TroopAutoAttack>();  
+        troopAutoAttack = GetComponent<TroopAutoAttack>();
 
         UpdateHUD();
     }
@@ -157,65 +158,28 @@ public class Troop : MonoBehaviour
 
     void HandleUltimateInput()
     {
-        if (selected && Input.GetKeyDown(KeyCode.R) && clickingOnLocation) // Cancel clicking on location if it's already active (CC's Ultimate)
+        if (selected && Input.GetKeyDown(KeyCode.R) && ccClickingOnLocation) // Cancel clicking on location if it's already active
         {
-            clickingOnLocation = false;
-            Debug.Log("Ultimate targeting cancelled.");
+            ccClickingOnLocation = false;
+            Debug.Log("CC Ultimate targeting cancelled.");
         }
-        /*
-        else if (troopController2D.selectedTroop == troopController2D.troop1 && isDPSUltimateActive && Input.GetKeyDown(KeyCode.R)) //cancel dps's ultimate
+        else if (selected && Input.GetKeyDown(KeyCode.R) && tankClickingOnLocation)
         {
-            //isDPSUltimateActive = false;
-            //EndUltimateDPS();
+            tankClickingOnLocation = false;
+            Debug.Log("Tank Ultimate targeting cancelled.");
         }
-        */
         else if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
         {
             // Start the ultimate if not on cooldown
             StartCoroutine(UseUltimate(ultimate));
         }
-        if (clickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
+        if (ccClickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
         {
-            Vector3 newPosition = transform.position;
-            Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
-
-            foreach (var Hit in hits)
-            {
-                if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
-                {
-                    if (Hit.collider != null)
-                    {
-                        if (Hit.collider.CompareTag("[TP] Ground"))
-                        {
-                            newPosition.x = MousePosition.x;
-                            newPosition.y = -3; //Y value for ground
-                        }
-                        else if (Hit.collider.CompareTag("[TP] Platform"))
-                        {
-                            newPosition.x = MousePosition.x;
-                            newPosition.y = 3; //Y value for platform
-                        }
-                        else
-                        {
-                            newPosition.x = MousePosition.x;
-                        }
-                    }
-                    break;
-                }
-            }
-
-            Instantiate(tauntMine, newPosition, Quaternion.Euler(0f, 0f, 0f), null);
-            clickingOnLocation = false;
-
-            troopEnergy.UseAllPower();
-
-            ultimateOnCooldown = true;
-            ultimateCooldownTimeRemaining = ultimateCooldown;
-            ultimateDurationTimeRemaining = ultimateDuration;
-            Debug.Log("CC Ultimate Activated");
-
-            StartCoroutine(Ultimate_CC_End());
+            HandleCCUltimateTargeting();
+        }
+        if (tankClickingOnLocation && Input.GetMouseButtonDown(0)) // Tank's ultimate
+        {
+            HandleTankUltimateTargeting();
         }
     }
 
@@ -227,28 +191,154 @@ public class Troop : MonoBehaviour
         }
     }
 
+    void HandleCCUltimateTargeting()
+    {
+        Vector3 newPosition = transform.position;
+        Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+        foreach (var Hit in hits)
+        {
+            if (Hit.collider != null && (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1")))
+            {
+                if (Hit.collider.CompareTag("[TP] Ground"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = -3;
+                }
+                else if (Hit.collider.CompareTag("[TP] Platform"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 3;
+                }
+                else if (Hit.collider.CompareTag("[TP] Platform 1"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 8;
+                }
+                break;
+            }
+        }
+
+        Instantiate(tauntMine, newPosition, Quaternion.identity);
+        ccClickingOnLocation = false;
+
+        troopEnergy.UseAllPower();
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("CC Ultimate Activated");
+
+        StartCoroutine(Ultimate_CC_End());
+    }
+
+    void HandleTankUltimateTargeting()
+    {
+        Vector3 newPosition = transform.position;
+        Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+        string currentTroopTag = GetCurrentTroopTag();
+        if (string.IsNullOrEmpty(currentTroopTag))
+        {
+            Debug.Log("Trigger Tag is null or empty");
+            tankClickingOnLocation = false;
+            return;
+        }
+        bool validTarget = false;
+
+        foreach (var Hit in hits)
+        {
+            if (Hit.collider != null && (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1")))
+            {
+                if (Hit.collider.CompareTag("[TP] Ground") && Hit.collider.CompareTag(currentTroopTag))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = -1;
+                    validTarget = true;
+                }
+                else if (Hit.collider.CompareTag("[TP] Platform") && Hit.collider.CompareTag(currentTroopTag))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 5;
+                    validTarget = true;
+                }
+                else if (Hit.collider.CompareTag("[TP] Platform 1") && Hit.collider.CompareTag(currentTroopTag))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 8;
+                    validTarget = true;
+                }
+                else
+                {
+                    validTarget = false;
+                }
+                break;
+            }
+        }
+
+        if (!validTarget)
+        {
+            Debug.Log("Invalid target for Shield's Position. Must click on the same elevation.");
+            tankClickingOnLocation = false;
+            return;
+        }
+
+        GameObject TankShield = Instantiate(tankShield, newPosition, Quaternion.identity);
+        tankClickingOnLocation = false;
+
+        troopEnergy.UseAllPower();
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("Tank Ultimate Activated");
+
+        Vector3 shieldPosition = TankShield.transform.position;
+        Vector3 tankPosition = transform.position;
+
+        Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
+
+        foreach (var enemyCollider in enemiesInRange)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(50);
+                StartCoroutine(StunEnemy(enemy, 2f)); //stun duration
+            }
+        }
+
+        StartCoroutine(DestroyTankShield(TankShield));
+    }
+
+    string GetCurrentTroopTag()
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(new Vector2(transform.position.x, transform.position.y), Vector2.zero);
+        foreach (var hit in hits)
+        {
+            if (hit.collider != null && (hit.collider.CompareTag("[TP] Ground") || hit.collider.CompareTag("[TP] Platform") || hit.collider.CompareTag("[TP] Platform 1")))
+            {
+                return hit.collider.tag;
+            }
+        }
+        return null;
+    }
+
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
-        //check if dps ultimate is on
-
-        /*
-        if (troopEnergy.currentPower < troopEnergy.maxPower)
+        if (ultimate != Ultimate.Ultimate_DPS && troopEnergy.currentPower < troopEnergy.maxPower)
         {
             Debug.Log("Not enough energy");
             yield break;
         }
-        */
 
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
-                //troopEnergy.UseAllPower();
-                //yield return StartCoroutine(Ultimate_DPS());
                 StartCoroutine(Ultimate_DPS());
                 break;
             case Ultimate.Ultimate_Tank:
-                troopEnergy.UseAllPower();
-                yield return StartCoroutine(Ultimate_Tank());
+                Ultimate_Tank();
                 break;
             case Ultimate.Ultimate_CC:
                 Ultimate_CC();
@@ -262,38 +352,6 @@ public class Troop : MonoBehaviour
 
     void UpdateUltimateUI()
     {
-        /*
-        if (ultimate == Ultimate.Ultimate_DPS)
-        {
-            if (ultimateDurationTimeRemaining > 0 && !isDPSUltimateActive)
-            {
-                Debug.Log("A");
-                ultimateReady.SetActive(false);
-                ultimateDurationTimeRemaining -= Time.deltaTime;
-                ultimateDurationOverlay.fillAmount = 1 - (ultimateDurationTimeRemaining / ultimateDuration);
-                ultimateDurationOverlay.enabled = true;
-            }
-            else if (ultimateCooldownTimeRemaining > 0 && !isDPSUltimateActive) //enter cooldown
-            {
-                Debug.Log("B");
-                ultimateDurationOverlay.fillAmount = 0;
-                ultimateDurationOverlay.enabled = false;
-
-                ultimateCooldownTimeRemaining -= Time.deltaTime;
-                ultimateCooldownOverlay.fillAmount = 1 - (ultimateCooldownTimeRemaining / ultimateCooldown);
-                ultimateCooldownOverlay.enabled = true;
-            }
-            else //ultimate ready
-            {
-                ultimateCooldownOverlay.fillAmount = 0;
-                ultimateCooldownOverlay.enabled = false;
-                ultimateDurationOverlay.fillAmount = 0;
-                ultimateDurationOverlay.enabled = false;
-                ultimateReady.SetActive(true);
-            }
-        }  
-        */
-
         if (ultimateOnCooldown)
         {
             if (ultimateDurationTimeRemaining > 0)
@@ -382,55 +440,24 @@ public class Troop : MonoBehaviour
 
     private void EndUltimateDPS()
     {
-        ultimateDuration = 0;   
+        ultimateDuration = 0;
         attackAnimation.SetBool("Berserk", false);
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
         isDPSUltimateActive = false;
     }
 
-    IEnumerator Ultimate_Tank()
+    void Ultimate_Tank()
     {
-        ultimateOnCooldown = true;
-        ultimateCooldownTimeRemaining = ultimateCooldown;
-        ultimateDurationTimeRemaining = ultimateDuration;
-        Debug.Log("Tank Ultimate Activated");
+        tankClickingOnLocation = true;
+    }
 
-        /*
-        // Determine the facing direction of the tank
-        Vector3 facingDirection = transform.localScale.x > 0 ? Vector3.right : Vector3.left;
-        Vector3 offset = facingDirection * 10f;
-        */
-
-        //delay for animations
-        yield return new WaitForSeconds(0.2f);
-
-        Vector3 offset = new Vector3(10f, 0f, 0);
-
-        // Spawn the shield at a distance apart from the tank
-        GameObject TankShield = Instantiate(tankShield, transform.position + offset, Quaternion.identity);
-
-        // Find all enemies between the tank and the shield
-        Vector3 shieldPosition = TankShield.transform.position;
-        Vector3 tankPosition = transform.position;
-        Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
-
-        yield return new WaitForSeconds(0.2f);
-
-        foreach (var enemyCollider in enemiesInRange)
-        {
-            Enemy enemy = enemyCollider.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(50); 
-                StartCoroutine(StunEnemy(enemy, 2f)); //stun duration
-            }
-        }
-
+    IEnumerator DestroyTankShield(GameObject TankShield)
+    {
         yield return new WaitForSeconds(ultimateDuration);
 
-        // Destroy the shield
         Destroy(TankShield);
+
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -438,14 +465,14 @@ public class Troop : MonoBehaviour
 
     private IEnumerator StunEnemy(Enemy enemy, float duration)
     {
-        enemy.Stun(true); 
+        enemy.Stun(true);
         yield return new WaitForSeconds(duration);
         enemy.Stun(false);
     }
 
     void Ultimate_CC()
     {
-        clickingOnLocation = true;
+        ccClickingOnLocation = true;
     }
 
     IEnumerator Ultimate_CC_End()
@@ -608,7 +635,7 @@ public class Troop : MonoBehaviour
     public void SetTargetEnemy(GameObject enemy, float attackRange)
     {
         this.targetEnemy = enemy;
-        this.attackRange = attackRange;
+        //this.attackRange = attackRange;
         this.isAttacking = false;
         this.stopAction = false;
     }
@@ -620,6 +647,7 @@ public class Troop : MonoBehaviour
 
     void MoveTowardsEnemy()
     {
+        /*
         if (stopAction || targetEnemy == null)
         {
             return;
@@ -641,5 +669,6 @@ public class Troop : MonoBehaviour
                 isAttacking = true;
             }
         }
+        */
     }
 }
