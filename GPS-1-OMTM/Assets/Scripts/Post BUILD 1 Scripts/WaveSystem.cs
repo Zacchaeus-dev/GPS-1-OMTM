@@ -141,6 +141,7 @@ public class WaveSystem : MonoBehaviour
     void HandleEnd()
     {
         waveStateText.text = "End";
+        settingsPanel.SetActive(true);
     }
 
     void StartMiniWave()
@@ -222,7 +223,17 @@ public class WaveSystem : MonoBehaviour
             kccPanel.SetActive(false);
         }
     }
+    public GameObject settingsPanel;
 
+    public void OpenSettingsPanel()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettingsPanel()
+    {
+        settingsPanel.SetActive(false);
+    }
     /*
     public enum WaveState { Start, Prewave, InWave, Break, End }
     public WaveState currentState;

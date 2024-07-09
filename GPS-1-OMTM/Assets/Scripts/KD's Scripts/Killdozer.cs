@@ -80,12 +80,21 @@ public class Killdozer : MonoBehaviour
 
     void Death()
     {
+
+
+
+        settingsPanel.SetActive(true);
+
+
+
+
+
         // Put death animation or effects
 
-        Debug.Log("Killdozer is dead");
+        //Debug.Log("Killdozer is dead");
 
         //lose screen
-        SceneManager.LoadScene("GameOver");
+        //SceneManager.LoadScene("GameOver");
     }
 
 
@@ -125,5 +134,17 @@ public class Killdozer : MonoBehaviour
             directPathfinding = 0;
             //Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
         }
+    }
+
+    public GameObject settingsPanel;
+
+    public void OpenSettingsPanel()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettingsPanel()
+    {
+        settingsPanel.SetActive(false);
     }
 }
