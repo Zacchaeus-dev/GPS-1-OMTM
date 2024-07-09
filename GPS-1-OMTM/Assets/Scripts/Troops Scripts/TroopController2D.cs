@@ -48,10 +48,20 @@ public class TroopController2D : MonoBehaviour
         HandleNumberKeyInput();
         //HandleEnemySelection();
         DetectDoubleClick();
+
+        if (WaveSystem.transitioning == true)
+        {
+            DeselectTroop();
+        }
     }
 
     void HandleMouseInput()
     {
+        if(WaveSystem.transitioning == true)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0)) // Left click
         {
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -92,6 +102,11 @@ public class TroopController2D : MonoBehaviour
 
     void DetectDoubleClick() //focus camera on troop
     {
+        if (WaveSystem.transitioning == true)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0)) 
         {
             float timeSinceLastClick = Time.time - lastClickTime;
@@ -113,6 +128,11 @@ public class TroopController2D : MonoBehaviour
 
     void HandleNumberKeyInput()
     {
+        if (WaveSystem.transitioning == true)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             HandleKeyPress(KeyCode.Alpha1, troop1);
@@ -133,6 +153,11 @@ public class TroopController2D : MonoBehaviour
 
     void HandleKeyPress(KeyCode key, GameObject troop)
     {
+        if (WaveSystem.transitioning == true)
+        {
+            return;
+        }
+
         if (key == lastKeyPressed && Time.time - lastKeyPressTime < doublePressTime)
         {
             // Double press

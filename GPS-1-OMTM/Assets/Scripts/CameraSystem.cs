@@ -29,6 +29,8 @@ public class CameraSystem : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     public float moveTime = 0.3f;
 
+    private bool focusOnKD;
+
     private void Start()
     {
         var camera = Camera.main;
@@ -162,7 +164,7 @@ public class CameraSystem : MonoBehaviour
         }
 
         StopAllCoroutines(); // Stop any existing focus coroutine
-        StartCoroutine(FocusCamera());
+        StartCoroutine(FocusCameraOnTroop());
     }
 
     public void DefocusTroop()
@@ -170,11 +172,33 @@ public class CameraSystem : MonoBehaviour
         focusedTroop = null;
     }
 
-    private IEnumerator FocusCamera()
+    public void FocusOnKilldozer()
+    {
+        StopAllCoroutines();
+        focusOnKD = true;
+        StartCoroutine(FocusCameraOnKilldozer());
+    }
+
+    public void DefocusKilldozer()
+    {
+        focusOnKD = false;
+    }
+
+    private IEnumerator FocusCameraOnTroop()
     {
         while (focusedTroop != null)
         {
             Vector3 targetPosition = new Vector3(focusedTroop.transform.position.x, transform.position.y, transform.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, moveTime);
+            yield return null;
+        }
+    }
+
+    private IEnumerator FocusCameraOnKilldozer()
+    {
+        while (focusOnKD)
+        {
+            Vector3 targetPosition = new Vector3(killdozer.transform.position.x, transform.position.y, transform.position.z);
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, moveTime);
             yield return null;
         }

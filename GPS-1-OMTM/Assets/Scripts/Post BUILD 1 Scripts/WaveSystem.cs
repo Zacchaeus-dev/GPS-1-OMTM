@@ -5,7 +5,7 @@ using TMPro;
 
 public class WaveSystem : MonoBehaviour
 {
-    public enum WaveState { Start, Prewave, InWave, Break, End }
+    public enum WaveState { Start, Prewave, InWave, Break, Transition, End }
     public WaveState currentState;
 
     [System.Serializable]
@@ -47,6 +47,15 @@ public class WaveSystem : MonoBehaviour
     public Transform killdozerTransform2;
     public Transform killdozerTransform3;
     public Transform killdozerTransform4;
+    public GameObject settingsPanel;
+    //public TroopController2D troopController2D;
+    //public TroopClass troopClass;
+    public CameraSystem cameraSystem;
+    public GameObject killdozer;
+    public Animator killdozerAnimator;
+    public static bool transitioning = false;
+    private bool teleported = false;
+    private bool transitioned = false;
 
     void Start()
     {
@@ -74,6 +83,9 @@ public class WaveSystem : MonoBehaviour
             case WaveState.Break:
                 HandleBreak();
                 break;
+            case WaveState.Transition:
+                HandleTransition();
+                break;
             case WaveState.End:
                 HandleEnd();
                 break;
@@ -99,7 +111,12 @@ public class WaveSystem : MonoBehaviour
 
     void HandlePrewave()
     {
-        TeleportTroopsToKilldozer();
+        if (!teleported)
+        {
+            TeleportTroopsToKilldozer();
+            teleported = true; 
+        }
+
         waveStateText.text = "Pre Wave";
 
         if (prewaveTimer > 0)
@@ -120,6 +137,7 @@ public class WaveSystem : MonoBehaviour
         {
             breakTimer = waves[currentWaveIndex].breakDuration;
             currentState = WaveState.Break;
+            teleported = false;
         }
         inwaveTimer -= Time.deltaTime;
     }
@@ -142,6 +160,67 @@ public class WaveSystem : MonoBehaviour
     {
         waveStateText.text = "End";
         settingsPanel.SetActive(true);
+    }
+
+    void HandleTransition()
+    {
+        if (transitioned)
+        {
+            return;
+        }
+
+        TeleportTroopsToKilldozer();
+        cameraSystem.FocusOnKilldozer();
+
+        troop1.transform.SetParent(killdozer.transform);
+        troop2.transform.SetParent(killdozer.transform);
+        troop3.transform.SetParent(killdozer.transform);
+        troop4.transform.SetParent(killdozer.transform);
+
+        troop1.GetComponent<BoxCollider2D>().enabled = false;
+        troop2.GetComponent<BoxCollider2D>().enabled = false;
+        troop3.GetComponent<BoxCollider2D>().enabled = false;
+        troop4.GetComponent<BoxCollider2D>().enabled = false;
+
+        waveStateText.text = "Transition";
+        transitioning = true;
+
+        killdozerAnimator.SetTrigger("Move Right");
+
+        transitioned = true;
+        StartCoroutine(TransitionDelay());
+    }
+
+    IEnumerator TransitionDelay()
+    {
+        yield return new WaitForSeconds(5.5f);
+        transitioning = false;
+        prewaveTimer = waves[currentWaveIndex].prewaveDuration;
+        currentState = WaveState.Prewave;
+
+        troop1.transform.SetParent(null);
+        troop2.transform.SetParent(null);
+        troop3.transform.SetParent(null);
+        troop4.transform.SetParent(null);
+
+        troop1.GetComponent<BoxCollider2D>().enabled = true;
+        troop2.GetComponent<BoxCollider2D>().enabled = true;
+        troop3.GetComponent<BoxCollider2D>().enabled = true;
+        troop4.GetComponent<BoxCollider2D>().enabled = true;
+
+        troop1.transform.position = killdozerTransform1.position;
+        troop2.transform.position = killdozerTransform2.position;
+        troop3.transform.position = killdozerTransform3.position;
+        troop4.transform.position = killdozerTransform4.position;
+
+        troop1.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop2.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop3.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop4.GetComponent<TroopClass>().SetTargetPositionHere();
+
+        transitioned = false;
+
+        cameraSystem.DefocusKilldozer();
     }
 
     void StartMiniWave()
@@ -172,8 +251,11 @@ public class WaveSystem : MonoBehaviour
         else
         {
             waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
-            prewaveTimer = waves[currentWaveIndex].prewaveDuration;
-            currentState = WaveState.Prewave;
+            miniWaveNumText.text = "0";
+            //prewaveTimer = waves[currentWaveIndex].prewaveDuration;
+            //currentState = WaveState.Prewave;
+
+            currentState = WaveState.Transition;
         }
     }
 
@@ -207,6 +289,8 @@ public class WaveSystem : MonoBehaviour
 
     void TeleportTroopsToKilldozer()
     {
+        //Vector3 offset = new Vector3(0, 0, 0); 
+
         troop1.transform.position = killdozerTransform1.position;
         troop2.transform.position = killdozerTransform2.position;
         troop3.transform.position = killdozerTransform3.position;
@@ -223,7 +307,6 @@ public class WaveSystem : MonoBehaviour
             kccPanel.SetActive(false);
         }
     }
-    public GameObject settingsPanel;
 
     public void OpenSettingsPanel()
     {
@@ -234,6 +317,7 @@ public class WaveSystem : MonoBehaviour
     {
         settingsPanel.SetActive(false);
     }
+
     /*
     public enum WaveState { Start, Prewave, InWave, Break, End }
     public WaveState currentState;
