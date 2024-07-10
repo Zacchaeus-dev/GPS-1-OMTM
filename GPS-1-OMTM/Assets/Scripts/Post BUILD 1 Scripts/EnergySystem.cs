@@ -10,6 +10,11 @@ public class EnergySystem : MonoBehaviour
 
     public float currentEnergy;
     public Text energyText; // Reference to UI Text to display energy
+    public Text energyTextDPS;
+    public Text energyTextTank;
+    public Text energyTextCC;
+    public Text energyTextHealer;
+    public Text energyTextKD;
 
     public int energyAmount = 10; // Amount of energy to add to the troop
 
@@ -86,11 +91,16 @@ public class EnergySystem : MonoBehaviour
     }
 
     // Method to update the UI with the current energy value
-    private void UpdateEnergyUI()
+    public void UpdateEnergyUI()
     {
-        if (energyText != null)
+        if (energyText != null || energyTextDPS != null || energyTextTank != null || energyTextCC != null || energyTextHealer != null || energyTextKD != null )
         {
             energyText.text = Mathf.FloorToInt(currentEnergy).ToString();
+            energyTextDPS.text = Mathf.FloorToInt(currentEnergy).ToString();
+            energyTextTank.text = Mathf.FloorToInt(currentEnergy).ToString();
+            energyTextCC.text = Mathf.FloorToInt(currentEnergy).ToString();
+            energyTextHealer.text = Mathf.FloorToInt(currentEnergy).ToString();
+            energyTextKD.text = Mathf.FloorToInt(currentEnergy).ToString();
         }
     }
 

@@ -62,8 +62,5 @@ public class StatsScript : MonoBehaviour
         Debug.Log("Switch");       
     }
 
-    /*void Update()
-    {
-        UpdateUI();
-    }*/
+  
 }

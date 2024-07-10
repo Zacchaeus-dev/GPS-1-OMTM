@@ -24,7 +24,7 @@ public class KDStatsScript : MonoBehaviour
 
     public void UpdateUI()
     {     
-        maxHealthKD.text = "Max Health: " + KDScript.maxHealth.ToString();
+        maxHealthKD.text = "" + KDScript.maxHealth.ToString();
         currentHealthKD.text = "Current Health: " + KDScript.currentHealth.ToString();
 
         int CurrentEnergy = (int)energy.currentEnergy; //show energy in int

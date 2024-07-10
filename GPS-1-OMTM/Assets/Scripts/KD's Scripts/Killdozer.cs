@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Killdozer : MonoBehaviour
@@ -14,6 +15,7 @@ public class Killdozer : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public bool invincible = false;
+    public Text Health;
 
     public int directPathfinding;
 
@@ -58,8 +60,14 @@ public class Killdozer : MonoBehaviour
         }
     }
     */
+    public void FixedUpdate()
+    {
+        if(Health != null)
+        {
+           Health.text  = Mathf.FloorToInt(currentHealth).ToString();
+        }
+    }
 
-    
     public void TakeDamage(int damage)
     {
         if (invincible)
