@@ -7,6 +7,7 @@ using UnityEditor.Experimental.GraphView;
 
 //using UnityEditor.Timeline;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TroopController2D : MonoBehaviour
 {
@@ -36,6 +37,17 @@ public class TroopController2D : MonoBehaviour
 
     public CameraSystem cameraSystem;
     public EnergySystem energySystem;
+
+    //tp animation
+    private Animator animator;
+    public GameObject tpAnimation1;
+    public GameObject tpAnimation2;
+    public GameObject tpAnimation3;
+    public GameObject tpAnimation4;
+    public GameObject troop1Sprite;
+    public GameObject troop2Sprite;
+    public GameObject troop3Sprite;
+    public GameObject troop4Sprite;
 
     void Start()
     {
@@ -181,7 +193,7 @@ public class TroopController2D : MonoBehaviour
         }
     }
 
-    void SelectTroop(GameObject troop)
+    public void SelectTroop(GameObject troop)
     {
         selectedTroop = troop;
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
@@ -272,14 +284,78 @@ public class TroopController2D : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.125f); //tp delay (slowed by 0.25 speed so its 0.5 seconds delay)
+        //animator = selectedTroop.GetComponent<Animator>();
+
+        if (selectedTroop == troop1)
+        {
+            animator = tpAnimation1.GetComponent<Animator>();
+            tpAnimation1.SetActive(true);
+        }
+        else if (selectedTroop == troop2)
+        {
+            animator = tpAnimation2.GetComponent<Animator>();
+            tpAnimation2.SetActive(true);
+        }
+        else if (selectedTroop == troop3)
+        {
+            animator = tpAnimation3.GetComponent<Animator>();
+            tpAnimation3.SetActive(true);
+        }
+        else if (selectedTroop == troop4)
+        {
+            animator = tpAnimation4.GetComponent<Animator>();
+            tpAnimation4.SetActive(true);
+        }
+
+        animator.SetTrigger("TP");
+
+        yield return new WaitForSeconds(0.075f);
+
+        //disable sprite
+        if (selectedTroop == troop1)
+        {
+            troop1Sprite.SetActive(false);
+        }
+        else if (selectedTroop == troop2)
+        {
+            troop2Sprite.SetActive(false);
+        }
+        else if (selectedTroop == troop3)
+        {
+            troop3Sprite.SetActive(false);
+        }
+        else if (selectedTroop == troop4)
+        {
+            troop4Sprite.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(0.15f); //tp delay (slowed by 0.25 speed so its 0.6 seconds delay)
+
+        //enable sprite
+        if (selectedTroop == troop1)
+        {
+            troop1Sprite.SetActive(true);
+        }
+        else if (selectedTroop == troop2)
+        {
+            troop2Sprite.SetActive(true);
+        }
+        else if (selectedTroop == troop3)
+        {
+            troop3Sprite.SetActive(true);
+        }
+        else if (selectedTroop == troop4)
+        {
+            troop4Sprite.SetActive(true);
+        }
 
         selectedTroop.transform.position = newPosition;
         selectedTroop.GetComponent<TroopClass>().SetTargetPositionHere();
-        //Debug.Log("Troop Teleported");
         energySystem.UseEnergy(50f);
 
-        yield return new WaitForSeconds(0.05f); //small delay before zooming in 
+        animator.SetTrigger("TP");
+
+        yield return new WaitForSeconds(0.075f);
 
         cameraSystem.ToggleZoom();
     }

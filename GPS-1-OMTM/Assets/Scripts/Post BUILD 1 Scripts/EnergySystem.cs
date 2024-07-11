@@ -22,7 +22,7 @@ public class EnergySystem : MonoBehaviour
 
     void Start()
     {
-        currentEnergy = 0f;
+        currentEnergy = 100f;
         //StartCoroutine(RegenerateEnergy());
     }
 

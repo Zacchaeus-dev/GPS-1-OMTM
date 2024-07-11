@@ -9,6 +9,12 @@ public class TroopHUD : MonoBehaviour
     public Slider hpSlider;
     public GameObject hpFill;
 
+    public TroopController2D troopController2D;
+    public CameraSystem cameraSystem;
+    public GameObject troop;
+    private float doubleClickTimeLimit = 0.3f;
+    private float lastClickTime;
+
     public void SetHUD(Troop _troop)
     {
         hpSlider.maxValue = _troop.maxHealth;
@@ -21,6 +27,21 @@ public class TroopHUD : MonoBehaviour
         else
         {
             hpFill.SetActive(true);
+        }
+    }
+
+    public void ButtonClick()
+    {
+        float timeSinceLastClick = Time.time - lastClickTime;
+        lastClickTime = Time.time;
+
+        if (timeSinceLastClick <= doubleClickTimeLimit)
+        {
+            cameraSystem.FocusOnTroop(troop);
+        }
+        else
+        {
+            troopController2D.SelectTroop(troop);
         }
     }
 }

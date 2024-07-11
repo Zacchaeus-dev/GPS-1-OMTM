@@ -76,7 +76,7 @@ public class Killdozer : MonoBehaviour
         }
 
         currentHealth -= damage;
-        Debug.Log("Killdozer took " + damage + " damage.");
+        //Debug.Log("Killdozer took " + damage + " damage.");
 
         if (currentHealth <= 0)
         {

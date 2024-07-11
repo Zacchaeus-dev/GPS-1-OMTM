@@ -220,7 +220,7 @@ public class Enemy: MonoBehaviour
         }
 
         currentHealth -= damage;
-        Debug.Log("Enemy took " + damage + " damage.");
+        //Debug.Log("Enemy took " + damage + " damage.");
 
         if (currentHealth <= 0)
         {
