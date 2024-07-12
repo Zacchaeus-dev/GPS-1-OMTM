@@ -181,7 +181,7 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator WaveAnimation()
     {
-        yield return new WaitForSeconds(2f); //animation duration
+        yield return new WaitForSeconds(1f); //animation duration
 
         //Debug.Log("Animation Ends");
 
@@ -233,6 +233,7 @@ public class WaveSystem : MonoBehaviour
             currentMiniWaveIndex++;
             breakTimer = waves[currentWaveIndex].breakDuration;
             currentState = WaveState.Break;
+            //startButton.SetActive(true); (skips transition)
             teleported = false;
         }
 
@@ -348,6 +349,11 @@ public class WaveSystem : MonoBehaviour
         troop2.GetComponent<TroopClass>().SetTargetPositionHere();
         troop3.GetComponent<TroopClass>().SetTargetPositionHere();
         troop4.GetComponent<TroopClass>().SetTargetPositionHere();
+
+        troop1.GetComponent<Troop>().FullHeal();
+        troop2.GetComponent<Troop>().FullHeal();
+        troop3.GetComponent<Troop>().FullHeal();
+        troop4.GetComponent<Troop>().FullHeal();
 
         transitioned = false;
 

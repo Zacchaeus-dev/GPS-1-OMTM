@@ -261,7 +261,7 @@ public class TroopController2D : MonoBehaviour
 
         foreach (var Hit in hits)
         {
-            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform"))
+            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1"))
             {
                 if (Hit.collider != null)
                 {
@@ -273,7 +273,12 @@ public class TroopController2D : MonoBehaviour
                     else if (Hit.collider.CompareTag("[TP] Platform"))
                     {
                         newPosition.x = MousePosition.x;
-                        newPosition.y = 5; //Y value for platform
+                        newPosition.y = 4.7f; //Y value for platform
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Platform 1"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 9.3f; //Y value for platform
                     }
                     else
                     {

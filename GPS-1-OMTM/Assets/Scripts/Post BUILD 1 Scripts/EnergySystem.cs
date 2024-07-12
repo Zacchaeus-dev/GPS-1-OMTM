@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class EnergySystem : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class EnergySystem : MonoBehaviour
 
     void Start()
     {
-        currentEnergy = 100f;
+        currentEnergy = 0f;
         //StartCoroutine(RegenerateEnergy());
     }
 

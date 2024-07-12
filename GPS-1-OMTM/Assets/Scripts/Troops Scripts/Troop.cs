@@ -555,6 +555,13 @@ public class Troop : MonoBehaviour
         }
     }
 
+    public void FullHeal()
+    {
+        currentHealth = maxHealth;
+        Debug.Log(gameObject.name + " is fully healed");
+        UpdateHUD();
+    }
+
     void Death()
     {
         // Put death animation or effects

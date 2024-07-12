@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Killdozer : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Killdozer : MonoBehaviour
     public int currentHealth;
     public bool invincible = false;
     public Text Health;
+    public TextMeshProUGUI uiHealth;
 
     public int directPathfinding;
 
@@ -27,6 +29,8 @@ public class Killdozer : MonoBehaviour
         //rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         //KDUIScript = KDUI.GetComponent<KDHealthUI>();
+
+        UpdateHealth();
     }
 
     void Update()
@@ -68,6 +72,14 @@ public class Killdozer : MonoBehaviour
         }
     }
 
+    public void UpdateHealth()
+    {
+        if (uiHealth != null)
+        {
+            uiHealth.text = currentHealth.ToString();
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         if (invincible)
@@ -75,8 +87,17 @@ public class Killdozer : MonoBehaviour
             return;
         }
 
-        currentHealth -= damage;
+        if (damage < currentHealth)
+        {
+            currentHealth -= damage;
+        }
+        else if (damage > currentHealth)
+        {
+            currentHealth = 0;
+        }
         //Debug.Log("Killdozer took " + damage + " damage.");
+
+        UpdateHealth();
 
         if (currentHealth <= 0)
         {
