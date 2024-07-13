@@ -31,8 +31,9 @@ public class TroopClass : MonoBehaviour
     public RaycastHit2D hit;
     public Transform killdozer;
 
-    
     //public Animator attackAnimation;
+
+    public TroopWeapon troopWeapon;
 
     bool teleported;
     float timer;
@@ -43,8 +44,39 @@ public class TroopClass : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         controllerScript = TroopController2D.GetComponent<TroopController2D>();
         OnKDScript = OnKDCollider.GetComponent<OnKDDetector>();
-
+        DetermineMoveSpeed();
         SetTargetPositionHere();
+    }
+
+    public void DetermineMoveSpeed()
+    {
+        switch (troopWeapon.selectedWeapon) //determine speed based on selected weapon
+        {
+            case TroopWeapon.Weapon.Weapon1_DPS:
+                moveSpeed = 8;
+                break;
+            case TroopWeapon.Weapon.Weapon2_DPS:
+                moveSpeed = 6;
+                break;
+            case TroopWeapon.Weapon.Weapon1_Tank:
+                moveSpeed = 5;
+                break;
+            case TroopWeapon.Weapon.Weapon2_Tank:
+                moveSpeed = 7;
+                break;
+            case TroopWeapon.Weapon.Weapon1_CC:
+                moveSpeed = 7;
+                break;
+            case TroopWeapon.Weapon.Weapon2_CC:
+                moveSpeed = 7;
+                break;
+            case TroopWeapon.Weapon.Weapon1_Healer:
+                moveSpeed = 6;
+                break;
+            case TroopWeapon.Weapon.Weapon2_Healer:
+                moveSpeed = 6;
+                break;
+        }
     }
 
     public void SetTargetPositionHere() //used after teleporting

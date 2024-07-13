@@ -34,7 +34,7 @@ public class Troop : MonoBehaviour
     private Rigidbody2D rb;
 
     //Attacks
-    public Weapon selectedWeapon = Weapon.None;
+    //public Weapon selectedWeapon = Weapon.None;
     private GameObject targetEnemy;
     private bool isAttacking;
     public bool canAttack = true;
@@ -53,8 +53,6 @@ public class Troop : MonoBehaviour
     // Ultimate Objects
     public GameObject tankShield;
     public GameObject tauntMine;
-    //public int tauntMineDamage;
-    //public float tauntMineRadius;
 
     // UI 
     public Image ultimateImage;
@@ -83,19 +81,6 @@ public class Troop : MonoBehaviour
     public bool shieldOn = false;
     public bool reducingShield = false;
 
-    public enum Weapon
-    {
-        None,
-        Weapon1_DPS,
-        Weapon2_DPS,
-        Weapon1_Tank,
-        Weapon2_Tank,
-        Weapon1_CC,
-        Weapon2_CC,
-        Weapon1_Healer,
-        Weapon2_Healer
-    }
-
     public enum Ultimate
     {
         None,
@@ -120,23 +105,12 @@ public class Troop : MonoBehaviour
 
     void Update()
     {
-        /*
-        // Check if the stop key is pressed and troop is selected
-        if (selected && Input.GetKeyDown(KeyCode.S))
-        {
-            stopAction = true;
-            StopAllCoroutines(); // Stop attacking coroutine
-        }
-        */
-
-        //HandleDropOffInput();
-
         DrainPower(); //DPS's Ultimate
         HandleUltimateInput();
 
         if (targetEnemy != null)
         {
-            MoveTowardsEnemy();
+            //MoveTowardsEnemy();
         }
 
         CheckGround();
@@ -424,7 +398,6 @@ public class Troop : MonoBehaviour
                 troopEnergy.currentPower -= integerPowerDrain;
                 powerDrainAccumulator -= integerPowerDrain; // Subtract the used portion
 
-                // Update the power display
                 troopEnergy.UpdateText();
             }
 
@@ -564,9 +537,7 @@ public class Troop : MonoBehaviour
 
     void Death()
     {
-        // Put death animation or effects
-
-        Debug.Log(gameObject.name + " is dead");
+        //Debug.Log(gameObject.name + " is dead");
 
         // Notify troopController2D to respawn this troop
         troopController2D.HandleRespawn(this);
@@ -585,10 +556,6 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = true;
         }
-        /*if (collision.gameObject.CompareTag("Killdozer"))
-        {
-            transform.SetParent(collision.transform); //set troop as kd's child
-        }*/
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -601,35 +568,7 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = false;
         }
-        /*if (collision.gameObject.CompareTag("Killdozer"))
-        {
-            transform.SetParent(null); //remove troop from kd's child
-        }*/
     }
-
-    /*
-    void HandleDropOffInput()
-    {
-        if (Input.GetKeyDown(KeyCode.F) && selected && troopOnPlatform)
-        {
-            Debug.Log("Drop Off");
-            StartCoroutine(DisableAndEnableColliders());
-        }
-    }
-
-    IEnumerator DisableAndEnableColliders()
-    {
-        boxCollider.enabled = false;
-        capsuleCollider.enabled = false;
-
-        rb.velocity = new Vector2(0, -30);
-
-        yield return new WaitForSeconds(0.05f);
-
-        boxCollider.enabled = true;
-        capsuleCollider.enabled = true;
-    }
-    */
 
     void CheckGround()
     {
@@ -652,9 +591,9 @@ public class Troop : MonoBehaviour
         this.targetEnemy = null;
     }
 
+    /*
     void MoveTowardsEnemy()
     {
-        /*
         if (stopAction || targetEnemy == null)
         {
             return;
@@ -676,6 +615,6 @@ public class Troop : MonoBehaviour
                 isAttacking = true;
             }
         }
-        */
     }
+    */
 }

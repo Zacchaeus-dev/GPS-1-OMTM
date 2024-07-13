@@ -16,6 +16,7 @@ public class HealerAutoHeal : MonoBehaviour
     private Rigidbody2D rb;
 
     private TroopEnergy troopEnergy;
+    public TroopWeapon troopWeapon;
 
     // Public references for LineRenderer and start position offset
     public LineRenderer lineRenderer;
@@ -41,7 +42,7 @@ public class HealerAutoHeal : MonoBehaviour
             }
             else
             {
-                MoveTowardsTarget();
+                //MoveTowardsTarget();
                 HealTarget();
             }
         }

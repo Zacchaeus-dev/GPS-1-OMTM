@@ -29,7 +29,7 @@ public class Enemy: MonoBehaviour
     public float killdozerStoppingDistance = 5.0f;
 
     //visual effect from damaged
-    public SpriteRenderer enemy;
+    public SpriteRenderer enemySprite;
     public Color DamagedColor;
     public Color NormalColor;
     float timer;
@@ -40,14 +40,17 @@ public class Enemy: MonoBehaviour
     public float slowEffectRadius = 5f;
     private Rigidbody2D rb;
 
+    public bool slowArea = false;
     private bool isKnockedBack = false;
     private bool isStunned = false;
     private bool facingRight = false;
     public event Action onDeath;
 
+    private bool moveRight; //initial move direction
+
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();   
+        rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
 
         // Find all troops and add their transforms to the potentialTargets list
@@ -65,6 +68,11 @@ public class Enemy: MonoBehaviour
         }
 
         normalScale = transform.localScale;
+
+        if (killdozerTransform != null) //determine move direction
+        {
+            moveRight = killdozerTransform.position.x > transform.position.x; //if kd is on the right
+        }
     }
 
     void Update()
@@ -73,14 +81,14 @@ public class Enemy: MonoBehaviour
         MoveTowardsTarget();
 
         if (tookdamage == true)
-        {         
-            enemy.color = DamagedColor;
+        {
+            enemySprite.color = DamagedColor;
             timer = timer + Time.deltaTime;
             transform.localScale += transform.localScale / 1000;
 
             if (timer >= 0.3)
             {
-                enemy.color = NormalColor;
+                enemySprite.color = NormalColor;
                 transform.localScale = normalScale;
                 timer = 0;
                 tookdamage = false;
@@ -90,22 +98,25 @@ public class Enemy: MonoBehaviour
 
     void FindClosestTarget()
     {
-        potentialTargets.RemoveAll(target => target == null); //removes null transforms in potential target list, so that enemy can always find a real transform
+        potentialTargets.RemoveAll(target => target == null); // Removes null transforms in potential target list, so that enemy can always find a real transform
 
         closestTarget = null; // Start with no target
         float closestDistanceSqr = Mathf.Infinity;
-        
+
         foreach (Transform target in potentialTargets) // For each target in the list
         {
             if (!target.gameObject.activeSelf) continue; // Skip inactive (dead) targets
 
             float distanceSqr = (target.position - transform.position).sqrMagnitude; // Calculate distance between enemy position and target position
-            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange) // If current target is closer than other targets and if target is within enemy detection range
+
+            // Check if the target is in the initial move direction
+            bool isTargetInInitialDirection = (moveRight && target.position.x > transform.position.x) || (!moveRight && target.position.x < transform.position.x);
+
+            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
                 // Update closest target to current target
                 closestDistanceSqr = distanceSqr;
                 closestTarget = target;
-                //Debug.Log("Found " + closestTarget.name);
             }
         }
     }
@@ -117,19 +128,23 @@ public class Enemy: MonoBehaviour
             float stoppingDistanceToUse = closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance; // Choose stopping distance based on if the target is the killdozer
             float distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
 
-            facingRight = closestTarget.position.x > transform.position.x; //check facing direction
+            //facingRight = closestTarget.position.x > transform.position.x; //check facing direction
 
-            if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
+            // Ensure enemy only moves in the initial direction
+            if ((moveRight && closestTarget.position.x > transform.position.x) || (!moveRight && closestTarget.position.x < transform.position.x))
             {
-                Vector3 direction = (closestTarget.position - transform.position).normalized;
-                direction.y = 0; //only move horizontally
-                transform.position += direction * moveSpeed * Time.deltaTime;
-            }
-            else if (!isAttacking) // otherwise stop and attack
-            {
-                //Debug.Log("Attacking target");
-                isAttacking = true;
-                StartCoroutine(AttackTarget());
+                if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
+                {
+                    Vector3 direction = (closestTarget.position - transform.position).normalized;
+                    direction.y = 0; //only move horizontally
+                    transform.position += direction * moveSpeed * Time.deltaTime;
+                }
+                else if (!isAttacking) // otherwise stop and attack
+                {
+                    //Debug.Log("Attacking target");
+                    isAttacking = true;
+                    StartCoroutine(AttackTarget());
+                }
             }
         }
     }
@@ -147,12 +162,14 @@ public class Enemy: MonoBehaviour
             if (!target.gameObject.activeSelf) continue; // Skip inactive (dead) targets
 
             float distanceSqr = (target.position - transform.position).sqrMagnitude; // Calculate distance between enemy position and target position
-            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange) // If current target is closer than other targets and if target is within enemy detection range
+
+            bool isTargetInInitialDirection = (moveRight && target.position.x > transform.position.x) || (!moveRight && target.position.x < transform.position.x);
+
+            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
                 // Update closest target to current target
                 closestDistanceSqr = distanceSqr;
                 closestTarget = target;
-                //Debug.Log("Found " + closestTarget.name);
             }
         }
     }
@@ -249,7 +266,12 @@ public class Enemy: MonoBehaviour
 
         markedForDeath = true;
         markForDeathIcon.SetActive(true);
-        SlowNearbyEnemies();
+
+        if (slowArea)
+        {
+            SlowNearbyEnemies();
+        }
+
         StartCoroutine((MarkForDeathEnd()));
     }
 
@@ -336,3 +358,4 @@ public class Enemy: MonoBehaviour
         isStunned = stun;
     }
 }
+

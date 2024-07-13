@@ -309,6 +309,16 @@ public class WaveSystem : MonoBehaviour
         troop3.transform.SetParent(killdozer.transform);
         troop4.transform.SetParent(killdozer.transform);
 
+        troop1.transform.position = killdozerTransform1.position;
+        troop2.transform.position = killdozerTransform2.position;
+        troop3.transform.position = killdozerTransform3.position;
+        troop4.transform.position = killdozerTransform4.position;
+
+        troop1.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop2.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop3.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop4.GetComponent<TroopClass>().SetTargetPositionHere();
+
         troop1.GetComponent<BoxCollider2D>().enabled = false;
         troop2.GetComponent<BoxCollider2D>().enabled = false;
         troop3.GetComponent<BoxCollider2D>().enabled = false;
