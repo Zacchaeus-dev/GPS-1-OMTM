@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingEnemy : MonoBehaviour
+public class NormalFlyingEnemy : MonoBehaviour
 {
     public int maxHealth; // Maximum health of the enemy
     public int currentHealth;
@@ -76,28 +76,14 @@ public class FlyingEnemy : MonoBehaviour
     {
         if (targetTroop != null)
         {
-            // Calculate distance to the target troop
-            float distanceToTroop = Vector2.Distance(transform.position, targetTroop.transform.position);
-
-            // Check if within attack range
-            if (distanceToTroop > attackRange)
-            {
-                // Move towards the troop if outside attack range, only in X-axis
-                Vector3 direction = (targetTroop.transform.position - transform.position).normalized;
-                direction.y = 0; // Ensure no movement in Y-axis
-                transform.position += direction * speed * Time.deltaTime;
-            }
-            else
-            {
-                // Stay at the edge of attack range
-                shouldMove = false; // Stop moving
-            }
-        }
-        else
-        {
-            shouldMove = true; // Resume moving if no troop in attack range
+            // Move towards the troop's position
+            Vector2 direction = (targetTroop.transform.position - transform.position).normalized;
+            direction.y = 0; // Prevent movement in the Y-axis
+            transform.position += (Vector3)direction * speed * Time.deltaTime;
         }
     }
+
+
 
     void HandleAttack()
     {

@@ -120,7 +120,9 @@ public class TroopAutoAttack : MonoBehaviour
                         {
                             targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
                             DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+
                         }
+                        
 
                         lastAttackTime = Time.time;
                     }
