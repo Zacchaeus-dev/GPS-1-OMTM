@@ -105,9 +105,37 @@ public class TroopController2D : MonoBehaviour
             int layerMask = LayerMask.GetMask("Pathfinding"); 
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
-            if (hit.collider != null)
+            bool GoingLeft = mousePosition.x < selectedTroop.transform.position.x;
+            
+            if (GoingLeft == true)
             {
-                selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
+                selectedTroop.GetComponent<TroopClass>().ONCE = false;
+                if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == true)
+                {
+                    Debug.Log("============== BLOCKED ON THE LEFT ===========");
+                }
+                else if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == false)
+                {
+                    if (hit.collider != null)
+                    {
+                        selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
+                    }
+                }
+            }
+            else if (GoingLeft == false)
+            {
+                selectedTroop.GetComponent<TroopClass>().ONCE2 = false;
+                if (selectedTroop.GetComponent<TroopClass>().BlockedRight == true)
+                {
+                    Debug.Log("============== BLOCKED ON THE RUGHT ===========");
+                }
+                else if (selectedTroop.GetComponent<TroopClass>().BlockedRight == false)
+                {
+                    if (hit.collider != null)
+                    {
+                        selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
+                    }
+                }
             }
         }
     }

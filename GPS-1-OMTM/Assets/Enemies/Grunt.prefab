@@ -141,11 +141,11 @@ MonoBehaviour:
   attack: 10
   attackSpeed: 1
   attackRange: 1
-  moveSpeed: 2
+  moveSpeed: 1.5
   markedForDeath: 0
   slowed: 0
   detectionRange: 70
-  troopStoppingDistance: 1
+  troopStoppingDistance: 2
   potentialTargets:
   - {fileID: 0}
   - {fileID: 0}
@@ -252,7 +252,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 128
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

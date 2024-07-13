@@ -1482,45 +1482,14 @@ public class TroopClass : MonoBehaviour
                 }
             }
 
-            /*// 3b. If click on verticallies, still move go on Ground
-            else if (hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1") || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 1") 
-            || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2") 
-            || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3")
-            || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4"))
+            // if pathfind blocked by an enemy
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
-                if (onPlatform == "Ground" || onPlatform == "KD Ground")
-                {
-                    targetPosition = new Vector2(mousePosition.x, transform.position.y); // Default to only X movement
-                    vertPosition = Vector2.zero;
-                    nearestVert = null;
-                }
-                else if (onPlatform == "KD Middle-Ground")
-                {
-
-                    FindAndGoToNearestVerticallyKD(mousePosition);
-                }
-                else if (onPlatform == "Upper-Ground 1")
-                {
-
-                    FindAndGoToNearestVertically1(mousePosition);
-                }
-                else if (onPlatform == "Upper-Ground 2")
-                {
-
-                    FindAndGoToNearestVertically2(mousePosition);
-                }
-                else if (onPlatform == "Upper-Ground 3")
-                {
-
-                    FindAndGoToNearestVertically3(mousePosition);
-                }                
-                else if (onPlatform == "Upper-Ground 4")
-                {
-
-                    FindAndGoToNearestVertically4(mousePosition);
-                }
+                Debug.Log("STOPPIN");
+                targetPosition = transform.position;
+                vertPosition = Vector2.zero;
+                nearestVert = null;
             }
-            //*/
 
             // == send over to <TroopClass> script == //
             if (controllerScript.selectedTroop != null)
@@ -1530,6 +1499,11 @@ public class TroopClass : MonoBehaviour
 
         }
     }
+
+    public bool ONCE;
+    public bool ONCE2;
+    public bool BlockedLeft;
+    public bool BlockedRight;
 
     void FindAndGoToNearestVerticallyKD(Vector2 mousePosition)
     {
