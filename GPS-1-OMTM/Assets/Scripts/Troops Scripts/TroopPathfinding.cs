@@ -224,6 +224,14 @@ public class TroopClass : MonoBehaviour
                         climbingUp = false;
                     }
                 }
+                else if (onPlatform == "Upper-Ground 4 (2)")
+                {
+                    if (onPlatform != "Ground")
+                    {
+                        FindAndGoToNearestVertically4TWO(mousePosition);
+                        climbingUp = false;
+                    }
+                }
             }
 
             // 1b. if click on any part of killdozer upperground
@@ -1344,9 +1352,8 @@ public class TroopClass : MonoBehaviour
                     // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
                     if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
                     {
-                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
-                        vertPosition = Vector2.zero;
-                        nearestVert = null;
+                        FindAndGoToNearestVerticallyKD2(mousePosition);
+                        climbingUp = true;
                     }
                     // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
                     else
@@ -1360,7 +1367,7 @@ public class TroopClass : MonoBehaviour
                 }                
                 else if (onPlatform == "KD Upper-Ground")
                 {
-/*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                   // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
                     if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
                     {
                         targetPosition = new Vector2(mousePosition.x, transform.position.y);
@@ -1369,12 +1376,14 @@ public class TroopClass : MonoBehaviour
                     }
                     // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
                     else
-                    {}*/
+                    {
                         if (onPlatform != "Ground")
                         {
                             FindAndGoToNearestVerticallyKD2(mousePosition);
                             climbingUp = false;
                         }
+                    }
+                        
                     
                 }
                 else if (onPlatform == "Ground")
