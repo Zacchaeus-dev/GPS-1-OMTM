@@ -49,6 +49,8 @@ public class TroopController2D : MonoBehaviour
     public GameObject troop3Sprite;
     public GameObject troop4Sprite;
 
+    private TroopClass troopPathfinding;
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -287,6 +289,8 @@ public class TroopController2D : MonoBehaviour
         Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
 
+        troopPathfinding = selectedTroop.GetComponent<TroopClass>(); //change the onPlatform value with this
+
         foreach (var Hit in hits)
         {
             if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1"))
@@ -297,6 +301,7 @@ public class TroopController2D : MonoBehaviour
                     {
                         newPosition.x = MousePosition.x;
                         newPosition.y = -1; //Y value for ground
+
                     }
                     else if (Hit.collider.CompareTag("[TP] Platform"))
                     {

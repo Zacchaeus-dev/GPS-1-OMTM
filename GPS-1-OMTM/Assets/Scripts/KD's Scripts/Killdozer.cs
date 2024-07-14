@@ -87,7 +87,7 @@ public class Killdozer : MonoBehaviour
             return;
         }
 
-        if (damage < currentHealth)
+        if (damage <= currentHealth)
         {
             currentHealth -= damage;
         }

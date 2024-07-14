@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1729821359936427449}
   - component: {fileID: 3614769247092955645}
   - component: {fileID: 7031319074673531879}
-  - component: {fileID: 574820260157439560}
+  - component: {fileID: 3417212990156351002}
   - component: {fileID: 7723110405879252575}
   - component: {fileID: 1836634834773702463}
   m_Layer: 7
@@ -56,22 +56,25 @@ MonoBehaviour:
   currentHealth: 250
   attack: 15
   attackSpeed: 1
-  attackRange: 1
+  attackRange: 20
   moveSpeed: 2
   markedForDeath: 0
   slowed: 0
-  detectionRange: 70
+  detectionRange: 100
   troopStoppingDistance: 1
   potentialTargets:
   - {fileID: 0}
   killdozerTransform: {fileID: 0}
-  killdozerStoppingDistance: 6.5
+  killdozerCollider: {fileID: 0}
+  killdozerStoppingDistance: 14.5
   enemySprite: {fileID: 299753947352045487}
   DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
   NormalColor: {r: 1, g: 1, b: 1, a: 1}
   markForDeathIcon: {fileID: 4079625021068982437}
   slowEffectRadius: 5
   slowArea: 0
+  energyOrb: {fileID: 1836634834773702463}
+  energyOrbDropNum: 2
 --- !u!212 &3614769247092955645
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -151,8 +154,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &574820260157439560
-CapsuleCollider2D:
+--- !u!61 &3417212990156351002
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -170,22 +173,32 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0000005364418, y: 1.0000868}
-  m_Size: {x: 1.7559909, y: 4.8474283}
-  m_Direction: 0
+  m_Offset: {x: 0.0048698783, y: 1.3003137}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.7694741, y: 4.886332}
+  m_EdgeRadius: 0
 --- !u!114 &7723110405879252575
 MonoBehaviour:
   m_ObjectHideFlags: 0

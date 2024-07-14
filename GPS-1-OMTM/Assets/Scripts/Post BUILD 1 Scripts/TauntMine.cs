@@ -7,6 +7,8 @@ public class TauntMine : MonoBehaviour
     public int tauntMineDamage;
     public float tauntMineRadius;
     public float timeUntilExplode = 7.5f;
+    public float pullForce = 15f;
+    private bool taunting = false;
 
     Collider2D[] enemies;
 
@@ -15,12 +17,21 @@ public class TauntMine : MonoBehaviour
         Vector3 spawnPosition = gameObject.transform.position;
         enemies = Physics2D.OverlapCircleAll(spawnPosition, tauntMineRadius);
 
-        TauntEnemies();
+        PullEnemies();
+        AddToEnemyTargets();
 
         StartCoroutine(ExplodeMine());
     }
 
-    void TauntEnemies()
+    private void Update()
+    {
+        if(taunting)
+        {
+            TauntEnemies();
+        }
+    }
+
+    void AddToEnemyTargets()
     {
         foreach (var enemy in enemies)
         {
@@ -33,11 +44,50 @@ public class TauntMine : MonoBehaviour
                 }
             }
         }
+
+        taunting = true;
+    }
+
+    void PullEnemies()
+    {
+        foreach (var enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
+                if (enemyRb != null)
+                {
+                    Vector2 direction = (transform.position - enemy.transform.position).normalized;
+                    enemyRb.AddForce(direction * pullForce, ForceMode2D.Impulse);
+                }
+            }
+        }
+    }
+
+    void TauntEnemies()
+    {
+        foreach (var enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
+                if (enemyRb != null)
+                {
+                    Vector2 direction = (transform.position - enemy.transform.position).normalized;
+                    enemyRb.AddForce(direction * 1, ForceMode2D.Impulse);
+                }
+            }
+        }
     }
 
     IEnumerator ExplodeMine()
     {
         yield return new WaitForSeconds(timeUntilExplode);
+
+        taunting = false;
+
+        Vector3 spawnPosition = gameObject.transform.position; //reset the radius
+        enemies = Physics2D.OverlapCircleAll(spawnPosition, tauntMineRadius);
 
         foreach (var enemy in enemies)
         {

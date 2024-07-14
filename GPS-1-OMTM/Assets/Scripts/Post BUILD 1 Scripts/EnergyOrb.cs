@@ -15,7 +15,14 @@ public class EnergyOrb : MonoBehaviour
             if (otherTroopEnergy != null)
             {
                 // Add energy to the troop
-                otherTroopEnergy.currentPower += energyAmount;
+                if (otherTroopEnergy.currentPower + energyAmount > otherTroopEnergy.maxPower)
+                {
+                    otherTroopEnergy.currentPower = otherTroopEnergy.maxPower;
+                }
+                else
+                {
+                    otherTroopEnergy.currentPower += energyAmount;
+                }
                 otherTroopEnergy.UpdateText();
 
                 // Optionally, play a sound, deactivate the energy orb, etc.

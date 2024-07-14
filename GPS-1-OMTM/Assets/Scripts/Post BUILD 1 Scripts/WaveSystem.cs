@@ -79,6 +79,8 @@ public class WaveSystem : MonoBehaviour
         public List<MiniWave> miniWaves;
         public float prewaveDuration;
         public float breakDuration;
+        public List<GameObject> objectsToDisableDuringWave;
+        public List<GameObject> objectsToEnableDuringWave;
     }
 
     public List<Wave> waves;
@@ -158,6 +160,25 @@ public class WaveSystem : MonoBehaviour
         UpdateButtonState();
     }
 
+    public void SkipWave()
+    {
+        waves[currentWaveIndex].prewaveDuration = 0;
+        waves[currentWaveIndex].breakDuration = 0;
+        inwaveTimer1 = 0;
+        inwaveTimer2 = 0;
+        inwaveTimer3 = 0;
+        inwaveTimer4 = 0;
+        inwaveTimer5 = 0;
+        inwaveTimer6 = 0;
+        inwaveTimer7 = 0;
+        inwaveTimer8 = 0;
+        inwaveTimer9 = 0;
+        inwaveTimer10 = 0;
+        inwaveTimer11 = 0;
+        inwaveTimer12 = 0;
+        aliveEnemies.Clear();
+    }
+
     public void StartWave()
     {
         waveStateText.text = "Pre Wave";
@@ -213,6 +234,24 @@ public class WaveSystem : MonoBehaviour
         }
 
         waveStateText.text = "Pre Wave";
+
+        //Debug.Log(currentWaveIndex.ToString());
+
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToDisableDuringWave) //disable objects for that wave
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToEnableDuringWave) //enable objects for that wave
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
 
         if (prewaveTimer > 0)
         {
@@ -284,6 +323,22 @@ public class WaveSystem : MonoBehaviour
         }
         else
         {
+            foreach (GameObject obj in waves[currentWaveIndex].objectsToDisableDuringWave) //re enable objects
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(true);
+                }
+            }
+
+            foreach (GameObject obj in waves[currentWaveIndex].objectsToEnableDuringWave) //re disable objects
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                }
+            }
+
             StartMiniWave();
         }
     }

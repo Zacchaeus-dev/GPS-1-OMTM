@@ -26,6 +26,7 @@ public class Enemy: MonoBehaviour
     private bool isAttacking;
 
     public Transform killdozerTransform; //killdozer position
+    public Collider2D killdozerCollider;
     public float killdozerStoppingDistance = 5.0f;
 
     //visual effect from damaged
@@ -46,6 +47,9 @@ public class Enemy: MonoBehaviour
     private bool facingRight = false;
     public event Action onDeath;
 
+    public DropEnergyOrbOnDeath energyOrb;
+    public int energyOrbDropNum = 1;
+
     private bool moveRight; //initial move direction
 
     private void Start()
@@ -65,6 +69,7 @@ public class Enemy: MonoBehaviour
         {
             potentialTargets.Add(killdozer.transform);
             killdozerTransform = killdozer.transform;
+            killdozerCollider = killdozer.GetComponent<BoxCollider2D>();
         }
 
         normalScale = transform.localScale;
@@ -100,6 +105,13 @@ public class Enemy: MonoBehaviour
     {
         potentialTargets.RemoveAll(target => target == null); // Removes null transforms in potential target list, so that enemy can always find a real transform
 
+        if (closestTarget != null && closestTarget == killdozerTransform)
+        {
+            // Continue attacking the Killdozer 
+            Debug.Log("Prioritize KD");
+            return;
+        }
+
         closestTarget = null; // Start with no target
         float closestDistanceSqr = Mathf.Infinity;
 
@@ -114,9 +126,19 @@ public class Enemy: MonoBehaviour
 
             if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
-                // Update closest target to current target
-                closestDistanceSqr = distanceSqr;
-                closestTarget = target;
+                if (IsInsideKilldozer(target))
+                {
+                    // Prioritize the Killdozer if the target is inside it
+                    closestTarget = killdozerTransform;
+                    closestDistanceSqr = 0;
+                    Debug.Log("Found KD with Troops On it");
+                }
+                else
+                {
+                    // Update closest target to current target
+                    closestDistanceSqr = distanceSqr;
+                    closestTarget = target;
+                }
             }
         }
     }
@@ -128,7 +150,7 @@ public class Enemy: MonoBehaviour
             float stoppingDistanceToUse = closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance; // Choose stopping distance based on if the target is the killdozer
             float distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
 
-            //facingRight = closestTarget.position.x > transform.position.x; //check facing direction
+            facingRight = closestTarget.position.x > transform.position.x; //check facing direction (for knock back)
 
             // Ensure enemy only moves in the initial direction
             if ((moveRight && closestTarget.position.x > transform.position.x) || (!moveRight && closestTarget.position.x < transform.position.x))
@@ -154,6 +176,7 @@ public class Enemy: MonoBehaviour
         potentialTargets.RemoveAll(target => target == null); //removes null transforms in potential target list, so that enemy can always find a real transform
         potentialTargets.Add(objectTransform);
 
+        /*
         closestTarget = null; // Start with no target
         float closestDistanceSqr = Mathf.Infinity;
 
@@ -172,6 +195,14 @@ public class Enemy: MonoBehaviour
                 closestTarget = target;
             }
         }
+        */
+
+        FindClosestTarget();
+    }
+
+    bool IsInsideKilldozer(Transform target)
+    {
+        return killdozerCollider.bounds.Contains(target.position); // Check if the target's position is within the Killdozer's collider bounds
     }
 
     IEnumerator AttackTarget()
@@ -250,7 +281,12 @@ public class Enemy: MonoBehaviour
 
     public void Death()
     {
-        // Put death animation or effects
+        int i = 0;
+        while (i < energyOrbDropNum)
+        {
+            energyOrb.DropEnergyOrb();
+            i++;
+        }
 
         onDeath.Invoke();
 

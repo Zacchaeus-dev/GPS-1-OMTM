@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3267627570627783171}
   - component: {fileID: 6599155213906096576}
   - component: {fileID: 7797885612375523985}
-  - component: {fileID: 4064590977300128009}
+  - component: {fileID: 5121045749212052956}
   - component: {fileID: 4530887168777485784}
   - component: {fileID: 4183063064124180584}
   m_Layer: 7
@@ -140,24 +140,27 @@ MonoBehaviour:
   currentHealth: 40
   attack: 10
   attackSpeed: 1
-  attackRange: 1
+  attackRange: 20
   moveSpeed: 1.5
   markedForDeath: 0
   slowed: 0
-  detectionRange: 70
+  detectionRange: 100
   troopStoppingDistance: 2
   potentialTargets:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   killdozerTransform: {fileID: 0}
-  killdozerStoppingDistance: 6.5
+  killdozerCollider: {fileID: 0}
+  killdozerStoppingDistance: 14.5
   enemySprite: {fileID: 241055197134439526}
   DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
   NormalColor: {r: 1, g: 1, b: 1, a: 1}
   markForDeathIcon: {fileID: 7463564859065588448}
   slowEffectRadius: 5
   slowArea: 0
+  energyOrb: {fileID: 4183063064124180584}
+  energyOrbDropNum: 1
 --- !u!212 &6599155213906096576
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -225,7 +228,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -237,8 +240,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &4064590977300128009
-CapsuleCollider2D:
+--- !u!61 &5121045749212052956
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -256,22 +259,32 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0022625923, y: 0.0014284849}
-  m_Size: {x: 1.1855228, y: 2.148115}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0.002817154}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.1941035, y: 2.1501765}
+  m_EdgeRadius: 0
 --- !u!114 &4530887168777485784
 MonoBehaviour:
   m_ObjectHideFlags: 0

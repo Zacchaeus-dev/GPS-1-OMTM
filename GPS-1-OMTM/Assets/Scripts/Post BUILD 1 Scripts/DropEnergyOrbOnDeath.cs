@@ -30,9 +30,11 @@ public class DropEnergyOrbOnDeath : MonoBehaviour
         }
     }
 
+    /*
     void OnDestroy()
     {
         // This function is called when the GameObject is destroyed (when the enemy is killed)
         DropEnergyOrb();
     }
+    */
 }

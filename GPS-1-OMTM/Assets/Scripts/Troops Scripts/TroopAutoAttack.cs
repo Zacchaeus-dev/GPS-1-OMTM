@@ -236,11 +236,23 @@ public class TroopAutoAttack : MonoBehaviour
         troopEnergy.GainPower();
     }
 
-    void CC_Weapon2Attack(Enemy enemy)
+    void CC_Weapon2Attack(Enemy _enemy)
     {
-        enemy.TakeDamage(attackDamage);
-        enemy.MarkForDeathStart();
-        DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+        //unfinished
+        Vector2 attackCenter = _enemy.transform.position; // Center of the attack
+        Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 15f, LayerMask.GetMask("Enemy")); // AOE detection
+
+        foreach (Collider2D enemyCollider in enemiesHit)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(attackDamage);
+                enemy.MarkForDeathStart();
+            }
+        }
+
+        DrawBulletTracer(transform.position + startOffset, attackCenter);
         troopEnergy.GainPower();
     }
 
