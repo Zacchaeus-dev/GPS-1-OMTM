@@ -108,6 +108,7 @@ public class TroopController2D : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
             bool GoingLeft = mousePosition.x < selectedTroop.transform.position.x;
+            Vector2 pos = new Vector2(mousePosition.x, transform.position.y);
             
             if (GoingLeft == true)
             {
@@ -121,6 +122,9 @@ public class TroopController2D : MonoBehaviour
                     if (hit.collider != null)
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
+                        selectedTroop.GetComponent<TroopClass>().SpawnPathfindArrow(mousePosition);
+
+
                     }
                 }
             }
@@ -136,12 +140,12 @@ public class TroopController2D : MonoBehaviour
                     if (hit.collider != null)
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
+                        selectedTroop.GetComponent<TroopClass>().SpawnPathfindArrow(mousePosition);
                     }
                 }
             }
         }
     }
-
     void DetectDoubleClick() //focus camera on troop
     {
         if (WaveSystem.transitioning == true)

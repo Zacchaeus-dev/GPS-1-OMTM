@@ -79,10 +79,21 @@ public class TroopClass : MonoBehaviour
         }
     }
 
-    public void SetTargetPositionHere() //used after teleporting
+    public void SetTargetPositionHere() //used after teleporting to stop troops from moving or climbing
     {
         targetPosition = transform.position;
         teleported = true;
+        isMoving = false;
+        canClimb = false;
+        arrow.SetActive(false);
+    }
+
+    public void SpawnPathfindArrow(Vector2 endPosition)
+    {
+        //bring arrow to targetPosition
+/*        arrow.SetActive(false);
+        arrow.SetActive(true);
+        arrow.transform.position = endPosition;*/
     }
 
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
@@ -1504,10 +1515,60 @@ public class TroopClass : MonoBehaviour
             if (controllerScript.selectedTroop != null)
             {
                 GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert, climbingUp);
+
+
+                // For Pathfind Arrow
+                arrow.SetActive(false);
+                arrow.SetActive(true);
+
+                // if ground level
+                if (hit.collider.CompareTag("[PF] Ground")
+                || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4"))
+                {
+                    arrow.transform.position = new Vector2(mousePosition.x, -2.34f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
+
+
+                // if middleground level
+                if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground")
+                || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 3")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 4")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4 (2)"))
+                {
+                    arrow.transform.position = new Vector2(mousePosition.x, 3.58f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
+
+
+                //if upperground level
+                if (hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 3 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 4 (2)")
+                    || hit.collider.CompareTag("[PF] KD Upper-Ground"))
+                {
+                    
+                    arrow.transform.position = new Vector2(mousePosition.x, 8.24f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
+                
+                
             }
 
         }
     }
+    public GameObject arrow;
 
     public bool ONCE;
     public bool ONCE2;
