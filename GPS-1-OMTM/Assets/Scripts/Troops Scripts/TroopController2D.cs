@@ -233,6 +233,11 @@ public class TroopController2D : MonoBehaviour
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
         selectedTroop.GetComponent<Troop>().selected = true;
         selectedTroop.GetComponent<Troop>().highlight.SetActive(true);
+        selectedTroop.GetComponent<Troop>().arrow.SetActive(true);
+        if (selectedTroop.GetComponent<TroopAttackRange>() != null)
+        {
+            selectedTroop.GetComponent<TroopAttackRange>().DrawCircle();
+        }
         //Debug.Log("Troop selected: " + selectedTroop.name);
     }
 
@@ -240,6 +245,12 @@ public class TroopController2D : MonoBehaviour
     {
         selectedTroop.GetComponent<Troop>().selected = false; //necessary for platform drop off to work as intended
         selectedTroop.GetComponent<Troop>().highlight.SetActive(false);
+        selectedTroop.GetComponent<Troop>().arrow.SetActive(false);
+        if (selectedTroop.GetComponent<TroopAttackRange>() != null)
+        {
+            selectedTroop.GetComponent<TroopAttackRange>().DisableCircle();
+        }
+        selectedTroop = null;
         cameraSystem.DefocusTroop();
     }
 
@@ -326,27 +337,33 @@ public class TroopController2D : MonoBehaviour
             }
         }
 
-        //animator = selectedTroop.GetComponent<Animator>();
-
         if (selectedTroop == troop1)
         {
             animator = tpAnimation1.GetComponent<Animator>();
             tpAnimation1.SetActive(true);
+            troop1.GetComponent<Troop>().invincible = true;
+            troop1.GetComponent<TroopAutoAttack>().targetEnemy = null;
         }
         else if (selectedTroop == troop2)
         {
             animator = tpAnimation2.GetComponent<Animator>();
             tpAnimation2.SetActive(true);
+            troop2.GetComponent<Troop>().invincible = true;
+            troop2.GetComponent<TroopAutoAttack>().targetEnemy = null;
         }
         else if (selectedTroop == troop3)
         {
             animator = tpAnimation3.GetComponent<Animator>();
             tpAnimation3.SetActive(true);
+            troop3.GetComponent<Troop>().invincible = true;
+            troop3.GetComponent<TroopAutoAttack>().targetEnemy = null;
         }
         else if (selectedTroop == troop4)
         {
             animator = tpAnimation4.GetComponent<Animator>();
             tpAnimation4.SetActive(true);
+            troop4.GetComponent<Troop>().invincible = true;
+            troop4.GetComponent<TroopAutoAttack>().targetEnemy = null;
         }
 
         animator.SetTrigger("TP");
@@ -398,6 +415,34 @@ public class TroopController2D : MonoBehaviour
         animator.SetTrigger("TP");
 
         yield return new WaitForSeconds(0.075f);
+
+        //TroopAutoAttack autoAttack = selectedTroop.GetComponent<TroopAutoAttack>();
+
+        if (selectedTroop == troop1)
+        {
+            troop1.GetComponent<Troop>().invincible = false;
+            //autoAttack = troop1.GetComponent<TroopAutoAttack>();
+            //autoAttack.lastAttackTime = autoAttack.attackCooldown; //reset attack cooldown
+            //autoAttack.canAttack = false;
+        }
+        else if (selectedTroop == troop2)
+        {
+            troop2.GetComponent<Troop>().invincible = false;
+            //autoAttack = troop2.GetComponent<TroopAutoAttack>();
+            //autoAttack.lastAttackTime = autoAttack.attackCooldown;
+        }
+        else if (selectedTroop == troop3)
+        {
+            troop3.GetComponent<Troop>().invincible = false;
+            //autoAttack = troop3.GetComponent<TroopAutoAttack>();
+            //autoAttack.lastAttackTime = autoAttack.attackCooldown;
+        }
+        else if (selectedTroop == troop4)
+        {
+            troop4.GetComponent<Troop>().invincible = false;
+            //autoAttack = troop4.GetComponent<TroopAutoAttack>();
+            //autoAttack.lastAttackTime = autoAttack.attackCooldown;
+        }
 
         cameraSystem.ToggleZoom();
     }

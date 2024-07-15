@@ -38,6 +38,7 @@ public class Enemy: MonoBehaviour
     Vector3 normalScale;
 
     public GameObject markForDeathIcon;
+    public GameObject slowedIcon;
     public float slowEffectRadius = 5f;
     private Rigidbody2D rb;
 
@@ -343,6 +344,7 @@ public class Enemy: MonoBehaviour
         }
 
         slowed = true;
+        slowedIcon.SetActive(true);
         moveSpeed = moveSpeed / 2;
         StartCoroutine((SlowedSpeedEnd()));
     }
@@ -355,6 +357,7 @@ public class Enemy: MonoBehaviour
         {
             moveSpeed = moveSpeed * 2;
             slowed = false;
+            slowedIcon.SetActive(false);
         }
     }
 

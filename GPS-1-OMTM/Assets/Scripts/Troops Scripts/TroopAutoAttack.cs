@@ -9,12 +9,13 @@ public class TroopAutoAttack : MonoBehaviour
     public float detectionRange = 3f; // Range within which the troop can detect enemies
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
+    //public bool canAttack = true;
     public Vector3 startOffset; // Offset for the start point of the bullet tracer
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
     public float tracerFadeDuration = 0.5f; // Duration of the fade-out
 
-    private float lastAttackTime = 0f;
-    private GameObject targetEnemy;
+    public float lastAttackTime = 0f;
+    public GameObject targetEnemy;
     private Rigidbody2D rb;
     public Animator attackAnimation;
 
@@ -201,8 +202,17 @@ public class TroopAutoAttack : MonoBehaviour
         tankAttackCounter++;
         if (tankAttackCounter < 3)
         {
-            // No damage for the first two attacks
-            //Debug.Log("Attack: " + tankAttackCounter);
+            // No damage for the first two attacks (only knockback)
+            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(transform.position, attackRange, LayerMask.GetMask("Enemy"));
+            foreach (Collider2D enemyCollider in enemiesHit)
+            {
+                Enemy enemy = enemyCollider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.ApplyKnockback(transform.position);
+                    Debug.Log("Knockback");
+                }
+            }
         }
         else
         {
@@ -215,6 +225,7 @@ public class TroopAutoAttack : MonoBehaviour
                 {
                     enemy.TakeDamage(attackDamage);
                     enemy.ApplyKnockback(transform.position);
+                    Debug.Log("Knockback and Damage");
                 }
             }
             tankAttackCounter = 0; // Reset the counter
@@ -238,9 +249,10 @@ public class TroopAutoAttack : MonoBehaviour
 
     void CC_Weapon2Attack(Enemy _enemy)
     {
-        //unfinished
+        _enemy.MarkForDeathStart();
+
         Vector2 attackCenter = _enemy.transform.position; // Center of the attack
-        Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 15f, LayerMask.GetMask("Enemy")); // AOE detection
+        Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 4f, LayerMask.GetMask("Enemy")); // AOE detection
 
         foreach (Collider2D enemyCollider in enemiesHit)
         {
@@ -248,7 +260,6 @@ public class TroopAutoAttack : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage(attackDamage);
-                enemy.MarkForDeathStart();
             }
         }
 

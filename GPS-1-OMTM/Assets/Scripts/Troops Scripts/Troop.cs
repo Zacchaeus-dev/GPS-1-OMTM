@@ -21,10 +21,6 @@ public class Troop : MonoBehaviour
     //Troop stats
     public int maxHealth;
     public int currentHealth;
-    //public int attack;
-    //public float attackSpeed;
-    //public float attackRange;
-    //public float moveSpeed = 1f;
 
     //Drop off platforms
     private Collider2D boxCollider;
@@ -34,7 +30,6 @@ public class Troop : MonoBehaviour
     private Rigidbody2D rb;
 
     //Attacks
-    //public Weapon selectedWeapon = Weapon.None;
     private GameObject targetEnemy;
     private bool isAttacking;
     public bool canAttack = true;
@@ -69,8 +64,8 @@ public class Troop : MonoBehaviour
     // Animation
     public Animator attackAnimation;
 
-    // Highlight
     public GameObject highlight;
+    public GameObject arrow;
 
     // Energy
     private TroopEnergy troopEnergy;
