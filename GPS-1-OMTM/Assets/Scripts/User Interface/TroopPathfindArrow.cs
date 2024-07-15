@@ -5,9 +5,9 @@ using UnityEngine;
 public class TroopPathfindArrow : MonoBehaviour
 {
     public GameObject Troop;
+    public Animator pathfindIcon;
     private void OnTriggerEnter2D(Collider2D other)
     {
-
         if (other.CompareTag("Troop") && other.gameObject == Troop )
         {
             gameObject.SetActive(false);
@@ -17,6 +17,7 @@ public class TroopPathfindArrow : MonoBehaviour
     public void bop()
     {
         StartCoroutine(Bopping());
+
     }
 
     public IEnumerator Bopping()
@@ -36,4 +37,20 @@ public class TroopPathfindArrow : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
     }
+
+    public void DeactivateX()
+    {
+        StartCoroutine(DisappearAfterSeconds(2));
+    }
+
+    public IEnumerator DisappearAfterSeconds(float duration)
+    {
+        Debug.Log("OI");
+
+        yield return new WaitForSeconds(duration);
+
+        gameObject.SetActive(false);
+    }
+
+
 }

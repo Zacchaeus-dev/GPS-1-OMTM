@@ -537,8 +537,12 @@ public class Troop : MonoBehaviour
         // Notify troopController2D to respawn this troop
         troopController2D.HandleRespawn(this);
 
+        // Deactivate the troop's pathfind arrow
+        gameObject.GetComponent<TroopClass>().arrow.SetActive(false);
+
         // Deactivate the troop
         gameObject.SetActive(false);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

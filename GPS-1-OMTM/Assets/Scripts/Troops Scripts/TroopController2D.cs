@@ -116,13 +116,14 @@ public class TroopController2D : MonoBehaviour
                 if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == true)
                 {
                     Debug.Log("============== BLOCKED ON THE LEFT ===========");
+                    selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == false)
                 {
                     if (hit.collider != null)
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
-                        selectedTroop.GetComponent<TroopClass>().SpawnPathfindArrow(mousePosition);
+                        selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false);
 
 
                     }
@@ -134,13 +135,14 @@ public class TroopController2D : MonoBehaviour
                 if (selectedTroop.GetComponent<TroopClass>().BlockedRight == true)
                 {
                     Debug.Log("============== BLOCKED ON THE RUGHT ===========");
+                    selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedRight == false)
                 {
                     if (hit.collider != null)
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
-                        selectedTroop.GetComponent<TroopClass>().SpawnPathfindArrow(mousePosition);
+                        selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false);
                     }
                 }
             }

@@ -31,7 +31,7 @@ public class TroopClass : MonoBehaviour
     public RaycastHit2D hit;
     public Transform killdozer;
 
-    //public Animator attackAnimation;
+    
 
     public TroopWeapon troopWeapon;
 
@@ -88,17 +88,9 @@ public class TroopClass : MonoBehaviour
         arrow.SetActive(false);
     }
 
-    public void SpawnPathfindArrow(Vector2 endPosition)
-    {
-        //bring arrow to targetPosition
-/*        arrow.SetActive(false);
-        arrow.SetActive(true);
-        arrow.transform.position = endPosition;*/
-    }
-
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
-        if (teleported == false)
+        if (teleported == false && gameObject.activeSelf == true)
         {
             mousePosition = mP;
             hit = h;
@@ -1568,6 +1560,7 @@ public class TroopClass : MonoBehaviour
 
         }
     }
+        
     public GameObject arrow;
 
     public bool ONCE;

@@ -31,6 +31,8 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
                 PathfindingScript.BlockedRight = true;
                 PathfindingScript.SetTroopTargetPosition(transform.position, hit);
                 PathfindingScript.ONCE2 = true;
+                PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
+                PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
             }
 
         }
