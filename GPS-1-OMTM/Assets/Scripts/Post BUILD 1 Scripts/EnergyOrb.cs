@@ -23,7 +23,7 @@ public class EnergyOrb : MonoBehaviour
                 {
                     otherTroopEnergy.currentPower += energyAmount;
                 }
-                otherTroopEnergy.UpdateText();
+                otherTroopEnergy.UpdateHUD();
 
                 // Optionally, play a sound, deactivate the energy orb, etc.
                 Destroy(gameObject); // Destroy the energy orb after collision

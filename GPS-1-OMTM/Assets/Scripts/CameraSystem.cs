@@ -35,7 +35,6 @@ public class CameraSystem : MonoBehaviour
     {
         var camera = Camera.main;
         var brain = (camera == null) ? null : camera.GetComponent<CinemachineBrain>();
-        vcam = (brain == null) ? null : brain.ActiveVirtualCamera as CinemachineVirtualCamera;
         originalCameraSize = vcam.m_Lens.OrthographicSize;
 
         Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);

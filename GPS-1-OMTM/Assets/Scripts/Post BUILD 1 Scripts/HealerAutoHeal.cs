@@ -22,6 +22,10 @@ public class HealerAutoHeal : MonoBehaviour
     public LineRenderer lineRenderer;
     public Vector3 startPositionOffset;
 
+    public int segments = 50; // Number of segments for the circle
+    public float lineWidth = 0.1f; // Width of the line
+    public Color lineColor = Color.green;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -29,6 +33,32 @@ public class HealerAutoHeal : MonoBehaviour
         if (lineRenderer != null)
         {
             lineRenderer.enabled = false; // Initially disable the line renderer
+        }
+
+        DetermineHeal();
+    }
+
+    void DetermineHeal()
+    {
+        switch (troopWeapon.selectedWeapon) //determine heal and line renderer based on selected weapon
+        {
+            case TroopWeapon.Weapon.Weapon1_Healer:
+                healAmount = 50;
+                healCooldown = 1.5f;
+                break;
+            case TroopWeapon.Weapon.Weapon2_Healer:
+                healAmount = 20;
+                healCooldown = 5f;
+
+                lineRenderer.positionCount = segments + 1;
+                lineRenderer.loop = true;
+                lineRenderer.startWidth = lineWidth;
+                lineRenderer.endWidth = lineWidth;
+                lineRenderer.startColor = lineColor;
+                lineRenderer.endColor = lineColor;
+                lineRenderer.useWorldSpace = false;
+                lineRenderer.enabled = false;
+                break;
         }
     }
 
@@ -42,7 +72,6 @@ public class HealerAutoHeal : MonoBehaviour
             }
             else
             {
-                //MoveTowardsTarget();
                 HealTarget();
             }
         }
@@ -86,6 +115,19 @@ public class HealerAutoHeal : MonoBehaviour
 
     void HealTarget()
     {
+        switch (troopWeapon.selectedWeapon)
+        {
+            case TroopWeapon.Weapon.Weapon1_Healer:
+                Healer_Weapon1Heal();
+                break;
+            case TroopWeapon.Weapon.Weapon2_Healer:
+                Healer_Weapon2Heal();
+                break;
+        }
+    }
+
+    void Healer_Weapon1Heal()
+    {
         if (targetAlly != null)
         {
             float distanceToAlly = Vector2.Distance(transform.position, targetAlly.transform.position);
@@ -98,7 +140,8 @@ public class HealerAutoHeal : MonoBehaviour
                     {
                         allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
                         lastHealTime = Time.time;
-                        //Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                        Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                        allyTroop.UpdateHUD();
                         troopEnergy.GainPower();
                         StartCoroutine(ShowHealTracer(targetAlly.transform));
                     }
@@ -108,6 +151,38 @@ public class HealerAutoHeal : MonoBehaviour
             {
                 targetAlly = null; // Lost range, find another target
             }
+        }
+    }
+
+    void Healer_Weapon2Heal()
+    {
+        if (Time.time >= lastHealTime + healCooldown)
+        {
+            Collider2D[] alliesInRange = Physics2D.OverlapCircleAll(transform.position, healRange, LayerMask.GetMask("Troop"));
+
+            foreach (Collider2D allyCollider in alliesInRange)
+            {
+                Troop allyTroop = allyCollider.GetComponent<Troop>();
+                /*
+                if (allyTroop != null) //heals everyone in the range
+                {
+                    allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                    Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                    allyTroop.UpdateHUD();
+                    StartCoroutine(ShowHealTracer(allyTroop.transform));
+                }
+                */
+
+                if (allyTroop != null && allyTroop.gameObject != gameObject) //heals everyone except herself
+                {
+                    StartCoroutine(ShowHealAOE(allyTroop.transform));
+                    allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                    Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                    allyTroop.UpdateHUD();
+                }
+            }
+            lastHealTime = Time.time;
+            troopEnergy.GainPower();
         }
     }
 
@@ -129,6 +204,43 @@ public class HealerAutoHeal : MonoBehaviour
             }
 
             lineRenderer.enabled = false;
+        }
+    }
+
+    private IEnumerator ShowHealAOE(Transform target)
+    {
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = true;
+            float elapsedTime = 0f;
+            float growDuration = 0.5f; // Duration for the circle to grow
+            float maxRadius = healRange; // Maximum radius for the circle
+
+            while (elapsedTime < growDuration)
+            {
+                float currentRadius = Mathf.Lerp(0, maxRadius, elapsedTime / growDuration);
+                DrawCircle(currentRadius);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            DrawCircle(maxRadius); // Ensure the circle reaches its maximum size
+            yield return new WaitForSeconds(0.15f); // Duration for the circle to stay
+
+            lineRenderer.enabled = false;
+        }
+    }
+
+    private void DrawCircle(float radius)
+    {
+        float angle = 0f;
+        for (int i = 0; i < (segments + 1); i++)
+        {
+            float x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius;
+            float y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius;
+
+            lineRenderer.SetPosition(i, new Vector3(x, y, 0));
+            angle += (360f / segments);
         }
     }
 

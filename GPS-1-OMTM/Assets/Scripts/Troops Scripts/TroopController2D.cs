@@ -233,9 +233,11 @@ public class TroopController2D : MonoBehaviour
     {
         selectedTroop = troop;
         selectedTroop.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // Prevent rotation
-        selectedTroop.GetComponent<Troop>().selected = true;
-        selectedTroop.GetComponent<Troop>().highlight.SetActive(true);
-        selectedTroop.GetComponent<Troop>().arrow.SetActive(true);
+        Troop troopScript = selectedTroop.GetComponent<Troop>();
+        troopScript.ChangeIconColour();
+        troopScript.selected = true;
+        troopScript.highlight.SetActive(true);
+        troopScript.arrow.SetActive(true);
         if (selectedTroop.GetComponent<TroopAttackRange>() != null)
         {
             selectedTroop.GetComponent<TroopAttackRange>().DrawCircle();
@@ -245,9 +247,11 @@ public class TroopController2D : MonoBehaviour
 
     void DeselectTroop() 
     {
-        selectedTroop.GetComponent<Troop>().selected = false; //necessary for platform drop off to work as intended
-        selectedTroop.GetComponent<Troop>().highlight.SetActive(false);
-        selectedTroop.GetComponent<Troop>().arrow.SetActive(false);
+        Troop troopScript = selectedTroop.GetComponent<Troop>();
+        troopScript.ChangeIconColour();
+        troopScript.selected = false; 
+        troopScript.highlight.SetActive(false);
+        troopScript.arrow.SetActive(false);
         if (selectedTroop.GetComponent<TroopAttackRange>() != null)
         {
             selectedTroop.GetComponent<TroopAttackRange>().DisableCircle();
@@ -255,23 +259,6 @@ public class TroopController2D : MonoBehaviour
         selectedTroop = null;
         cameraSystem.DefocusTroop();
     }
-
- 
-/*    void HandleEnemySelection()
-    {
-        if (selectedTroop != null && Input.GetKeyDown(KeyCode.A))
-        {
-            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
-            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
-            {
-                GameObject enemy = hit.collider.gameObject;
-                selectedTroop.GetComponent<Troop>().SetTargetEnemy(enemy, attackRange);
-                Debug.Log("Enemy targeted: " + enemy.name);
-            }
-        }
-    }*/
 
     public void HandleRespawn(Troop troop)
     {

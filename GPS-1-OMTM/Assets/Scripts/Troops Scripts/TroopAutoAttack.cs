@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TroopAutoAttack : MonoBehaviour
@@ -25,6 +26,8 @@ public class TroopAutoAttack : MonoBehaviour
     public TroopEnergy troopEnergy;
     public TroopWeapon troopWeapon;
     private int tankAttackCounter = 0;
+    private int dpsWeapon2Range = 10;
+    private int dpsWeapon2Width = 3;
     public enum TroopCharacter
     {
         DPS,
@@ -63,7 +66,8 @@ public class TroopAutoAttack : MonoBehaviour
                 attackCooldown = 0.25f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-               
+                attackDamage = 30;
+                attackCooldown = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
                 attackDamage = 10;
@@ -191,9 +195,73 @@ public class TroopAutoAttack : MonoBehaviour
         troopEnergy.GainPower();
     }
 
-    void DPS_Weapon2Attack(Enemy enemy)
+    void DPS_Weapon2Attack(Enemy _enemy)
     {
+        Vector3 targetPosition = _enemy.transform.position;
+        Vector2 attackDirection = (targetPosition - transform.position).normalized;
 
+        // Define the rectangle's size
+        float halfWidth = dpsWeapon2Width / 2;
+        float length = dpsWeapon2Range;
+
+        // Find all enemies within a larger circle
+        Collider2D[] allEnemies = Physics2D.OverlapCircleAll(transform.position, length, LayerMask.GetMask("Enemy"));
+
+        foreach (Collider2D enemyCollider in allEnemies)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                Vector2 toEnemy = enemy.transform.position - transform.position;
+                float distanceAlongDirection = Vector2.Dot(toEnemy, attackDirection);
+                float distancePerpendicular = Mathf.Abs(Vector2.Dot(toEnemy, new Vector2(-attackDirection.y, attackDirection.x)));
+
+                // Check if the enemy is within the length and width of the attack rectangle
+                if (distanceAlongDirection > 0 && distanceAlongDirection <= length && distancePerpendicular <= halfWidth)
+                {
+                    enemy.TakeDamage(attackDamage);
+                    DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position);
+                }
+            }
+        }
+
+        DrawAttackRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        troopEnergy.GainPower();
+    }
+
+    void DrawAttackRectangle(Vector3 start, Vector3 direction, float width, float length)
+    {
+        // Calculate the four corners of the rectangle
+        Vector3 perpendicular = Vector3.Cross(direction, Vector3.forward).normalized * (width / 2);
+        Vector3 topLeft = start + perpendicular;
+        Vector3 topRight = start - perpendicular;
+        Vector3 bottomLeft = topLeft + (direction.normalized * length);
+        Vector3 bottomRight = topRight + (direction.normalized * length);
+
+        LineRenderer line = Instantiate(lineRendererPrefab);
+        line.positionCount = 5; // Four corners plus the start point to close the rectangle
+
+        line.SetPosition(0, topLeft);
+        line.SetPosition(1, bottomLeft);
+        line.SetPosition(2, bottomRight);
+        line.SetPosition(3, topRight);
+        line.SetPosition(4, topLeft); // Closing the rectangle
+
+        StartCoroutine(FadeOutRectangle(line));
+    }
+
+    IEnumerator FadeOutRectangle(LineRenderer line)
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 0.2f; // Duration for which the rectangle is visible
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(line.gameObject);
     }
 
     void Tank_Weapon1Attack()

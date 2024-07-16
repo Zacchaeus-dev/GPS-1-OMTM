@@ -8,6 +8,10 @@ public class TroopHUD : MonoBehaviour
 {
     public Slider hpSlider;
     public GameObject hpFill;
+    public Slider powerSlider;
+    public GameObject powerFill;
+    public Slider shieldSlider;
+    public GameObject shieldFill;
 
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
@@ -27,6 +31,32 @@ public class TroopHUD : MonoBehaviour
         else
         {
             hpFill.SetActive(true);
+        }
+
+        TroopEnergy troopEnergy = _troop.GetComponent<TroopEnergy>();
+
+        powerSlider.maxValue = troopEnergy.maxPower;
+        powerSlider.value = troopEnergy.currentPower;
+
+        if (troopEnergy.currentPower <= 0)
+        {
+            powerFill.SetActive(false);
+        }
+        else
+        {
+            powerFill.SetActive(true);
+        }
+
+        shieldSlider.maxValue = _troop.maxShield;
+        shieldSlider.value = _troop.currentShield;
+
+        if (_troop.currentShield <= 0)
+        {
+            shieldFill.SetActive(false);
+        }
+        else
+        {
+            shieldFill.SetActive(true);
         }
     }
 

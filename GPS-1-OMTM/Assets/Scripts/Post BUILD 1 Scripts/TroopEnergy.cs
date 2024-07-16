@@ -11,6 +11,7 @@ public class TroopEnergy : MonoBehaviour
     public float powerPercent;
     public PowerMethod powerMethod;
     public TextMeshProUGUI powerText;
+    private Troop troop;
 
     public enum PowerMethod
     {
@@ -21,12 +22,14 @@ public class TroopEnergy : MonoBehaviour
     void Start()
     {
         currentPower = 0;
-        UpdateText();
+        troop = GetComponent<Troop>();
+        UpdateHUD();
     }
 
-    public void UpdateText()
+    public void UpdateHUD()
     {
         powerText.text = currentPower.ToString();
+        troop.UpdateHUD();
     }
 
     public void GainPower()
@@ -36,13 +39,13 @@ public class TroopEnergy : MonoBehaviour
             currentPower = currentPower + powerGainAmount;
         }
 
-        UpdateText();
+        UpdateHUD();
     }
 
     public void UseAllPower()
     {
         currentPower = 0;
-        UpdateText();
+        UpdateHUD();
     }
 
     public void GetPowerPercentage()

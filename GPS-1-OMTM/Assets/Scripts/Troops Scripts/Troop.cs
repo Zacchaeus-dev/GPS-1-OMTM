@@ -41,9 +41,6 @@ public class Troop : MonoBehaviour
     public float ultimateDuration = 0f;
     private bool ccClickingOnLocation = false;
     private bool tankClickingOnLocation = false;
-    private bool isDPSUltimateActive = false;
-    private float powerDrainRate = 5f;
-    private float powerDrainAccumulator = 0f; // Accumulates the drained power over time
 
     // Ultimate Objects
     public GameObject tankShield;
@@ -76,6 +73,9 @@ public class Troop : MonoBehaviour
     public bool shieldOn = false;
     public bool reducingShield = false;
 
+    private Image iconBorder;
+    private Color originalColor;
+
     public enum Ultimate
     {
         None,
@@ -95,12 +95,13 @@ public class Troop : MonoBehaviour
         troopEnergy = GetComponent<TroopEnergy>();
         troopAutoAttack = GetComponent<TroopAutoAttack>();
 
-        UpdateHUD();
+        iconBorder = troopHUD.gameObject.GetComponent<Image>();
+        originalColor = iconBorder.color;
+        StartCoroutine(InitializeHUD());
     }
 
     void Update()
     {
-        DrainPower(); //DPS's Ultimate
         HandleUltimateInput();
 
         if (targetEnemy != null)
@@ -150,6 +151,13 @@ public class Troop : MonoBehaviour
         {
             HandleTankUltimateTargeting();
         }
+    }
+
+    IEnumerator InitializeHUD()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        UpdateHUD();
     }
 
     public void UpdateHUD()
@@ -295,7 +303,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
-        if (ultimate != Ultimate.Ultimate_DPS && troopEnergy.currentPower < troopEnergy.maxPower)
+        if (troopEnergy.currentPower < troopEnergy.maxPower)
         {
             Debug.Log("Not enough energy");
             yield break;
@@ -304,6 +312,7 @@ public class Troop : MonoBehaviour
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
+                troopEnergy.UseAllPower();
                 StartCoroutine(Ultimate_DPS());
                 break;
             case Ultimate.Ultimate_Tank:
@@ -352,7 +361,6 @@ public class Troop : MonoBehaviour
 
     IEnumerator Ultimate_DPS()
     {
-        isDPSUltimateActive = true;
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
@@ -364,55 +372,13 @@ public class Troop : MonoBehaviour
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
         attackAnimation.SetBool("Berserk", true);
 
-        while (isDPSUltimateActive)
-        {
-            if (troopEnergy.currentPower <= 0)
-            {
-                isDPSUltimateActive = false;
-                EndUltimateDPS();
-            }
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(ultimateCooldown);
-        ultimateOnCooldown = false;
-    }
-
-    void DrainPower()
-    {
-        if (isDPSUltimateActive)
-        {
-            float powerToDrain = powerDrainRate * Time.deltaTime;
-            powerDrainAccumulator += powerToDrain;
-
-            // Convert the accumulated power drain to an integer and subtract from currentPower
-            int integerPowerDrain = (int)powerDrainAccumulator;
-            if (integerPowerDrain > 0)
-            {
-                troopEnergy.currentPower -= integerPowerDrain;
-                powerDrainAccumulator -= integerPowerDrain; // Subtract the used portion
-
-                troopEnergy.UpdateText();
-            }
-
-            // Check if the ultimate should be cancelled
-            if (troopController2D.selectedTroop == troopController2D.troop1 && (Input.GetKeyDown(KeyCode.R) || troopEnergy.currentPower <= 0))
-            {
-                isDPSUltimateActive = false;
-                EndUltimateDPS();
-            }
-        }
-
-    }
-
-    private void EndUltimateDPS()
-    {
-        ultimateDuration = 0;
+        yield return new WaitForSeconds(ultimateDuration);
         attackAnimation.SetBool("Berserk", false);
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
-        isDPSUltimateActive = false;
+
+        yield return new WaitForSeconds(ultimateCooldown);
+        ultimateOnCooldown = false;
     }
 
     void Ultimate_Tank()
@@ -478,6 +444,8 @@ public class Troop : MonoBehaviour
         troop.currentShield = 500;
         troop.shieldOn = true;
         troop.reducingShield = true;
+
+        troop.UpdateHUD();
     }
 
     void DrainShield()
@@ -487,6 +455,7 @@ public class Troop : MonoBehaviour
             currentShield = currentShield - 50;
             Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
             reducingShield = false;
+            UpdateHUD();
             StartCoroutine(ReduceShieldOverTime());
         }
     }
@@ -580,7 +549,6 @@ public class Troop : MonoBehaviour
     public void SetTargetEnemy(GameObject enemy, float attackRange)
     {
         this.targetEnemy = enemy;
-        //this.attackRange = attackRange;
         this.isAttacking = false;
         this.stopAction = false;
     }
@@ -590,30 +558,15 @@ public class Troop : MonoBehaviour
         this.targetEnemy = null;
     }
 
-    /*
-    void MoveTowardsEnemy()
+    public void ChangeIconColour()
     {
-        if (stopAction || targetEnemy == null)
+        if(!selected)
         {
-            return;
-        }
-
-        Vector2 direction = (targetEnemy.transform.position - transform.position).normalized;
-        float distance = Vector2.Distance(transform.position, targetEnemy.transform.position);
-
-        if (distance > attackRange)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, targetEnemy.transform.position, moveSpeed * Time.deltaTime);
-            Debug.Log("Moving");
+            iconBorder.color = Color.yellow;
         }
         else
         {
-            if (!isAttacking)
-            {
-                Debug.Log("Attacking");
-                isAttacking = true;
-            }
+            iconBorder.color = originalColor;
         }
     }
-    */
 }
