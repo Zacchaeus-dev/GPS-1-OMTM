@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class WaveSystem : MonoBehaviour
 {
@@ -102,6 +104,7 @@ public class WaveSystem : MonoBehaviour
     private float breakTimer;
     private List<GameObject> aliveEnemies = new List<GameObject>();
     public GameObject startButton;
+    public GameObject startBorder;
     public GameObject commandCentreButton;
     public GameObject kccPanel;
     public TextMeshProUGUI waveStateText;
@@ -122,16 +125,23 @@ public class WaveSystem : MonoBehaviour
     public static bool transitioning = false;
     private bool teleported = false;
     private bool transitioned = false;
+    private bool timerOn;
+    private float timerDuration;
+    private float timerDurationRemaining;
+    public Image timerFill;
+    public TextMeshProUGUI timerText;
 
     void Start()
     {
         startButton.SetActive(true);
+        startBorder.SetActive(true);
         waveNumText.text = "0";
         miniWaveNumText.text = "0";
         waveStateText.text = "Pre Wave";
 
         TeleportTroopsToKilldozer();
         UpdateButtonState();
+        UpdateTimerUI();
     }
 
     void Update()
@@ -158,6 +168,7 @@ public class WaveSystem : MonoBehaviour
         }
 
         UpdateButtonState();
+        UpdateTimerUI();
     }
 
     public void SkipWave()
@@ -177,6 +188,8 @@ public class WaveSystem : MonoBehaviour
         inwaveTimer11 = 0;
         inwaveTimer12 = 0;
         aliveEnemies.Clear();
+
+        UpdateTimerUI();
     }
 
     public void StartWave()
@@ -190,14 +203,8 @@ public class WaveSystem : MonoBehaviour
         //animator.settrigger("a");
         StartCoroutine(WaveAnimation());
 
-        /*
-        StartMiniWave();
-        inwaveTimer1 = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex].timeUntilSpawningEnds1;
-        inwaveTimer2 = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex].timeUntilSpawningEnds2;
-        currentState = WaveState.InWave;
-        */
-
         startButton.SetActive(false);
+        startBorder.SetActive(false);
     }
 
     IEnumerator WaveAnimation()
@@ -256,9 +263,12 @@ public class WaveSystem : MonoBehaviour
         if (prewaveTimer > 0)
         {
             prewaveTimer -= Time.deltaTime;
+            int prewavetime = (int)prewaveTimer;
+            timerText.text =  prewavetime.ToString() + "s";
         }
         else
         {
+            timerOn = false;
             StartMiniWave();
         }
     }
@@ -393,6 +403,10 @@ public class WaveSystem : MonoBehaviour
         yield return new WaitForSeconds(5.5f);
         transitioning = false;
         prewaveTimer = waves[currentWaveIndex].prewaveDuration;
+        timerDuration = prewaveTimer;
+        timerDurationRemaining = timerDuration;
+        timerOn = true;
+        UpdateTimerUI();
         currentState = WaveState.Prewave;
 
         troop1.transform.SetParent(null);
@@ -425,11 +439,13 @@ public class WaveSystem : MonoBehaviour
         cameraSystem.DefocusKilldozer();
 
         startButton.SetActive(true);
+        startBorder.SetActive(true);
     }
 
     void StartMiniWave()
     {
         startButton.SetActive(false);
+        startBorder.SetActive(false);
 
         if (currentMiniWaveIndex >= waves[currentWaveIndex].miniWaves.Count)
         {
@@ -932,5 +948,23 @@ public class WaveSystem : MonoBehaviour
     public void CloseSettingsPanel()
     {
         settingsPanel.SetActive(false);
+    }
+
+    void UpdateTimerUI()
+    {
+        if (timerOn)
+        {
+            if (timerDurationRemaining > 0)
+            {
+                timerDurationRemaining -= Time.deltaTime;
+                timerFill.fillAmount = 1 - (timerDurationRemaining / timerDuration);
+                timerFill.enabled = true;
+            }
+        }
+        else
+        {
+            timerFill.fillAmount = 0;
+            timerFill.enabled = false;
+        }
     }
 }

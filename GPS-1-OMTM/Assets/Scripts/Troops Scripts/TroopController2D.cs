@@ -8,6 +8,7 @@ using UnityEditor.Experimental.GraphView;
 //using UnityEditor.Timeline;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.EventSystems;
 
 public class TroopController2D : MonoBehaviour
 {
@@ -82,24 +83,27 @@ public class TroopController2D : MonoBehaviour
             int layerMask = LayerMask.GetMask("Troop"); 
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
-            if (hit.collider != null && hit.collider.CompareTag("Troop"))
-            {
-                if (selectedTroop != null) //if already have a troop selected
+            // Check if the mouse is over a UI element
+            //if (!EventSystem.current.IsPointerOverGameObject())
+            //{
+                if (hit.collider != null && hit.collider.CompareTag("Troop") && cameraSystem.isZoomedOut == false)
                 {
-                    DeselectTroop(); //deselect old troop
+                    if (selectedTroop != null) //if already have a troop selected
+                    {
+                        DeselectTroop(); //deselect old troop
+                    }
+                    SelectTroop(hit.collider.gameObject);
                 }
-                SelectTroop(hit.collider.gameObject);
-                
-            }
-            else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
-            {
-                StartCoroutine(Teleportation());
-            }
-            else if (selectedTroop != null) // clicking elsewhere should deselect the troop
-            {
-                DeselectTroop();
-            }
-
+                else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
+                {
+                    Debug.Log("Teleport");
+                    StartCoroutine(Teleportation());
+                }
+                else if (selectedTroop != null && !EventSystem.current.IsPointerOverGameObject()) // clicking elsewhere besides ui to deselect troop
+                {
+                    DeselectTroop();
+                }
+            //}
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
         {
@@ -176,7 +180,7 @@ public class TroopController2D : MonoBehaviour
 
     void HandleNumberKeyInput()
     {
-        if (WaveSystem.transitioning == true)
+        if (WaveSystem.transitioning == true || cameraSystem.isZoomedOut == true)
         {
             return;
         }
@@ -245,17 +249,22 @@ public class TroopController2D : MonoBehaviour
         //Debug.Log("Troop selected: " + selectedTroop.name);
     }
 
-    void DeselectTroop() 
+    public void DeselectTroop() 
     {
-        Troop troopScript = selectedTroop.GetComponent<Troop>();
-        troopScript.ChangeIconColour();
-        troopScript.selected = false; 
-        troopScript.highlight.SetActive(false);
-        troopScript.arrow.SetActive(false);
-        if (selectedTroop.GetComponent<TroopAttackRange>() != null)
+        if (selectedTroop != null)
         {
-            selectedTroop.GetComponent<TroopAttackRange>().DisableCircle();
+            Troop troopScript = selectedTroop.GetComponent<Troop>();
+            troopScript.ChangeIconColour();
+            troopScript.selected = false;
+            troopScript.highlight.SetActive(false);
+            troopScript.arrow.SetActive(false);
+
+            if (selectedTroop.GetComponent<TroopAttackRange>() != null)
+            {
+                selectedTroop.GetComponent<TroopAttackRange>().DisableCircle();
+            }
         }
+
         selectedTroop = null;
         cameraSystem.DefocusTroop();
     }
@@ -352,7 +361,7 @@ public class TroopController2D : MonoBehaviour
             animator = tpAnimation4.GetComponent<Animator>();
             tpAnimation4.SetActive(true);
             troop4.GetComponent<Troop>().invincible = true;
-            troop4.GetComponent<TroopAutoAttack>().targetEnemy = null;
+            troop4.GetComponent<HealerAutoHeal>().targetAlly = null;
         }
 
         animator.SetTrigger("TP");
@@ -429,8 +438,6 @@ public class TroopController2D : MonoBehaviour
         else if (selectedTroop == troop4)
         {
             troop4.GetComponent<Troop>().invincible = false;
-            //autoAttack = troop4.GetComponent<TroopAutoAttack>();
-            //autoAttack.lastAttackTime = autoAttack.attackCooldown;
         }
 
         cameraSystem.ToggleZoom();

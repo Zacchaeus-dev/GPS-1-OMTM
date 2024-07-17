@@ -12,6 +12,7 @@ public class TroopHUD : MonoBehaviour
     public GameObject powerFill;
     public Slider shieldSlider;
     public GameObject shieldFill;
+    public TextMeshProUGUI currentHealth;
 
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
@@ -58,6 +59,8 @@ public class TroopHUD : MonoBehaviour
         {
             shieldFill.SetActive(true);
         }
+
+        currentHealth.text = _troop.currentHealth.ToString();
     }
 
     public void ButtonClick()
@@ -65,9 +68,19 @@ public class TroopHUD : MonoBehaviour
         float timeSinceLastClick = Time.time - lastClickTime;
         lastClickTime = Time.time;
 
+        if (cameraSystem.isZoomedOut == true)
+        {
+            return;
+        }
+
         if (timeSinceLastClick <= doubleClickTimeLimit)
         {
             cameraSystem.FocusOnTroop(troop);
+        }
+        else if (troop != null)
+        {
+            troopController2D.DeselectTroop();
+            troopController2D.SelectTroop(troop);
         }
         else
         {

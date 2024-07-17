@@ -76,6 +76,8 @@ public class Troop : MonoBehaviour
     private Image iconBorder;
     private Color originalColor;
 
+    public bool troopOnKilldozer = false;
+
     public enum Ultimate
     {
         None,
@@ -524,6 +526,10 @@ public class Troop : MonoBehaviour
         {
             troopOnGround = true;
         }
+        if (collision.gameObject.CompareTag("Killdozer"))
+        {
+            troopOnKilldozer = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -535,6 +541,10 @@ public class Troop : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             troopOnGround = false;
+        }
+        if (collision.gameObject.CompareTag("Killdozer"))
+        {
+            troopOnKilldozer = false;
         }
     }
 

@@ -12,7 +12,7 @@ public class HealerAutoHeal : MonoBehaviour
     public float moveSpeed = 2f; // Speed at which the healer moves towards the ally
 
     private float lastHealTime = 0f;
-    private GameObject targetAlly;
+    public GameObject targetAlly;
     private Rigidbody2D rb;
 
     private TroopEnergy troopEnergy;
@@ -163,15 +163,6 @@ public class HealerAutoHeal : MonoBehaviour
             foreach (Collider2D allyCollider in alliesInRange)
             {
                 Troop allyTroop = allyCollider.GetComponent<Troop>();
-                /*
-                if (allyTroop != null) //heals everyone in the range
-                {
-                    allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
-                    Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
-                    allyTroop.UpdateHUD();
-                    StartCoroutine(ShowHealTracer(allyTroop.transform));
-                }
-                */
 
                 if (allyTroop != null && allyTroop.gameObject != gameObject) //heals everyone except herself
                 {

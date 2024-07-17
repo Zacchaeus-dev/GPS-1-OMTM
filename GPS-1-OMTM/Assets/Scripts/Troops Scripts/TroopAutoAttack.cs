@@ -278,7 +278,7 @@ public class TroopAutoAttack : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.ApplyKnockback(transform.position);
-                    Debug.Log("Knockback");
+                    //Debug.Log("Knockback");
                 }
             }
         }
@@ -293,7 +293,7 @@ public class TroopAutoAttack : MonoBehaviour
                 {
                     enemy.TakeDamage(attackDamage);
                     enemy.ApplyKnockback(transform.position);
-                    Debug.Log("Knockback and Damage");
+                    //Debug.Log("Knockback and Damage");
                 }
             }
             tankAttackCounter = 0; // Reset the counter

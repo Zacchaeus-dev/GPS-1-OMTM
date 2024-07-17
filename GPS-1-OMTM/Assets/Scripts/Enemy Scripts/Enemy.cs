@@ -21,9 +21,8 @@ public class Enemy: MonoBehaviour
     public float troopStoppingDistance = 1f; // distance which the enemy stops moving towards the target 
     public List<Transform> potentialTargets; // list of potential targets (players, killdozer)
     private Transform closestTarget;
-
-    //Attack troops
     private bool isAttacking;
+    private bool attackingKilldozer;
 
     public Transform killdozerTransform; //killdozer position
     public Collider2D killdozerCollider;
@@ -50,8 +49,10 @@ public class Enemy: MonoBehaviour
 
     public DropEnergyOrbOnDeath energyOrb;
     public int energyOrbDropNum = 1;
+    private int i = 0;
 
     private bool moveRight; //initial move direction
+    float radius = 0.1f;  //check targets inside the Killdozer
 
     private void Start()
     {
@@ -106,14 +107,7 @@ public class Enemy: MonoBehaviour
     {
         potentialTargets.RemoveAll(target => target == null); // Removes null transforms in potential target list, so that enemy can always find a real transform
 
-        if (closestTarget != null && closestTarget == killdozerTransform)
-        {
-            // Continue attacking the Killdozer 
-            Debug.Log("Prioritize KD");
-            return;
-        }
-
-        closestTarget = null; // Start with no target
+        closestTarget = null; 
         float closestDistanceSqr = Mathf.Infinity;
 
         foreach (Transform target in potentialTargets) // For each target in the list
@@ -127,18 +121,19 @@ public class Enemy: MonoBehaviour
 
             if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
-                if (IsInsideKilldozer(target))
+                if (target != null && (IsInsideKilldozer(target) || attackingKilldozer))
                 {
-                    // Prioritize the Killdozer if the target is inside it
+                    // Prioritize the Killdozer if the target is inside it or if enemy is already attacking killdozer
                     closestTarget = killdozerTransform;
-                    closestDistanceSqr = 0;
-                    Debug.Log("Found KD with Troops On it");
+                    closestDistanceSqr = distanceSqr;
+                    //Debug.Log("Found KD with Troops On it");
                 }
                 else
                 {
                     // Update closest target to current target
                     closestDistanceSqr = distanceSqr;
                     closestTarget = target;
+                    //Debug.Log("Found Troop");
                 }
             }
         }
@@ -164,8 +159,8 @@ public class Enemy: MonoBehaviour
                 }
                 else if (!isAttacking) // otherwise stop and attack
                 {
-                    //Debug.Log("Attacking target");
                     isAttacking = true;
+                    //Debug.Log(closestTarget);
                     StartCoroutine(AttackTarget());
                 }
             }
@@ -177,33 +172,27 @@ public class Enemy: MonoBehaviour
         potentialTargets.RemoveAll(target => target == null); //removes null transforms in potential target list, so that enemy can always find a real transform
         potentialTargets.Add(objectTransform);
 
-        /*
-        closestTarget = null; // Start with no target
-        float closestDistanceSqr = Mathf.Infinity;
-
-        foreach (Transform target in potentialTargets) // For each target in the list
-        {
-            if (!target.gameObject.activeSelf) continue; // Skip inactive (dead) targets
-
-            float distanceSqr = (target.position - transform.position).sqrMagnitude; // Calculate distance between enemy position and target position
-
-            bool isTargetInInitialDirection = (moveRight && target.position.x > transform.position.x) || (!moveRight && target.position.x < transform.position.x);
-
-            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
-            {
-                // Update closest target to current target
-                closestDistanceSqr = distanceSqr;
-                closestTarget = target;
-            }
-        }
-        */
-
         FindClosestTarget();
     }
 
     bool IsInsideKilldozer(Transform target)
     {
-        return killdozerCollider.bounds.Contains(target.position); // Check if the target's position is within the Killdozer's collider bounds
+        /*
+        radius = 0.1f;
+
+        // Check if any point within the radius around the target's position is inside the Killdozer's collider bounds
+        Vector2 targetPosition = target.position;
+        return killdozerCollider.OverlapPoint(targetPosition) ||
+               killdozerCollider.OverlapPoint(targetPosition + new Vector2(radius, 0)) ||
+               killdozerCollider.OverlapPoint(targetPosition + new Vector2(-radius, 0)) ||
+               killdozerCollider.OverlapPoint(targetPosition + new Vector2(0, radius)) ||
+               killdozerCollider.OverlapPoint(targetPosition + new Vector2(0, -radius));
+
+        */
+        //return killdozerCollider.bounds.Contains(target.position);
+        //Debug.Log(target);
+
+        return target.GetComponent<Troop>().troopOnKilldozer;
     }
 
     IEnumerator AttackTarget()
@@ -218,10 +207,12 @@ public class Enemy: MonoBehaviour
                     // Check if killdozer is dead
                     if (killdozerScript.currentHealth <= 0)
                     {
+                        attackingKilldozer = false;
                         break;
                     }
 
                     killdozerScript.TakeDamage(attack); // Killdozer takes damage equal to attack
+                    attackingKilldozer = true;
                     //Debug.Log("Attacking killdozer");
                 }
             }
@@ -254,6 +245,9 @@ public class Enemy: MonoBehaviour
 
         Gizmos.color = Color.white; //enemy slowed affected range
         Gizmos.DrawWireSphere(transform.position, slowEffectRadius);
+
+        Gizmos.color = Color.blue; //targets in kd range
+        Gizmos.DrawWireSphere(killdozerTransform.position, radius);
     }
 
     public void TakeDamage(int damage)
@@ -279,10 +273,8 @@ public class Enemy: MonoBehaviour
         tookdamage = true;
     }
 
-
     public void Death()
     {
-        int i = 0;
         while (i < energyOrbDropNum)
         {
             energyOrb.DropEnergyOrb();
