@@ -99,6 +99,7 @@ public class FlyingEnemy : MonoBehaviour
         }
     }
 
+
     void HandleAttack()
     {
         if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
