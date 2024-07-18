@@ -96,7 +96,7 @@ public class TroopClass : MonoBehaviour
         arrow.SetActive(false);
     }
 
-    public bool GoingLeft;
+    public bool GoingLeft = false;
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
         if (teleported == false && gameObject.activeSelf == true)
@@ -1522,7 +1522,7 @@ public class TroopClass : MonoBehaviour
                 {
                     GoingLeft = targetPosition.x < gameObject.transform.position.x;
                 }
-                if (nearestVert != null)
+                else if (nearestVert != null)
                 {
                     GoingLeft = vertPosition.x < gameObject.transform.position.x;
                 }
@@ -2191,7 +2191,7 @@ public class TroopClass : MonoBehaviour
             if (WalkOrStopAnimation == false) 
             {
                 WalkOrStopAnimation = true;
-                TroopAnimator.TroopWalkOn1();
+                TroopAnimator.TroopWalkOn();
             }
 
             if (nearestVert != null) // if changing elevation
@@ -2227,7 +2227,7 @@ public class TroopClass : MonoBehaviour
         if (WalkOrStopAnimation == true)
         {
             WalkOrStopAnimation = false;
-            TroopAnimator.TroopWalkOff1();
+            TroopAnimator.TroopWalkOff();
         }
     }
 
@@ -2236,8 +2236,8 @@ public class TroopClass : MonoBehaviour
         if (ClimbAnimation == true)
         {
             ClimbAnimation = false;
-            TroopAnimator.TroopClimbOff1();
-            TroopAnimator.TroopFallOff1();
+            TroopAnimator.TroopClimbOff();
+            TroopAnimator.TroopFallOff();
         }
     }
 
@@ -2257,7 +2257,7 @@ public class TroopClass : MonoBehaviour
             if (ClimbAnimation == false)
             {
                 ClimbAnimation = true;
-                TroopAnimator.TroopClimbOn1();
+                TroopAnimator.TroopClimbOn();
             }
         }        
         
@@ -2272,7 +2272,7 @@ public class TroopClass : MonoBehaviour
             if (ClimbAnimation == false)
             {
                 ClimbAnimation = true;
-                TroopAnimator.TroopFallOn1();
+                TroopAnimator.TroopFallOn();
             }
 
         }

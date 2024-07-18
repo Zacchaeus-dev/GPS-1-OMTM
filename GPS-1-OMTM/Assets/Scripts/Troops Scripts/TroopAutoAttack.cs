@@ -125,7 +125,7 @@ public class TroopAutoAttack : MonoBehaviour
         {
             if (targetEnemy != null)
             {
-                gameObject.GetComponent<TroopClass>().GoingLeft = targetEnemy.transform.position.x < gameObject.transform.position.x;
+                gameObject.GetComponent<TroopClass>().GoingLeft = targetEnemy.transform.position.x < gameObject.transform.position.x; // to check whether Troop is attacking Left or Right
 
                 float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
                 if (distanceToEnemy <= attackRange)
@@ -154,11 +154,11 @@ public class TroopAutoAttack : MonoBehaviour
                                     {
                                         case TroopWeapon.Weapon.Weapon1_Tank:
                                             Tank_Weapon1Attack();
-                                            TroopAnimator.TroopAttack1();
+                                            TroopAnimator.TroopAttackOn();
                                             break;
                                         case TroopWeapon.Weapon.Weapon2_Tank:
                                             Tank_Weapon2Attack(enemy);
-                                            TroopAnimator.TroopAttack1();
+                                            TroopAnimator.TroopAttackOn();
                                             break;
                                     }
                                     break;
@@ -191,6 +191,7 @@ public class TroopAutoAttack : MonoBehaviour
                 else
                 {
                     targetEnemy = null; // Lost range, find another target
+                    TroopAnimator.TroopAttackOff();
                 }
             }
             

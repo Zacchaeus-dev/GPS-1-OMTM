@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 
 //using UnityEditor.Timeline;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+//using static UnityEditor.Experimental.GraphView.GraphView;
 using UnityEngine.EventSystems;
 
 public class TroopController2D : MonoBehaviour
@@ -121,6 +121,7 @@ public class TroopController2D : MonoBehaviour
                 {
                     Debug.Log("============== BLOCKED ON THE LEFT ===========");
                     selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
+                    selectedTroop.GetComponent<TroopClass>().GoingLeft = true;
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == false)
                 {
@@ -135,6 +136,7 @@ public class TroopController2D : MonoBehaviour
             }
             else if (GoingLeft == false)
             {
+                selectedTroop.GetComponent<TroopClass>().ONCE2 = false;
                 selectedTroop.GetComponent<TroopClass>().ONCE2 = false;
                 if (selectedTroop.GetComponent<TroopClass>().BlockedRight == true)
                 {

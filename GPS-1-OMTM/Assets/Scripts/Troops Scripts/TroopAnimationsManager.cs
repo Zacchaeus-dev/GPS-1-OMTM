@@ -6,60 +6,66 @@ public class TroopAnimationsManager : MonoBehaviour
 {
     public Animator TroopAnimator;
 
-    public void TroopIdle1()
+    public void TroopIdle()
     {
-        TroopAnimator.SetBool("walking (1)", false);
-        TroopAnimator.SetBool("climbing (1)", false);
-        TroopAnimator.SetBool("ulti (1)", false);
-        TroopAnimator.SetBool("attack (1)", false);
+        TroopAnimator.SetBool("walking", false);
+        TroopAnimator.SetBool("climbing", false);
+        TroopAnimator.SetBool("ulti", false);
+        TroopAnimator.SetBool("attack", false);
     }
     
-    public void TroopWalkOn1()
+    public void TroopWalkOn()
     {
-        TroopAnimator.SetBool("walking (1)", true);
-        TroopAnimator.SetBool("attack (1)", false);
+        TroopAnimator.SetBool("walking", true);
+        TroopAnimator.SetBool("attack", false);
     }       
     
-    public void TroopWalkOff1()
+    public void TroopWalkOff()
     {
-        TroopAnimator.SetBool("walking (1)", false);    }        
-    
-    public void TroopClimbOn1()
-    {
-        TroopAnimator.SetBool("climbing (1)", true);
-        TroopAnimator.SetBool("attack (1)", false);
-    }      
-    
-    public void TroopClimbOff1()
-    {
-        TroopAnimator.SetBool("climbing (1)", false);
+        TroopAnimator.SetBool("walking", false);    
     }        
     
-    public void TroopFallOn1()
+    public void TroopClimbOn()
     {
-        TroopAnimator.SetBool("falling (1)", true);
-        TroopAnimator.SetBool("attack (1)", false);
+        TroopAnimator.SetBool("climbing", true);
+        TroopAnimator.SetBool("attack", false);
     }      
     
-    public void TroopFallOff1()
+    public void TroopClimbOff()
     {
-        TroopAnimator.SetBool("falling (1)", false);
+        TroopAnimator.SetBool("climbing", false);
+    }        
+    
+    public void TroopFallOn()
+    {
+        TroopAnimator.SetBool("falling", true);
+        TroopAnimator.SetBool("attack", false);
+    }      
+    
+    public void TroopFallOff()
+    {
+        TroopAnimator.SetBool("falling", false);
     }    
     
-    public void TroopAttack1()
+    public void TroopAttackOn()
     {
-        TroopAnimator.SetBool("walking (1)", false);
-        TroopAnimator.SetBool("climbing (1)", false);
-        TroopAnimator.SetBool("ulti (1)", false);
-        TroopAnimator.SetBool("attack (1)", true);
+/*        TroopAnimator.SetBool("walking", false);
+        TroopAnimator.SetBool("climbing", false);
+        TroopAnimator.SetBool("ulti", false);*/
+        TroopAnimator.SetBool("attack", true);
+    }        
+    
+    public void TroopAttackOff()
+    {
+        TroopAnimator.SetBool("attack", false);
     }    
     
     public void TroopUlti1()
     {
-        TroopAnimator.SetBool("walking (1)", false);
-        TroopAnimator.SetBool("climbing (1)", false);
-        TroopAnimator.SetBool("ulti (1)", true);
-        TroopAnimator.SetBool("attack (1)", false);
+        TroopAnimator.SetBool("walking", false);
+        TroopAnimator.SetBool("climbing", false);
+        TroopAnimator.SetBool("ulti", true);
+        TroopAnimator.SetBool("attack", false);
     }
 
     public void TroopOnWeapon1()
@@ -70,5 +76,10 @@ public class TroopAnimationsManager : MonoBehaviour
     public void TroopOnWeapon2()
     {
         TroopAnimator.SetBool("2nd Weapon", true);
+    }    
+    
+    public void TroopDies()
+    {
+        TroopAnimator.SetBool("death", true);
     }
 }

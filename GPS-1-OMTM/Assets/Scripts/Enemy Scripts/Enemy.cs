@@ -361,11 +361,12 @@ public class Enemy: MonoBehaviour
         }
     }
 
+    public float knockbackForce;
     private IEnumerator KnockbackCoroutine(Vector3 attackerPosition)
     {
         isKnockedBack = true;
 
-        float knockbackForce = 10f;
+        //float knockbackForce = 10f;
 
         if (facingRight)
         {

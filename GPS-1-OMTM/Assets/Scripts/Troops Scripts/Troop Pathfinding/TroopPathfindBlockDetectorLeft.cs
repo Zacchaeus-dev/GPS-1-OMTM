@@ -33,6 +33,7 @@ public class TroopPathfindBlockDetectorLeft : MonoBehaviour
                 PathfindingScript.ONCE = true;
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
+                PathfindingScript.GoingLeft = true;
             }
 
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.MaterialProperty;
+//using static UnityEditor.MaterialProperty;
 
 public class ShieldUpgradeSystem : MonoBehaviour
 {

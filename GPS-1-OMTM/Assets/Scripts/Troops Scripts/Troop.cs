@@ -59,7 +59,8 @@ public class Troop : MonoBehaviour
     private float ultimateDurationTimeRemaining;
 
     // Animation
-
+    public GameObject TroopModel;
+    TroopAnimationsManager TroopAnimator;
 
     public GameObject highlight;
     public GameObject arrow;
@@ -481,7 +482,7 @@ public class Troop : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Death();
+            StartCoroutine(Death());
         }
 
         if (troopEnergy != null)
@@ -500,19 +501,23 @@ public class Troop : MonoBehaviour
         UpdateHUD();
     }
 
-    void Death()
+    IEnumerator Death()
     {
-        //Debug.Log(gameObject.name + " is dead");
-
-        // Notify troopController2D to respawn this troop
-        troopController2D.HandleRespawn(this);
+        Debug.Log(gameObject.name + " is dead");
 
         // Deactivate the troop's pathfind arrow
         gameObject.GetComponent<TroopClass>().arrow.SetActive(false);
 
+        // Death Animation
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopDies();
+
+        yield return new WaitForSeconds(2f);
+
+        // Notify troopController2D to respawn this troop
+        troopController2D.HandleRespawn(this);
+
         // Deactivate the troop
         gameObject.SetActive(false);
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
