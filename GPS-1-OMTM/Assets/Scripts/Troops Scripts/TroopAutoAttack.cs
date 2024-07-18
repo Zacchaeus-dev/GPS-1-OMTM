@@ -10,7 +10,7 @@ public class TroopAutoAttack : MonoBehaviour
     public float detectionRange = 3f; // Range within which the troop can detect enemies
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
-    //public bool canAttack = true;
+
     public Vector3 startOffset; // Offset for the start point of the bullet tracer
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
     public float tracerFadeDuration = 0.5f; // Duration of the fade-out
@@ -18,7 +18,7 @@ public class TroopAutoAttack : MonoBehaviour
     public float lastAttackTime = 0f;
     public GameObject targetEnemy;
     private Rigidbody2D rb;
-    public Animator attackAnimation;
+
 
     public Troop troop;
     public TroopCharacter troopCharacter;
@@ -35,11 +35,16 @@ public class TroopAutoAttack : MonoBehaviour
         CC,
     }
 
+    public GameObject TroopModel;
+    TroopAnimationsManager TroopAnimator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         troopEnergy = GetComponent<TroopEnergy>();
         DetermineAttack();
+
+        TroopAnimator = TroopModel.GetComponent<TroopAnimationsManager>();
     }
 
     void Update()
@@ -53,6 +58,7 @@ public class TroopAutoAttack : MonoBehaviour
             else
             {
                 AttackTarget();
+                
             }
         }
     }
@@ -146,9 +152,11 @@ public class TroopAutoAttack : MonoBehaviour
                                     {
                                         case TroopWeapon.Weapon.Weapon1_Tank:
                                             Tank_Weapon1Attack();
+                                            TroopAnimator.TroopAttack1();
                                             break;
                                         case TroopWeapon.Weapon.Weapon2_Tank:
                                             Tank_Weapon2Attack(enemy);
+                                            TroopAnimator.TroopAttack1();
                                             break;
                                     }
                                     break;
@@ -183,8 +191,7 @@ public class TroopAutoAttack : MonoBehaviour
                     targetEnemy = null; // Lost range, find another target
                 }
             }
-            //chg gun up sprite
-            attackAnimation.SetBool("Attack", true);
+            
         }
     }
 

@@ -59,7 +59,7 @@ public class Troop : MonoBehaviour
     private float ultimateDurationTimeRemaining;
 
     // Animation
-    public Animator attackAnimation;
+
 
     public GameObject highlight;
     public GameObject arrow;
@@ -372,15 +372,14 @@ public class Troop : MonoBehaviour
         //add attack and attack speed 
         troopAutoAttack.attackDamage += 25;
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
-        attackAnimation.SetBool("Berserk", true);
 
         yield return new WaitForSeconds(ultimateDuration);
-        attackAnimation.SetBool("Berserk", false);
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
+
     }
 
     void Ultimate_Tank()

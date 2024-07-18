@@ -38,12 +38,20 @@ public class TroopClass : MonoBehaviour
     bool teleported;
     float timer;
 
+    //ANIMATIONS
+
+    public GameObject TroopModel;
+    TroopAnimationsManager TroopAnimator;
+
     private void Start()
     {
         mainCamera = Camera.main;
         rb = gameObject.GetComponent<Rigidbody2D>();
         controllerScript = TroopController2D.GetComponent<TroopController2D>();
         OnKDScript = OnKDCollider.GetComponent<OnKDDetector>();
+
+        TroopAnimator= TroopModel.GetComponent<TroopAnimationsManager>();
+
         DetermineMoveSpeed();
         SetTargetPositionHere();
     }
@@ -88,12 +96,15 @@ public class TroopClass : MonoBehaviour
         arrow.SetActive(false);
     }
 
+    bool GoingLeft;
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
         if (teleported == false && gameObject.activeSelf == true)
         {
             mousePosition = mP;
             hit = h;
+
+            GoingLeft = mousePosition.x < gameObject.transform.position.x;
 
             // 1a. if click on any part of killdozer middleground
             if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground")
@@ -2114,16 +2125,34 @@ public class TroopClass : MonoBehaviour
         isMoving = true;
     }
 
-
+    public GameObject Model;
     public void Update()
     {
+        if (GoingLeft == true)
+        {
+            Model.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else
+        {
+            Model.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+
+        if (canClimb)
+        {
+            ClimbAndMove();
+        }
+        else
+        {
+            StopClimb();
+        }
+
         if (isMoving)
         {
             Move();
         }
-        if (canClimb)
+        else
         {
-            ClimbAndMove();
+            StopMove();
         }
 
         if (teleported == true)
@@ -2136,19 +2165,27 @@ public class TroopClass : MonoBehaviour
                 timer = 0;
             }
         }
-        // To move with Killdozer  // || onPlatform == "Upper-Ground 1" || onPlatform == "Upper-Ground 2" || onPlatform == "Upper-Ground 3" || onPlatform == "Upper-Ground 4")
-            /*        if (OnKDScript.onKD == true)
-                    {
-                        transform.SetParent(killdozer);
-                    }
-                    else
-                    {
-                        transform.SetParent(null);
-                    }*/
-    }
 
+        switch (troopWeapon.selectedWeapon) //determine speed based on selected weapon
+        {
+            case TroopWeapon.Weapon.Weapon1_Tank:
+                TroopAnimator.TroopOnWeapon1();
+                break;
+            case TroopWeapon.Weapon.Weapon2_Tank:
+                TroopAnimator.TroopOnWeapon2();
+                break;
+        }
+
+    }
+    bool WalkOrStopAnimation;
     void Move()
     {
+            
+            if (WalkOrStopAnimation == false) 
+            {
+                WalkOrStopAnimation = true;
+                TroopAnimator.TroopWalkOn1();
+            }
 
             if (nearestVert != null) // if changing elevation
             {
@@ -2178,8 +2215,29 @@ public class TroopClass : MonoBehaviour
         
     }
 
+    void StopMove()
+    {
+        if (WalkOrStopAnimation == true)
+        {
+            WalkOrStopAnimation = false;
+            TroopAnimator.TroopWalkOff1();
+        }
+    }
+
+    void StopClimb()
+    {
+        if (ClimbAnimation == true)
+        {
+            ClimbAnimation = false;
+            TroopAnimator.TroopClimbOff1();
+            TroopAnimator.TroopFallOff1();
+        }
+    }
+
+    bool ClimbAnimation;
     void ClimbAndMove()
     {
+
         isMoving = false;
 
         if (climbingUp == true)
@@ -2189,6 +2247,11 @@ public class TroopClass : MonoBehaviour
                 //transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y + 20), (moveSpeed * Time.deltaTime) + 0.015f);
             }
 
+            if (ClimbAnimation == false)
+            {
+                ClimbAnimation = true;
+                TroopAnimator.TroopClimbOn1();
+            }
         }        
         
         else if (climbingUp == false)
@@ -2198,6 +2261,13 @@ public class TroopClass : MonoBehaviour
                 //transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y - 20), moveSpeed * Time.deltaTime);
                 transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed ) * Time.deltaTime));
             }
+
+            if (ClimbAnimation == false)
+            {
+                ClimbAnimation = true;
+                TroopAnimator.TroopFallOn1();
+            }
+
         }
 
 
