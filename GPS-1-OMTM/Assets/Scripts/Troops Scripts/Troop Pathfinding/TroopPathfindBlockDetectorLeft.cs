@@ -35,7 +35,10 @@ public class TroopPathfindBlockDetectorLeft : MonoBehaviour
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
                 PathfindingScript.GoingLeft = true;
             }
-
+        }
+        else
+        {
+            return;
         }
     }
 }

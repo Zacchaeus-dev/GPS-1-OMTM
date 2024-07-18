@@ -37,5 +37,9 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
             }
 
         }
+        else
+        {
+            return;
+        }
     }
 }
