@@ -125,6 +125,8 @@ public class TroopAutoAttack : MonoBehaviour
         {
             if (targetEnemy != null)
             {
+                gameObject.GetComponent<TroopClass>().GoingLeft = targetEnemy.transform.position.x < gameObject.transform.position.x;
+
                 float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
                 if (distanceToEnemy <= attackRange)
                 {

@@ -96,7 +96,7 @@ public class TroopClass : MonoBehaviour
         arrow.SetActive(false);
     }
 
-    bool GoingLeft;
+    public bool GoingLeft;
     public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
         if (teleported == false && gameObject.activeSelf == true)
@@ -2139,7 +2139,7 @@ public class TroopClass : MonoBehaviour
         {
             Model.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
-        else
+        else if (GoingLeft == false)
         {
             Model.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
