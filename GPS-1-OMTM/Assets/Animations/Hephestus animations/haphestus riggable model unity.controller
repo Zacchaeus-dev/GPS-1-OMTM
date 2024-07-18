@@ -333,16 +333,16 @@ AnimatorStateMachine:
     m_Position: {x: -220, y: 390, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6786869045565068976}
-    m_Position: {x: 350, y: 30, z: 0}
+    m_Position: {x: 80, y: 70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6050447314401668382}
-    m_Position: {x: -520, y: -70, z: 0}
+    m_Position: {x: -480, y: -110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2883509312451505173}
     m_Position: {x: 10, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1411043515294039737}
-    m_Position: {x: -520, y: -20, z: 0}
+    m_Position: {x: -480, y: -60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5037981336370758002}
     m_Position: {x: 20, y: 490, z: 0}
@@ -364,7 +364,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 110, y: 40, z: 0}
+  m_AnyStatePosition: {x: -160, y: 70, z: 0}
   m_EntryPosition: {x: 130, y: 120, z: 0}
   m_ExitPosition: {x: 660, y: 30, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -483,7 +483,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
   - m_Name: climbing (1)
     m_Type: 4
