@@ -104,7 +104,6 @@ public class TroopClass : MonoBehaviour
             mousePosition = mP;
             hit = h;
 
-            GoingLeft = mousePosition.x < gameObject.transform.position.x;
 
             // 1a. if click on any part of killdozer middleground
             if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground")
@@ -1519,6 +1518,14 @@ public class TroopClass : MonoBehaviour
             {
                 GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert, climbingUp);
 
+                if (nearestVert == null)
+                {
+                    GoingLeft = targetPosition.x < gameObject.transform.position.x;
+                }
+                if (nearestVert != null)
+                {
+                    GoingLeft = vertPosition.x < gameObject.transform.position.x;
+                }
 
                 // For Pathfind Arrow
                 arrow.SetActive(false);
