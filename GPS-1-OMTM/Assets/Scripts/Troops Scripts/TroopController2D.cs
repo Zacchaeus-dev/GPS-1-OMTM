@@ -39,7 +39,8 @@ public class TroopController2D : MonoBehaviour
     public CameraSystem cameraSystem;
     public EnergySystem energySystem;
 
-    //tp animation
+    //tp 
+    private bool teleporting = false;
     private Animator animator;
     public GameObject tpAnimation1;
     public GameObject tpAnimation2;
@@ -97,7 +98,11 @@ public class TroopController2D : MonoBehaviour
                 else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
                 {
                     Debug.Log("Teleport");
-                    StartCoroutine(Teleportation());
+                    if (teleporting == false)
+                    {
+                        teleporting = true;
+                        StartCoroutine(Teleportation());
+                    }
                 }
                 else if (selectedTroop != null && !EventSystem.current.IsPointerOverGameObject()) // clicking elsewhere besides ui to deselect troop
                 {
@@ -443,6 +448,8 @@ public class TroopController2D : MonoBehaviour
         }
 
         cameraSystem.ToggleZoom();
+
+        teleporting = false;
     }
 }
 

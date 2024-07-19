@@ -73,6 +73,15 @@ public class HealerAutoHeal : MonoBehaviour
             else
             {
                 HealTarget();
+
+                if (troopWeapon.selectedWeapon == TroopWeapon.Weapon.Weapon1_Healer)
+                {
+                    Troop allyTroop = targetAlly.GetComponent<Troop>();
+                    if (allyTroop != null && allyTroop.currentHealth == allyTroop.maxHealth)
+                    {
+                        FindTarget(); // Change target if the current ally is fully healed
+                    }
+                }
             }
         }
     }
@@ -88,7 +97,22 @@ public class HealerAutoHeal : MonoBehaviour
             if (hitCollider.CompareTag("Troop") && hitCollider.gameObject != this.gameObject)
             {
                 float distanceToAlly = Vector2.Distance(transform.position, hitCollider.transform.position);
-                if (distanceToAlly < closestDistance)
+                Troop allyTroop = hitCollider.GetComponent<Troop>();
+
+                /*
+                if (distanceToAlly < closestDistance && troopWeapon.selectedWeapon == TroopWeapon.Weapon.Weapon2_Healer)
+                {
+                    closestDistance = distanceToAlly;
+                    closestAlly = hitCollider.gameObject;
+                }
+                else if (allyTroop != null && allyTroop.currentHealth < allyTroop.maxHealth && troopWeapon.selectedWeapon == TroopWeapon.Weapon.Weapon1_Healer)
+                {
+                    closestDistance = distanceToAlly;
+                    closestAlly = hitCollider.gameObject;
+                }
+                */
+                
+                if (allyTroop != null && allyTroop.currentHealth < allyTroop.maxHealth)
                 {
                     closestDistance = distanceToAlly;
                     closestAlly = hitCollider.gameObject;

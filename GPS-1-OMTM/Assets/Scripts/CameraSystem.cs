@@ -31,6 +31,10 @@ public class CameraSystem : MonoBehaviour
 
     private bool focusOnKD;
 
+    // Borders
+    Vector3 leftBorder = new Vector3(-24.5f, 0, 0);
+    Vector3 rightBorder = new Vector3(220, 0, 0);
+
     private void Start()
     {
         var camera = Camera.main;
@@ -54,13 +58,13 @@ public class CameraSystem : MonoBehaviour
     void HandleCameraMovement()
     {
         Vector3 inputDir = new Vector3(0, 0, 0);
-        int edgeScrollSize = 20;
+        int edgeScrollSize = 20; //cursoe hover area
 
-        if (Input.mousePosition.x < edgeScrollSize) // Move left
+        if (Input.mousePosition.x < edgeScrollSize && transform.position.x > leftBorder.x) // Move left
         {
             inputDir.x = -1f;
         }
-        if (Input.mousePosition.x > Screen.width - edgeScrollSize) // Move right
+        if (Input.mousePosition.x > Screen.width - edgeScrollSize && transform.position.x < rightBorder.x) // Move right
         {
             inputDir.x = 1f;
         }
@@ -74,7 +78,7 @@ public class CameraSystem : MonoBehaviour
         }
 
         Vector3 moveDir = transform.right * inputDir.x;
-        float moveSpeed = cameraSpeed; // Camera movement speed
+        float moveSpeed = cameraSpeed; 
         transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
 

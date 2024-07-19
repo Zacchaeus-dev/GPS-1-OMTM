@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1310919259
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 7962233255136715888}
   - component: {fileID: 6365492276895408061}
   - component: {fileID: 1332440361139677993}
+  - component: {fileID: 5798729683341498861}
   m_Layer: 7
   m_Name: Minitaur
   m_TagString: Enemy
@@ -162,6 +163,7 @@ MonoBehaviour:
   slowArea: 0
   energyOrb: {fileID: 6365492276895408061}
   energyOrbDropNum: 2
+  knockbackForce: 0
 --- !u!212 &8011022337802696535
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -201,7 +203,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1310919259
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: b43f223f7389f2b4f8fb4dd824e88908, type: 3}
   m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
@@ -328,11 +330,27 @@ MonoBehaviour:
   currentHealth: 0
   walkSpeed: 2
   dashSpeed: 10
-  detectionRange1: 18.37
-  detectionRange2: 11.55
-  detectionRange3: 1.81
+  detectionRangeX1: 10
+  detectionRangeY1: 10
+  detectionRangeX2: 5
+  detectionRangeY2: 5
+  detectionRangeX3: 1.5
+  detectionRangeY3: 1.5
   attackDamage: 500
   chargeTime: 2
+--- !u!114 &5798729683341498861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592388419513265639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58143d0c48ed43d41b00fba598465867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyTier: 2
 --- !u!1 &2400191154234946585
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +422,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1310919259
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 7be80bca896121b4e8da971da28942d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.9019608}
@@ -488,7 +506,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1310919259
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: da2d398ecaa1e41478df0ec60626f775, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.9019608}
