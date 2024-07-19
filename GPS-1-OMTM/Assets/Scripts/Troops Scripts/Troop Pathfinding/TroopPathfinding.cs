@@ -56,9 +56,9 @@ public class TroopClass : MonoBehaviour
         SetTargetPositionHere();
     }
 
-    public void DetermineMoveSpeed()
+    public void DetermineMoveSpeed() //determine movement speed based on selected weapon 
     {
-        switch (troopWeapon.selectedWeapon) //determine speed based on selected weapon
+        switch (troopWeapon.selectedWeapon) 
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
                 moveSpeed = 8;
@@ -2135,32 +2135,27 @@ public class TroopClass : MonoBehaviour
     public GameObject Model;
     public void Update()
     {
-        if (GoingLeft == true)
-        {
-            Model.transform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-        else if (GoingLeft == false)
-        {
-            Model.transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
+        CorrectTroopDirection();
 
-        if (canClimb)
-        {
-            ClimbAndMove();
-        }
-        else
-        {
-            StopClimb();
-        }
+            if (canClimb)
+                {
+                    ClimbAndMove();
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                }
+                else
+                {
+                    StopClimb();
+                }
 
-        if (isMoving)
-        {
-            Move();
-        }
-        else
-        {
-            StopMove();
-        }
+            if (isMoving)
+                {
+                    Move();
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                }
+                else
+                {
+                    StopMove();
+                }
 
         if (teleported == true)
         {
@@ -2173,17 +2168,20 @@ public class TroopClass : MonoBehaviour
             }
         }
 
-        switch (troopWeapon.selectedWeapon) //determine speed based on selected weapon
-        {
-            case TroopWeapon.Weapon.Weapon1_Tank:
-                TroopAnimator.TroopOnWeapon1();
-                break;
-            case TroopWeapon.Weapon.Weapon2_Tank:
-                TroopAnimator.TroopOnWeapon2();
-                break;
-        }
-
     }
+
+    void CorrectTroopDirection()
+    {
+        if (GoingLeft == true)
+        {
+            Model.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (GoingLeft == false)
+        {
+            Model.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+
     bool WalkOrStopAnimation;
     void Move()
     {
@@ -2228,6 +2226,7 @@ public class TroopClass : MonoBehaviour
         {
             WalkOrStopAnimation = false;
             TroopAnimator.TroopWalkOff();
+            //gameObject.GetComponent<TroopAutoAttack>().AttackModelParts.SetActive(false);
         }
     }
 
@@ -2238,6 +2237,7 @@ public class TroopClass : MonoBehaviour
             ClimbAnimation = false;
             TroopAnimator.TroopClimbOff();
             TroopAnimator.TroopFallOff();
+            //gameObject.GetComponent<TroopAutoAttack>().AttackModelParts.SetActive(false);
         }
     }
 

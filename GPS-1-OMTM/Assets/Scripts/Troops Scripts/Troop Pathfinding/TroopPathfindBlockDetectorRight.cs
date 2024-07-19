@@ -21,7 +21,7 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
             PathfindingScript.BlockedRight = false;
         }
 
-        if (hit.collider.CompareTag("Enemy"))
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
             Debug.Log(hit.collider.gameObject);
             Debug.Log("CANNOT MOVE RIGHT");
