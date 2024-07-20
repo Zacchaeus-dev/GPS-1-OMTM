@@ -616,15 +616,20 @@ public class Troop : MonoBehaviour
         this.targetEnemy = null;
     }
 
+    [Header(" HUD ")]
+    public GameObject SelectedIcon;
+
     public void ChangeIconColour()
     {
         if(!selected)
         {
-            iconBorder.color = Color.yellow;
+            //iconBorder.color = Color.yellow;
+            SelectedIcon.SetActive(true);
         }
         else
         {
-            iconBorder.color = originalColor;
+            //iconBorder.color = originalColor;
+            SelectedIcon.SetActive(false);
         }
     }
 }
