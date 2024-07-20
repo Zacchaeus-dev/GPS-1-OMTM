@@ -11,14 +11,6 @@ public class TroopAutoAttack : MonoBehaviour
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
 
-    public GameObject AttackModelPart1;
-    public GameObject AttackModelPart2;
-    public GameObject AttackModelPart3;
-    public GameObject shootingPoint; // Shooting point of troop's Weapon
-    public Vector3 startOffset; // Offset for the start point of the bullet tracer
-    public LineRenderer lineRendererPrefab; // Prefab for the line renderer
-    public float tracerFadeDuration = 0.5f; // Duration of the fade-out
-
     public float lastAttackTime = 0f;
     public GameObject targetEnemy;
     private Rigidbody2D rb;
@@ -32,6 +24,18 @@ public class TroopAutoAttack : MonoBehaviour
     private int tankAttackCounter = 0;
     private int dpsWeapon2Range = 10;
     private int dpsWeapon2Width = 3;
+
+    [Header(" Art ")]
+    public float AnimationDelay;
+    public GameObject AttackModelHead;
+    public GameObject AttackModelGun;
+    public GameObject shootingPoint1; // Shooting point of troop's Weapon 1
+    public GameObject shootingPoint2; // Shooting point of troop's Weapon 2
+    public Vector3 startOffset; // Offset for the start point of the bullet tracer
+    public LineRenderer lineRendererPrefab; // Prefab for the line renderer
+    public float tracerFadeDuration = 0.5f; // Duration of the fade-out
+
+
     public enum TroopCharacter
     {
         DPS,
@@ -105,10 +109,12 @@ public class TroopAutoAttack : MonoBehaviour
             case TroopWeapon.Weapon.Weapon1_CC:
                 attackDamage = 10;
                 attackCooldown = 1f;
+                AnimationDelay = 0f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
                 attackDamage = 15;
                 attackCooldown = 2f;
+                AnimationDelay = 0.8f;
                 break;
         }
     }
@@ -155,18 +161,7 @@ public class TroopAutoAttack : MonoBehaviour
 
         if (closestEnemy != null)
         {
-            targetEnemy = closestEnemy;
-
-            // to check whether Troop is attacking Left or Right
-            if (closestEnemy.transform.position.x < gameObject.transform.position.x)
-            {
-                gameObject.GetComponent<TroopClass>().GoingLeft = true;
-            }
-            else if (closestEnemy.transform.position.x > gameObject.transform.position.x)
-            {
-                gameObject.GetComponent<TroopClass>().GoingLeft = false;
-            }
-            
+            targetEnemy = closestEnemy;     
         }
 
     }
@@ -178,7 +173,15 @@ public class TroopAutoAttack : MonoBehaviour
         {
             if (targetEnemy != null)
             {
-                
+                // to check whether Troop is attacking Left or Right
+                if (targetEnemy.transform.position.x < gameObject.transform.position.x)
+                {
+                    gameObject.GetComponent<TroopClass>().GoingLeft = true;
+                }
+                else if (targetEnemy.transform.position.x > gameObject.transform.position.x)
+                {
+                    gameObject.GetComponent<TroopClass>().GoingLeft = false;
+                }
 
                 float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
                 if (distanceToEnemy <= attackRange)
@@ -186,7 +189,7 @@ public class TroopAutoAttack : MonoBehaviour
                     
                     //delay bc troops need a window of time to get into attack stance when transitioning from walking to attacking
                     delay = delay + Time.deltaTime;
-                    if (delay > 0.8f)
+                    if (delay > AnimationDelay)
                     {
                         ActivateAttackVisuals();
                     }
@@ -239,8 +242,8 @@ public class TroopAutoAttack : MonoBehaviour
                                         }
                                         break;
                                     default:
-                                        enemy.TakeDamage(attackDamage);
-                                        DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+                                        //enemy.TakeDamage(attackDamage);
+                                        //DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
                                         break;
                                 }
                             }
@@ -249,7 +252,7 @@ public class TroopAutoAttack : MonoBehaviour
                                 targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
                                 
                                 //DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position); // change to below after adding in troop assets, fits better rn
-                                DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+                                //DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
 
                                 targetEnemy = null; // enemy ded, remove target
                             }
@@ -276,9 +279,29 @@ public class TroopAutoAttack : MonoBehaviour
     {
         //Stops Attack Animation
         TroopAnimator.TroopAttackOff();
-        AttackModelPart1.SetActive(false);
-        AttackModelPart2.SetActive(false);
-        AttackModelPart3.SetActive(false);
+        switch (troopCharacter) // activate corresponding pivot models
+        {
+            case TroopCharacter.DPS:
+                switch (troopWeapon.selectedWeapon)
+                {
+                    case TroopWeapon.Weapon.Weapon1_DPS:
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_DPS:
+                        break;
+                }
+                break;
+            case TroopCharacter.CC:
+                switch (troopWeapon.selectedWeapon)
+                {
+                    case TroopWeapon.Weapon.Weapon2_CC:
+                        AttackModelHead.SetActive(false);
+                        AttackModelGun.SetActive(false);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
 
     }
     public void ActivateAttackVisuals()
@@ -295,15 +318,12 @@ public class TroopAutoAttack : MonoBehaviour
                         break;
                 }
                 break;
-            case TroopCharacter.Tank:
-                break;
             case TroopCharacter.CC:
                 switch (troopWeapon.selectedWeapon)
                 {
                     case TroopWeapon.Weapon.Weapon2_CC:
-                        AttackModelPart1.SetActive(true);
-                        AttackModelPart2.SetActive(true);
-                        AttackModelPart3.SetActive(true);
+                        AttackModelHead.SetActive(true);
+                        AttackModelGun.SetActive(true);
                         break;
                 }
                 break;
@@ -314,7 +334,7 @@ public class TroopAutoAttack : MonoBehaviour
     void DPS_Weapon1Attack(Enemy enemy)
     {
         enemy.TakeDamage(attackDamage);
-        DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+        DrawBulletTracer(shootingPoint1.transform.position, targetEnemy.transform.position);
         troopEnergy.GainPower();
     }
 
@@ -343,7 +363,7 @@ public class TroopAutoAttack : MonoBehaviour
                 if (distanceAlongDirection > 0 && distanceAlongDirection <= length && distancePerpendicular <= halfWidth)
                 {
                     enemy.TakeDamage(attackDamage);
-                    DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+                    DrawBulletTracer(shootingPoint2.transform.position, targetEnemy.transform.position);
                 }
             }
         }
@@ -434,8 +454,12 @@ public class TroopAutoAttack : MonoBehaviour
         enemy.TakeDamage(attackDamage);
         enemy.slowArea = true;
         enemy.MarkForDeathStart();
-        DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+        DrawBulletTracer(shootingPoint1.transform.position, targetEnemy.transform.position);
         troopEnergy.GainPower();
+
+        //visual effect here
+        //projectile
+        
     }
 
     void CC_Weapon2Attack(Enemy _enemy)
@@ -454,8 +478,12 @@ public class TroopAutoAttack : MonoBehaviour
             }
         }
 
-        DrawBulletTracer(shootingPoint.transform.position, attackCenter);
+        DrawBulletTracer(shootingPoint2.transform.position, attackCenter);
         troopEnergy.GainPower();
+
+        //visual effect here
+        // 1. muzzle
+        // 2. hit effect
     }
 
     void DrawBulletTracer(Vector3 start, Vector3 end)
@@ -466,24 +494,24 @@ public class TroopAutoAttack : MonoBehaviour
         StartCoroutine(FadeOutLine(line));
     }
 
-    IEnumerator FadeOutLine(LineRenderer line)
-    {
-        float elapsedTime = 0f;
-        Color startColor = line.startColor;
-        Color endColor = line.endColor;
-
-        while (elapsedTime < tracerFadeDuration)
+        IEnumerator FadeOutLine(LineRenderer line)
         {
-            elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / tracerFadeDuration);
-            Color newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
-            line.startColor = newColor;
-            line.endColor = newColor;
-            yield return null;
-        }
+            float elapsedTime = 0f;
+            Color startColor = line.startColor;
+            Color endColor = line.endColor;
 
-        Destroy(line.gameObject);
-    }
+            while (elapsedTime < tracerFadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / tracerFadeDuration);
+                Color newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                line.startColor = newColor;
+                line.endColor = newColor;
+                yield return null;
+            }
+
+            Destroy(line.gameObject);
+        }
 
     public void SetTargetEnemy(GameObject enemy)
     {
