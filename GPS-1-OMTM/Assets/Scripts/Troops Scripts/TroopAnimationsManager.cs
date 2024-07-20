@@ -12,6 +12,16 @@ public class TroopAnimationsManager : MonoBehaviour
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("ulti", false);
         TroopAnimator.SetBool("attack", false);
+    }    
+    
+    public void TroopIdleOn()
+    {
+        TroopAnimator.SetBool("idle", true);
+    }    
+    
+    public void TroopIdleOff()
+    {
+        TroopAnimator.SetBool("idle", false);
     }
     
     public void TroopWalkOn()
@@ -60,11 +70,18 @@ public class TroopAnimationsManager : MonoBehaviour
         TroopAnimator.SetBool("attack", false);
     }    
     
-    public void TroopUlti1()
+    public void TroopUltiOn()
     {
         TroopAnimator.SetBool("walking", false);
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("ulti", true);
+        TroopAnimator.SetBool("attack", false);
+    }    
+    public void TroopUltiOff()
+    {
+        TroopAnimator.SetBool("ulti", false);
+        TroopAnimator.SetBool("walking", false);
+        TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("attack", false);
     }
 

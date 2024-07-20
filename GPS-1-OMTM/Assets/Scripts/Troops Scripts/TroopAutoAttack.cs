@@ -25,10 +25,15 @@ public class TroopAutoAttack : MonoBehaviour
     private int dpsWeapon2Range = 10;
     private int dpsWeapon2Width = 3;
 
-    [Header(" Art ")]
-    public float AnimationDelay;
+    float AnimationDelay;
+    
+    float delay;
+
+    [Header(" Art / Animations ")]
+    public float ShootingDelay;
     public GameObject AttackModelHead;
-    public GameObject AttackModelGun;
+    public GameObject AttackModelWeapon1;
+    public GameObject AttackModelWeapon2;
     public GameObject shootingPoint1; // Shooting point of troop's Weapon 1
     public GameObject shootingPoint2; // Shooting point of troop's Weapon 2
     public Vector3 startOffset; // Offset for the start point of the bullet tracer
@@ -50,11 +55,13 @@ public class TroopAutoAttack : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         troopEnergy = GetComponent<TroopEnergy>();
-        DetermineAttack();
 
         TroopAnimator = TroopModel.GetComponent<TroopAnimationsManager>();
     }
-
+    private void FixedUpdate()
+    {
+        DetermineAttack();
+    }
     public void DetermineWeaponLoadout() // to change animation set when troop changes weapon
     {
         switch (troopWeapon.selectedWeapon)
@@ -93,10 +100,14 @@ public class TroopAutoAttack : MonoBehaviour
             case TroopWeapon.Weapon.Weapon1_DPS:
                 attackDamage = 20;
                 attackCooldown = 0.25f;
+                AnimationDelay = 0.4f;
+                ShootingDelay = 0.5f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
                 attackDamage = 30;
                 attackCooldown = 1f;
+                AnimationDelay = 0.4f;
+                ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
                 attackDamage = 10;
@@ -110,11 +121,13 @@ public class TroopAutoAttack : MonoBehaviour
                 attackDamage = 10;
                 attackCooldown = 1f;
                 AnimationDelay = 0f;
+                ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
                 attackDamage = 15;
                 attackCooldown = 2f;
                 AnimationDelay = 0.8f;
+                ShootingDelay = 1f;
                 break;
         }
     }
@@ -166,7 +179,7 @@ public class TroopAutoAttack : MonoBehaviour
 
     }
 
-    float delay;
+  
     void AttackTarget()
     {
         if (troopClass.isMoving == false) //refering to the TroopClass on "(moving == false)" then this autoattack is activated......
@@ -194,7 +207,7 @@ public class TroopAutoAttack : MonoBehaviour
                         ActivateAttackVisuals();
                     }
 
-                    if (delay >= 1f) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
+                    if (delay >= ShootingDelay) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
                     {
                         delay = 0;
                         
@@ -275,6 +288,38 @@ public class TroopAutoAttack : MonoBehaviour
 
     }
 
+    public void ActivateAttackVisuals()
+    {
+        TroopAnimator.TroopAttackOn(); //activate attack animation
+        switch (troopCharacter) // activate corresponding pivot models
+        {
+            case TroopCharacter.DPS:
+                switch (troopWeapon.selectedWeapon)
+                {
+                    case TroopWeapon.Weapon.Weapon1_DPS:
+                        AttackModelHead.SetActive(true);
+                        AttackModelWeapon1.SetActive(true);
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_DPS:
+                        AttackModelHead.SetActive(true);
+                        AttackModelWeapon2.SetActive(true);
+                        break;
+                }
+                break;
+            case TroopCharacter.CC:
+                switch (troopWeapon.selectedWeapon)
+                {
+                    case TroopWeapon.Weapon.Weapon2_CC:
+                        AttackModelHead.SetActive(true);
+                        AttackModelWeapon1.SetActive(true);
+                        AttackModelWeapon2 = null;
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
     public void DeactivateAttackVisuals()
     {
         //Stops Attack Animation
@@ -285,8 +330,12 @@ public class TroopAutoAttack : MonoBehaviour
                 switch (troopWeapon.selectedWeapon)
                 {
                     case TroopWeapon.Weapon.Weapon1_DPS:
+                        AttackModelHead.SetActive(false);
+                        AttackModelWeapon1.SetActive(false);
                         break;
                     case TroopWeapon.Weapon.Weapon2_DPS:
+                        AttackModelHead.SetActive(false);
+                        AttackModelWeapon2.SetActive(false);
                         break;
                 }
                 break;
@@ -295,7 +344,7 @@ public class TroopAutoAttack : MonoBehaviour
                 {
                     case TroopWeapon.Weapon.Weapon2_CC:
                         AttackModelHead.SetActive(false);
-                        AttackModelGun.SetActive(false);
+                        AttackModelWeapon1.SetActive(false);
                         break;
                 }
                 break;
@@ -304,37 +353,11 @@ public class TroopAutoAttack : MonoBehaviour
         }
 
     }
-    public void ActivateAttackVisuals()
-    {
-        TroopAnimator.TroopAttackOn(); //activate attack animation
-        switch (troopCharacter) // activate corresponding pivot models
-        {
-            case TroopCharacter.DPS:
-                switch (troopWeapon.selectedWeapon)
-                {
-                    case TroopWeapon.Weapon.Weapon1_DPS:
-                        break;
-                    case TroopWeapon.Weapon.Weapon2_DPS:
-                        break;
-                }
-                break;
-            case TroopCharacter.CC:
-                switch (troopWeapon.selectedWeapon)
-                {
-                    case TroopWeapon.Weapon.Weapon2_CC:
-                        AttackModelHead.SetActive(true);
-                        AttackModelGun.SetActive(true);
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-    }
+
     void DPS_Weapon1Attack(Enemy enemy)
     {
         enemy.TakeDamage(attackDamage);
-        DrawBulletTracer(shootingPoint1.transform.position, targetEnemy.transform.position);
+        DrawBulletTracer(shootingPoint1.transform.position, new Vector2(targetEnemy.transform.position.x, targetEnemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
         troopEnergy.GainPower();
     }
 
@@ -363,7 +386,7 @@ public class TroopAutoAttack : MonoBehaviour
                 if (distanceAlongDirection > 0 && distanceAlongDirection <= length && distancePerpendicular <= halfWidth)
                 {
                     enemy.TakeDamage(attackDamage);
-                    DrawBulletTracer(shootingPoint2.transform.position, targetEnemy.transform.position);
+                    DrawBulletTracer(shootingPoint2.transform.position, new Vector2(targetEnemy.transform.position.x, targetEnemy.transform.position.y + 0.8f));
                 }
             }
         }

@@ -58,9 +58,7 @@ public class Troop : MonoBehaviour
     // Duration time
     private float ultimateDurationTimeRemaining;
 
-    // Animation
-    public GameObject TroopModel;
-    TroopAnimationsManager TroopAnimator;
+
 
     public GameObject highlight;
     public GameObject arrow;
@@ -78,6 +76,14 @@ public class Troop : MonoBehaviour
     private Color originalColor;
 
     public bool troopOnKilldozer = false;
+
+    [Header(" Art / Animations ")]
+    // Animation
+    public GameObject TroopModel;
+    TroopAnimationsManager TroopAnimator;
+    public GameObject AttackModelGauntlets;
+    public GameObject AttackModel2ndSniper;
+    public float UltiDelay;
 
     public enum Ultimate
     {
@@ -304,6 +310,7 @@ public class Troop : MonoBehaviour
         return null;
     }
 
+    public TroopWeapon troopWeapon;
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
         if (troopEnergy.currentPower < troopEnergy.maxPower)
@@ -317,6 +324,29 @@ public class Troop : MonoBehaviour
             case Ultimate.Ultimate_DPS:
                 troopEnergy.UseAllPower();
                 StartCoroutine(Ultimate_DPS());
+
+                // activate ult animation
+
+                gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+                yield return new WaitForSeconds(UltiDelay);
+
+                switch (troopWeapon.selectedWeapon)
+                {
+                    case TroopWeapon.Weapon.Weapon1_DPS:
+                        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+                        AttackModelGauntlets.SetActive(true);// SetActive Floating Gauntlets
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_DPS:
+                        TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOn();
+                        AttackModel2ndSniper.SetActive(true);// SetActive Left Sniper
+                        break;
+                }
+                        
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+
                 break;
             case Ultimate.Ultimate_Tank:
                 Ultimate_Tank();
@@ -374,9 +404,21 @@ public class Troop : MonoBehaviour
         troopAutoAttack.attackDamage += 25;
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
 
-        yield return new WaitForSeconds(ultimateDuration);
+        yield return new WaitForSeconds(100);//ultimateDuration);
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
+
+        switch (troopWeapon.selectedWeapon)
+        {
+            case TroopWeapon.Weapon.Weapon1_DPS:
+                AttackModelGauntlets.SetActive(false);// SetActive Floating Gauntlets
+                break;
+            case TroopWeapon.Weapon.Weapon2_DPS:
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOff();
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+                AttackModel2ndSniper.SetActive(false);// SetActive Floating Snipers
+                break;
+        }
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -511,6 +553,7 @@ public class Troop : MonoBehaviour
         // Death Animation
         TroopModel.GetComponent<TroopAnimationsManager>().TroopDies();
         gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false; // stops shooting
 
         yield return new WaitForSeconds(2f);
 
