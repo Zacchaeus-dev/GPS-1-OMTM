@@ -124,16 +124,16 @@ public class TroopController2D : MonoBehaviour
                 selectedTroop.GetComponent<TroopClass>().ONCE = false;
                 if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == true)
                 {
-                    Debug.Log("============== BLOCKED ON THE LEFT ===========");
-                    selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
-                    selectedTroop.GetComponent<TroopClass>().GoingLeft = true;
+                    // stop moving
+                    selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true); // Pathfind UI
+                    //selectedTroop.GetComponent<TroopClass>().GoingLeft = true;
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == false)
                 {
                     if (hit.collider != null)
                     {
-                        selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
-                        selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false);
+                        selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit); // start moving
+                        selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false); // Pathfind UI
 
 
                     }
@@ -142,10 +142,8 @@ public class TroopController2D : MonoBehaviour
             else if (GoingLeft == false)
             {
                 selectedTroop.GetComponent<TroopClass>().ONCE2 = false;
-                selectedTroop.GetComponent<TroopClass>().ONCE2 = false;
                 if (selectedTroop.GetComponent<TroopClass>().BlockedRight == true)
                 {
-                    Debug.Log("============== BLOCKED ON THE RUGHT ===========");
                     selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedRight == false)

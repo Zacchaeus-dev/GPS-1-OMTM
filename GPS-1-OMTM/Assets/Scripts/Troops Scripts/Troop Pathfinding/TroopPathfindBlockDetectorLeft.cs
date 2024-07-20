@@ -23,9 +23,6 @@ public class TroopPathfindBlockDetectorLeft : MonoBehaviour
 
         if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
-            Debug.Log(hit.collider.gameObject);
-            Debug.Log("CANNOT MOVE LEFT");
-
             if (PathfindingScript.ONCE == false)
             {
                 PathfindingScript.BlockedLeft = true;
@@ -33,7 +30,7 @@ public class TroopPathfindBlockDetectorLeft : MonoBehaviour
                 PathfindingScript.ONCE = true;
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
-                PathfindingScript.GoingLeft = true;
+                
             }
         }
         else

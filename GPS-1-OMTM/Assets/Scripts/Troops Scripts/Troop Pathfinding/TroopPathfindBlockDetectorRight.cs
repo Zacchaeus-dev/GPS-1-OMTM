@@ -21,11 +21,8 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
             PathfindingScript.BlockedRight = false;
         }
 
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        if (hit.collider != null && hit.collider.CompareTag("Enemy")) // to check if enemy is colliding with troop, if true play below
         {
-            Debug.Log(hit.collider.gameObject);
-            Debug.Log("CANNOT MOVE RIGHT");
-
             if (PathfindingScript.ONCE2 == false)
             {
                 PathfindingScript.BlockedRight = true;
@@ -35,7 +32,6 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
                 
             }
-
         }
         else
         {

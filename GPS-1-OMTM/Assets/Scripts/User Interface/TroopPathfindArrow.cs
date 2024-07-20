@@ -45,8 +45,6 @@ public class TroopPathfindArrow : MonoBehaviour
 
     public IEnumerator DisappearAfterSeconds(float duration)
     {
-        Debug.Log("OI");
-
         yield return new WaitForSeconds(duration);
 
         gameObject.SetActive(false);

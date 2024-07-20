@@ -11,7 +11,9 @@ public class TroopAutoAttack : MonoBehaviour
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
 
-    public GameObject AttackModelParts;
+    public GameObject AttackModelPart1;
+    public GameObject AttackModelPart2;
+    public GameObject AttackModelPart3;
     public GameObject shootingPoint; // Shooting point of troop's Weapon
     public Vector3 startOffset; // Offset for the start point of the bullet tracer
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
@@ -154,6 +156,17 @@ public class TroopAutoAttack : MonoBehaviour
         if (closestEnemy != null)
         {
             targetEnemy = closestEnemy;
+
+            // to check whether Troop is attacking Left or Right
+            if (closestEnemy.transform.position.x < gameObject.transform.position.x)
+            {
+                gameObject.GetComponent<TroopClass>().GoingLeft = true;
+            }
+            else if (closestEnemy.transform.position.x > gameObject.transform.position.x)
+            {
+                gameObject.GetComponent<TroopClass>().GoingLeft = false;
+            }
+            
         }
 
     }
@@ -165,20 +178,20 @@ public class TroopAutoAttack : MonoBehaviour
         {
             if (targetEnemy != null)
             {
-                gameObject.GetComponent<TroopClass>().GoingLeft = targetEnemy.transform.position.x < gameObject.transform.position.x; // to check whether Troop is attacking Left or Right
+                
 
                 float distanceToEnemy = Vector2.Distance(transform.position, targetEnemy.transform.position);
                 if (distanceToEnemy <= attackRange)
                 {
                     
-
+                    //delay bc troops need a window of time to get into attack stance when transitioning from walking to attacking
                     delay = delay + Time.deltaTime;
                     if (delay > 0.8f)
                     {
                         ActivateAttackVisuals();
                     }
 
-                    if (delay >= 1f)
+                    if (delay >= 1f) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
                     {
                         delay = 0;
                         
@@ -222,7 +235,6 @@ public class TroopAutoAttack : MonoBehaviour
                                                 break;
                                             case TroopWeapon.Weapon.Weapon2_CC:
                                                 CC_Weapon2Attack(enemy);
-                                                AttackModelParts.SetActive(true);
                                                 break;
                                         }
                                         break;
@@ -235,8 +247,11 @@ public class TroopAutoAttack : MonoBehaviour
                             else
                             {
                                 targetEnemy.GetComponent<FlyingEnemy>().TakeDamage(attackDamage);
+                                
                                 //DrawBulletTracer(transform.position + startOffset, targetEnemy.transform.position); // change to below after adding in troop assets, fits better rn
                                 DrawBulletTracer(shootingPoint.transform.position, targetEnemy.transform.position);
+
+                                targetEnemy = null; // enemy ded, remove target
                             }
 
                             lastAttackTime = Time.time;
@@ -246,7 +261,6 @@ public class TroopAutoAttack : MonoBehaviour
                 }
                 else
                 {
-                    //DeactivateAttackVisuals();
                     targetEnemy = null; // Lost range, find another target
                 }
             }  
@@ -262,7 +276,9 @@ public class TroopAutoAttack : MonoBehaviour
     {
         //Stops Attack Animation
         TroopAnimator.TroopAttackOff();
-        AttackModelParts.SetActive(false);
+        AttackModelPart1.SetActive(false);
+        AttackModelPart2.SetActive(false);
+        AttackModelPart3.SetActive(false);
 
     }
     public void ActivateAttackVisuals()
@@ -285,7 +301,9 @@ public class TroopAutoAttack : MonoBehaviour
                 switch (troopWeapon.selectedWeapon)
                 {
                     case TroopWeapon.Weapon.Weapon2_CC:
-                        AttackModelParts.SetActive(true);
+                        AttackModelPart1.SetActive(true);
+                        AttackModelPart2.SetActive(true);
+                        AttackModelPart3.SetActive(true);
                         break;
                 }
                 break;

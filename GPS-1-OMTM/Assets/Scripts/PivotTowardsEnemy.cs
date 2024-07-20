@@ -17,7 +17,7 @@ public class PivotTowardsEnemy : MonoBehaviour
 
     Vector2 EnemyScreenpoint;
 
-    private void Update()
+    private void FixedUpdate()
     {
         Enemy = AttackScript.targetEnemy;
 
@@ -36,7 +36,7 @@ public class PivotTowardsEnemy : MonoBehaviour
 
         if (AttackScript.GetComponent<TroopClass>().GoingLeft == true)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.x + 180, 0, -angle);
+            transform.rotation = Quaternion.Euler(Mathf.Round(transform.rotation.x + 180), 0, -angle);
         }
         else
         {

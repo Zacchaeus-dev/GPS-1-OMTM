@@ -510,7 +510,7 @@ public class Troop : MonoBehaviour
 
         // Death Animation
         TroopModel.GetComponent<TroopAnimationsManager>().TroopDies();
-        gameObject.GetComponent<TroopAutoAttack>().AttackModelParts.SetActive(false);
+        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
 
         yield return new WaitForSeconds(2f);
 
