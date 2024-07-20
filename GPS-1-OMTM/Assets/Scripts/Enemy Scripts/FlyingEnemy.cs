@@ -16,14 +16,22 @@ public class FlyingEnemy : MonoBehaviour
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
     public float tracerFadeDuration = 0.5f; // Duration of the fade-out
 
-    private GameObject targetTroop;
+    private GameObject target;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement
 
+    // Reference to the Killdozer
+    public GameObject killdozer;
+
     void Start()
     {
-        // currentHealth = maxHealth;
+        currentHealth = maxHealth;
         lastAttackTime = Time.time;
+
+        if (killdozer == null)
+        {
+            Debug.LogError("Killdozer reference is not set!");
+        }
     }
 
     void Update()
@@ -32,8 +40,8 @@ public class FlyingEnemy : MonoBehaviour
         {
             MoveLeft();
         }
-        DetectTroops();
-        MoveTowardsTroop();
+        DetectTargets();
+        MoveTowardsTarget();
         HandleAttack();
     }
 
@@ -43,7 +51,7 @@ public class FlyingEnemy : MonoBehaviour
         transform.position -= Vector3.right * speed * Time.deltaTime;
     }
 
-    void DetectTroops()
+    void DetectTargets()
     {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
         float closestDistance = Mathf.Infinity;
@@ -64,26 +72,35 @@ public class FlyingEnemy : MonoBehaviour
 
         if (closestTroop != null)
         {
-            targetTroop = closestTroop;
+            target = closestTroop;
+            Debug.Log("Targeting troop: " + closestTroop.name);
         }
         else
         {
-            targetTroop = null;
+            target = killdozer; // Default to targeting the Killdozer if no troops are found
+            if (killdozer != null)
+            {
+                Debug.Log("No troops found. Targeting Killdozer: " + killdozer.name);
+            }
+            else
+            {
+                Debug.LogError("Killdozer is not assigned in the Inspector!");
+            }
         }
     }
 
-    void MoveTowardsTroop()
+    void MoveTowardsTarget()
     {
-        if (targetTroop != null)
+        if (target != null)
         {
-            // Calculate distance to the target troop
-            float distanceToTroop = Vector2.Distance(transform.position, targetTroop.transform.position);
+            // Calculate distance to the target
+            float distanceToTarget = Vector2.Distance(transform.position, target.transform.position);
 
             // Check if within attack range
-            if (distanceToTroop > attackRange)
+            if (distanceToTarget > attackRange)
             {
-                // Move towards the troop if outside attack range, only in X-axis
-                Vector3 direction = (targetTroop.transform.position - transform.position).normalized;
+                // Move towards the target if outside attack range, only in X-axis
+                Vector3 direction = (target.transform.position - transform.position).normalized;
                 direction.y = 0; // Ensure no movement in Y-axis
                 transform.position += direction * speed * Time.deltaTime;
             }
@@ -95,35 +112,53 @@ public class FlyingEnemy : MonoBehaviour
         }
         else
         {
-            shouldMove = true; // Resume moving if no troop in attack range
+            shouldMove = true; // Resume moving if no target in attack range
         }
     }
 
-
     void HandleAttack()
     {
-        if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
+        if (target != null && Vector2.Distance(transform.position, target.transform.position) <= attackRange)
         {
             if (Time.time >= lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
-                AttackTroop();
+                AttackTarget();
             }
         }
     }
 
-    void AttackTroop()
+    void AttackTarget()
     {
-        if (targetTroop != null)
+        if (target != null)
         {
-            Troop troop = targetTroop.GetComponent<Troop>();
-            if (troop != null)
+            if (target.CompareTag("Troop"))
             {
-                troop.TakeDamage(attackDamage);
-                Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
+                Troop troop = target.GetComponent<Troop>();
+                if (troop != null)
+                {
+                    troop.TakeDamage(attackDamage);
+                    Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
 
-                // Draw bullet tracer
-                StartCoroutine(DrawBulletTracer(targetTroop.transform.position));
+                    // Draw bullet tracer
+                    StartCoroutine(DrawBulletTracer(target.transform.position));
+                }
+            }
+            else if (target.CompareTag("Killdozer"))
+            {
+                Killdozer killdozerScript = target.GetComponent<Killdozer>();
+                if (killdozerScript != null)
+                {
+                    killdozerScript.TakeDamage(attackDamage);
+                    Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
+
+                    // Draw bullet tracer
+                    StartCoroutine(DrawBulletTracer(target.transform.position));
+                }
+                else
+                {
+                    Debug.LogError("Killdozer script not found on target!");
+                }
             }
         }
     }
