@@ -31,19 +31,17 @@ public class TroopClass : MonoBehaviour
     public RaycastHit2D hit;
     public Transform killdozer;
 
-    
-
     public TroopWeapon troopWeapon;
 
     bool teleported;
     float timer;
 
-    //ANIMATIONS
+    [Header(" Art / Animations ")]
 
     public GameObject TroopModel;
     TroopAnimationsManager TroopAnimator;
-
     public bool GoingLeft;
+    float climbDelay;
 
     private void Start()
     {
@@ -58,12 +56,13 @@ public class TroopClass : MonoBehaviour
         SetTargetPositionHere();
     }
 
-    public void DetermineMoveSpeed() //determine movement speed based on selected weapon 
+    public void DetermineMoveSpeed() //determine movement speed & climbDelay based on selected weapon 
     {
         switch (troopWeapon.selectedWeapon) 
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
                 moveSpeed = 8;
+                climbDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
                 moveSpeed = 6;
@@ -98,7 +97,8 @@ public class TroopClass : MonoBehaviour
         arrow.SetActive(false);
     }
 
-    public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
+    // After Player's Right Click, determine the position & how troop should pathfind to thr
+    public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h) 
     {
         if (teleported == false && gameObject.activeSelf == true)
         {
@@ -1514,7 +1514,7 @@ public class TroopClass : MonoBehaviour
                 nearestVert = null;
             }
 
-            // == send over to <TroopClass> script == //
+            // == END - now start Troop movement == //
             if (controllerScript.selectedTroop != null)
             {
                 GetComponent<TroopClass>().SetTargetPosition(targetPosition, vertPosition, nearestVert, climbingUp);
@@ -1546,6 +1546,7 @@ public class TroopClass : MonoBehaviour
                 }
 
                 // For Pathfind Arrow
+
                 arrow.SetActive(false);
                 arrow.SetActive(true);
 
@@ -1660,7 +1661,6 @@ public class TroopClass : MonoBehaviour
         }
         
     }
-    
     void FindAndGoToNearestVertically1(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 1");
@@ -1689,7 +1689,6 @@ public class TroopClass : MonoBehaviour
             
         }
     }
-
     void FindAndGoToNearestVertically2(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 2");
@@ -1718,7 +1717,6 @@ public class TroopClass : MonoBehaviour
             
         }
     }
-
     void FindAndGoToNearestVertically3(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 3");
@@ -1747,7 +1745,6 @@ public class TroopClass : MonoBehaviour
             
         }
     }    
-    
     void FindAndGoToNearestVertically4(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 4");
@@ -1889,7 +1886,7 @@ public class TroopClass : MonoBehaviour
         }
     }
 
-    // Changing onPlatform
+    // Assist Pathfinding by Changing Troop's "onPlatform" to the correct value
     private void OnTriggerEnter2D(Collider2D collision)
     {
         
@@ -2072,7 +2069,7 @@ public class TroopClass : MonoBehaviour
 
     }
     
-    // FUTURE THINGS OR POINT 2 THINGS // For when killdozer connects with another upperground
+/*   MOST PROB NOT NEEDED - For when killdozer connects with another upperground
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (isMoving == false)
@@ -2139,7 +2136,7 @@ public class TroopClass : MonoBehaviour
         }
 
     }
-
+*/
 
     public void SetTargetPosition(Vector2 targetPosition, Vector2 vertPosition, Collider2D nearestVert, bool climbingUp)
     {
