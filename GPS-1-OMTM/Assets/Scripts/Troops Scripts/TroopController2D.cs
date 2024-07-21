@@ -60,6 +60,11 @@ public class TroopController2D : MonoBehaviour
 
     void Update()
     {
+        if (Killdozer.gameOver)
+        {
+            return;
+        }
+
         HandleMouseInput();
         HandleNumberKeyInput();
         //HandleEnemySelection();

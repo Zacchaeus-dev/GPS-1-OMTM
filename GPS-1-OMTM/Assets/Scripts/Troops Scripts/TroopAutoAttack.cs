@@ -134,6 +134,11 @@ public class TroopAutoAttack : MonoBehaviour
     
     void Update()
     {
+        if (Killdozer.gameOver)
+        {
+            return;
+        }
+
         DetermineWeaponLoadout();
 
         if (autoAttackEnabled)

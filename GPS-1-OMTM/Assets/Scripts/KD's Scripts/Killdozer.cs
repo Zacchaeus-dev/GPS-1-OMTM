@@ -21,11 +21,14 @@ public class Killdozer : MonoBehaviour
 
     public int directPathfinding;
 
+    public static bool gameOver = false;
+
     /*public GameObject KDUI;
     KDHealthUI KDUIScript;*/
 
     void Start()
     {
+        gameOver = false;
         //rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         //KDUIScript = KDUI.GetComponent<KDHealthUI>();
@@ -114,7 +117,7 @@ public class Killdozer : MonoBehaviour
 
         settingsPanel.SetActive(true);
 
-
+        gameOver = true;
 
 
 

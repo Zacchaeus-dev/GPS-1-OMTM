@@ -49,6 +49,7 @@ public class TroopAttackRange : MonoBehaviour
         
     }
 
+    
     public void DrawCircle()
     {
         lineRenderer.enabled = true;
@@ -63,6 +64,32 @@ public class TroopAttackRange : MonoBehaviour
             angle += (360f / segments);
         }
     }
+
+    /*
+    public void DrawDottedCircle()
+    {
+        lineRenderer.enabled = true;
+
+        float angle = 0f;
+        int dottedSegments = segments * 2; // Double the segments to include gaps
+        lineRenderer.positionCount = dottedSegments + 1;
+
+        for (int i = 0; i < (dottedSegments + 1); i++)
+        {
+            if (i % 2 == 0) // Draw every other segment to create a dotted effect
+            {
+                float x = Mathf.Sin(Mathf.Deg2Rad * angle) * attackRange;
+                float y = Mathf.Cos(Mathf.Deg2Rad * angle) * attackRange;
+                lineRenderer.SetPosition(i, new Vector3(x, y, 0));
+            }
+            else
+            {
+                lineRenderer.SetPosition(i, lineRenderer.GetPosition(i - 1)); // Duplicate previous point to create gap
+            }
+            angle += (360f / dottedSegments);
+        }
+    }
+    */
 
     public void DisableCircle()
     {

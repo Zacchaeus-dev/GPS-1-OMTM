@@ -58,8 +58,6 @@ public class Troop : MonoBehaviour
     // Duration time
     private float ultimateDurationTimeRemaining;
 
-
-
     public GameObject highlight;
     public GameObject arrow;
 

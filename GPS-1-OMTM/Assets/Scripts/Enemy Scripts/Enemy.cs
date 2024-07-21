@@ -121,12 +121,28 @@ public class Enemy: MonoBehaviour
 
             if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
-                if (target != null && (IsInsideKilldozer(target) || attackingKilldozer))
+                if (target != null)
                 {
-                    // Prioritize the Killdozer if the target is inside it or if enemy is already attacking killdozer
-                    closestTarget = killdozerTransform;
-                    closestDistanceSqr = distanceSqr;
-                    //Debug.Log("Found KD with Troops On it");
+                    if (killdozerTransform == null)
+                    {
+                        Debug.LogError("Killdozer Transform is null");
+                        return; // Early exit to prevent further errors
+                    }
+
+                    if (target == killdozerTransform && (IsInsideKilldozer(target) || attackingKilldozer))
+                    {
+                        // Prioritize the Killdozer if the target is inside it or if enemy is already attacking killdozer
+                        closestTarget = killdozerTransform;
+                        closestDistanceSqr = distanceSqr;
+                        //Debug.Log("Found KD with Troops On it");
+                    }
+                    else
+                    {
+                        // Update closest target to current target
+                        closestDistanceSqr = distanceSqr;
+                        closestTarget = target;
+                        //Debug.Log("Found Troop");
+                    }
                 }
                 else
                 {
@@ -192,7 +208,27 @@ public class Enemy: MonoBehaviour
         //return killdozerCollider.bounds.Contains(target.position);
         //Debug.Log(target);
 
-        return target.GetComponent<Troop>().troopOnKilldozer;
+        if (target == null)
+        {
+            return false;
+        }
+
+        //return target.GetComponent<Troop>().troopOnKilldozer;
+
+        Troop troopComponent = target.GetComponent<Troop>();
+        if (troopComponent == null)
+        {
+            Debug.Log("Target does not have a Troop component");
+            return false;
+        }
+
+        if (killdozerCollider == null)
+        {
+            Debug.Log("Killdozer Collider is null in IsInsideKilldozer");
+            return false;
+        }
+
+        return troopComponent.troopOnKilldozer;
     }
 
     IEnumerator AttackTarget()

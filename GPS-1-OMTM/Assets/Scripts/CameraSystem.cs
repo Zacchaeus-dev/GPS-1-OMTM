@@ -46,6 +46,19 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        if (Killdozer.gameOver)
+        {
+            if (isZoomedOut)
+            {
+                StartCoroutine(ZoomCamera(originalCameraSize, 1f, 0.3f)); // Zoom in
+                zoomDim.SetActive(false);
+                Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
+                isZoomedOut = !isZoomedOut;
+            }
+
+            return;
+        }
+
         HandleZoomInput();
 
         if (cameraMovement && focusedTroop == null) // Disable manual movement when focusing on a troop

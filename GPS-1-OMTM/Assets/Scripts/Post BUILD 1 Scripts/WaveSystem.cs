@@ -130,6 +130,11 @@ public class WaveSystem : MonoBehaviour
     private float timerDurationRemaining;
     public Image timerFill;
     public TextMeshProUGUI timerText;
+    public GameObject wavePopUp;
+    public GameObject wave1Screen;
+    public GameObject wave2Screen;
+    public GameObject wave3Screen;
+    public GameObject wave4Screen;
 
     void Start()
     {
@@ -197,10 +202,36 @@ public class WaveSystem : MonoBehaviour
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
 
-        //Debug.Log("Animation Starts"); //wave animation
-        //change wave number
-        //change enemy images
-        //animator.settrigger("a");
+        switch(waves[currentWaveIndex].waveNum)
+        {
+            case 1:
+                wave1Screen.SetActive(true);
+                wave2Screen.SetActive(false);
+                wave3Screen.SetActive(false);
+                wave4Screen.SetActive(false);
+                break;
+            case 2:
+                wave1Screen.SetActive(false);
+                wave2Screen.SetActive(true);
+                wave3Screen.SetActive(false);
+                wave4Screen.SetActive(false);
+                break;
+            case 3:
+                wave1Screen.SetActive(false);
+                wave2Screen.SetActive(false);
+                wave3Screen.SetActive(true);
+                wave4Screen.SetActive(false);
+                break;
+            case 4:
+                wave1Screen.SetActive(false);
+                wave2Screen.SetActive(false);
+                wave3Screen.SetActive(false);
+                wave4Screen.SetActive(true);
+                break;
+        }
+
+        wavePopUp.SetActive(true);
+
         StartCoroutine(WaveAnimation());
 
         startButton.SetActive(false);
@@ -209,9 +240,9 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator WaveAnimation()
     {
-        yield return new WaitForSeconds(1f); //animation duration
+        yield return new WaitForSeconds(3f); //animation duration
 
-        //Debug.Log("Animation Ends");
+        wavePopUp.SetActive(false);
 
         //currentMiniWaveIndex = 0;
         StartMiniWave();
@@ -269,7 +300,7 @@ public class WaveSystem : MonoBehaviour
         else
         {
             timerOn = false;
-            StartMiniWave();
+            StartWave();
         }
     }
 
