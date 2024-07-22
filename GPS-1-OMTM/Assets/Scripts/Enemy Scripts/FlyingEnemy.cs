@@ -16,22 +16,19 @@ public class FlyingEnemy : MonoBehaviour
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
     public float tracerFadeDuration = 0.5f; // Duration of the fade-out
 
-    private GameObject target;
+    private GameObject targetTroop;
+    private GameObject killdozer;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement
 
-    // Reference to the Killdozer
-    public GameObject killdozer;
-
     void Start()
     {
+        // Initialize health
         currentHealth = maxHealth;
         lastAttackTime = Time.time;
 
-        if (killdozer == null)
-        {
-            Debug.LogError("Killdozer reference is not set!");
-        }
+        // Find the Killdozer in the scene
+        killdozer = GameObject.FindWithTag("Killdozer");
     }
 
     void Update()
@@ -72,93 +69,97 @@ public class FlyingEnemy : MonoBehaviour
 
         if (closestTroop != null)
         {
-            target = closestTroop;
-            Debug.Log("Targeting troop: " + closestTroop.name);
+            targetTroop = closestTroop;
         }
         else
         {
-            target = killdozer; // Default to targeting the Killdozer if no troops are found
-            if (killdozer != null)
-            {
-                Debug.Log("No troops found. Targeting Killdozer: " + killdozer.name);
-            }
-            else
-            {
-                Debug.LogError("Killdozer is not assigned in the Inspector!");
-            }
+            targetTroop = null;
         }
     }
 
     void MoveTowardsTarget()
     {
-        if (target != null)
+        if (killdozer != null)
         {
-            // Calculate distance to the target
-            float distanceToTarget = Vector2.Distance(transform.position, target.transform.position);
+            // Calculate distance to the Killdozer
+            float distanceToKilldozer = Vector2.Distance(transform.position, killdozer.transform.position);
 
-            // Check if within attack range
-            if (distanceToTarget > attackRange)
+            // Move towards the Killdozer if it's within detection range
+            if (distanceToKilldozer > attackRange)
             {
-                // Move towards the target if outside attack range, only in X-axis
-                Vector3 direction = (target.transform.position - transform.position).normalized;
+                Vector3 direction = (killdozer.transform.position - transform.position).normalized;
                 direction.y = 0; // Ensure no movement in Y-axis
                 transform.position += direction * speed * Time.deltaTime;
             }
             else
             {
-                // Stay at the edge of attack range
-                shouldMove = false; // Stop moving
+                shouldMove = false; // Stop moving if within attack range of Killdozer
             }
         }
-        else
+
+        if (targetTroop != null)
         {
-            shouldMove = true; // Resume moving if no target in attack range
+            // Calculate distance to the target troop
+            float distanceToTroop = Vector2.Distance(transform.position, targetTroop.transform.position);
+
+            // Move towards the troop if outside attack range, only in X-axis
+            if (distanceToTroop > attackRange)
+            {
+                Vector3 direction = (targetTroop.transform.position - transform.position).normalized;
+                direction.y = 0; // Ensure no movement in Y-axis
+                transform.position += direction * speed * Time.deltaTime;
+            }
         }
     }
 
     void HandleAttack()
     {
-        if (target != null && Vector2.Distance(transform.position, target.transform.position) <= attackRange)
+        if (killdozer != null && Vector2.Distance(transform.position, killdozer.transform.position) <= attackRange)
         {
             if (Time.time >= lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
-                AttackTarget();
+                AttackKilldozer();
+            }
+        }
+        else if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
+        {
+            if (Time.time >= lastAttackTime + attackInterval)
+            {
+                lastAttackTime = Time.time;
+                AttackTroop();
             }
         }
     }
 
-    void AttackTarget()
+    void AttackTroop()
     {
-        if (target != null)
+        if (targetTroop != null)
         {
-            if (target.CompareTag("Troop"))
+            Troop troop = targetTroop.GetComponent<Troop>();
+            if (troop != null)
             {
-                Troop troop = target.GetComponent<Troop>();
-                if (troop != null)
-                {
-                    troop.TakeDamage(attackDamage);
-                    Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
+                troop.TakeDamage(attackDamage);
+                Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
 
-                    // Draw bullet tracer
-                    StartCoroutine(DrawBulletTracer(target.transform.position));
-                }
+                // Draw bullet tracer
+                StartCoroutine(DrawBulletTracer(targetTroop.transform.position));
             }
-            else if (target.CompareTag("Killdozer"))
-            {
-                Killdozer killdozerScript = target.GetComponent<Killdozer>();
-                if (killdozerScript != null)
-                {
-                    killdozerScript.TakeDamage(attackDamage);
-                    Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
+        }
+    }
 
-                    // Draw bullet tracer
-                    StartCoroutine(DrawBulletTracer(target.transform.position));
-                }
-                else
-                {
-                    Debug.LogError("Killdozer script not found on target!");
-                }
+    void AttackKilldozer()
+    {
+        if (killdozer != null)
+        {
+            Killdozer kd = killdozer.GetComponent<Killdozer>();
+            if (kd != null)
+            {
+                kd.TakeDamage(attackDamage);
+                Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
+
+                // Draw bullet tracer
+                StartCoroutine(DrawBulletTracer(killdozer.transform.position));
             }
         }
     }
