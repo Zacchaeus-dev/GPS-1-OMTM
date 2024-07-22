@@ -83,6 +83,9 @@ public class WaveSystem : MonoBehaviour
         public float breakDuration;
         public List<GameObject> objectsToDisableDuringWave;
         public List<GameObject> objectsToEnableDuringWave;
+        public GameObject spawnMarkers;
+        public Vector3 leftBorder;
+        public Vector3 rightBorder;
     }
 
     public List<Wave> waves;
@@ -136,6 +139,7 @@ public class WaveSystem : MonoBehaviour
     public GameObject wave3Screen;
     public GameObject wave4Screen;
 
+
     void Start()
     {
         startButton.SetActive(true);
@@ -147,6 +151,26 @@ public class WaveSystem : MonoBehaviour
         TeleportTroopsToKilldozer();
         UpdateButtonState();
         UpdateTimerUI();
+
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToDisableDuringWave) //disable objects for that wave
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToEnableDuringWave) //enable objects for that wave
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
+
+        waves[currentWaveIndex].spawnMarkers.SetActive(true);
+        cameraSystem.leftBorder = waves[currentWaveIndex].leftBorder;
+        cameraSystem.rightBorder = waves[currentWaveIndex].rightBorder;
     }
 
     void Update()
@@ -202,7 +226,9 @@ public class WaveSystem : MonoBehaviour
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
 
-        switch(waves[currentWaveIndex].waveNum)
+        waves[currentWaveIndex].spawnMarkers.SetActive(false);
+
+        switch (waves[currentWaveIndex].waveNum)
         {
             case 1:
                 wave1Screen.SetActive(true);
@@ -431,7 +457,15 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator TransitionDelay()
     {
-        yield return new WaitForSeconds(5.5f);
+        if (waves[currentWaveIndex].waveNum != 4)
+        {
+            yield return new WaitForSeconds(5.5f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(12.5f); //transition is longer for wave 4
+        }
+        
         transitioning = false;
         prewaveTimer = waves[currentWaveIndex].prewaveDuration;
         timerDuration = prewaveTimer;
@@ -471,6 +505,10 @@ public class WaveSystem : MonoBehaviour
 
         startButton.SetActive(true);
         startBorder.SetActive(true);
+
+        waves[currentWaveIndex].spawnMarkers.SetActive(true);
+        cameraSystem.leftBorder = waves[currentWaveIndex].leftBorder;
+        cameraSystem.rightBorder = waves[currentWaveIndex].rightBorder;
     }
 
     void StartMiniWave()

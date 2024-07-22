@@ -8,7 +8,6 @@ public class EnergyOrb : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
         if (other.CompareTag("Troop"))
         {
             TroopEnergy otherTroopEnergy = other.GetComponent<TroopEnergy>();

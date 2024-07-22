@@ -392,6 +392,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator Ultimate_DPS()
     {
+        GetComponent<TroopClass>().SetTargetPositionHere();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
@@ -402,7 +403,7 @@ public class Troop : MonoBehaviour
         troopAutoAttack.attackDamage += 25;
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
 
-        yield return new WaitForSeconds(100);//ultimateDuration);
+        yield return new WaitForSeconds(ultimateDuration);//ultimateDuration);
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
 
@@ -425,6 +426,7 @@ public class Troop : MonoBehaviour
 
     void Ultimate_Tank()
     {
+        GetComponent<TroopClass>().SetTargetPositionHere();
         tankClickingOnLocation = true;
     }
 
@@ -448,6 +450,7 @@ public class Troop : MonoBehaviour
 
     void Ultimate_CC()
     {
+        GetComponent<TroopClass>().SetTargetPositionHere();
         ccClickingOnLocation = true;
     }
 
@@ -463,6 +466,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator Ultimate_Healer()
     {
+        GetComponent<TroopClass>().SetTargetPositionHere();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;

@@ -21,7 +21,7 @@ public class TroopEnergy : MonoBehaviour
 
     void Start()
     {
-        currentPower = 0;
+        currentPower = maxPower;
         troop = GetComponent<Troop>();
         UpdateHUD();
     }
@@ -46,10 +46,5 @@ public class TroopEnergy : MonoBehaviour
     {
         currentPower = 0;
         UpdateHUD();
-    }
-
-    public void GetPowerPercentage()
-    {
-        powerPercent = (currentPower / maxPower * 100f);
     }
 }

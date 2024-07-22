@@ -32,8 +32,8 @@ public class CameraSystem : MonoBehaviour
     private bool focusOnKD;
 
     // Borders
-    Vector3 leftBorder = new Vector3(-24.5f, 0, 0);
-    Vector3 rightBorder = new Vector3(220, 0, 0);
+    public Vector3 leftBorder = new Vector3(-24.5f, 0, 0);
+    public Vector3 rightBorder = new Vector3(220, 0, 0);
 
     private void Start()
     {

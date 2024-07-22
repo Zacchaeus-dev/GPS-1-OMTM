@@ -250,7 +250,7 @@ public class TroopController2D : MonoBehaviour
         Troop troopScript = selectedTroop.GetComponent<Troop>();
         troopScript.ChangeIconColour();
         troopScript.selected = true;
-        troopScript.highlight.SetActive(true);
+        //troopScript.highlight.SetActive(true);
         troopScript.arrow.SetActive(true);
         if (selectedTroop.GetComponent<TroopAttackRange>() != null)
         {
@@ -266,7 +266,7 @@ public class TroopController2D : MonoBehaviour
             Troop troopScript = selectedTroop.GetComponent<Troop>();
             troopScript.ChangeIconColour();
             troopScript.selected = false;
-            troopScript.highlight.SetActive(false);
+            //troopScript.highlight.SetActive(false);
             troopScript.arrow.SetActive(false);
 
             if (selectedTroop.GetComponent<TroopAttackRange>() != null)

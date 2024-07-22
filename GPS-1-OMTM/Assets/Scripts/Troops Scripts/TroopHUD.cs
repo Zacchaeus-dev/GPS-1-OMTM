@@ -13,6 +13,8 @@ public class TroopHUD : MonoBehaviour
     public Slider shieldSlider;
     public GameObject shieldFill;
     public TextMeshProUGUI currentHealth;
+    public Image ultimatePowerOverlay;
+    public TextMeshProUGUI powerPercentage;
 
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
@@ -61,6 +63,15 @@ public class TroopHUD : MonoBehaviour
         }
 
         currentHealth.text = _troop.currentHealth.ToString();
+
+        // Calculate the percentage
+        float percentage = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower) * 100f;
+        Debug.Log("Calculated Percentage: " + percentage);
+        percentage = (int)percentage;
+
+        powerPercentage.text =  percentage.ToString() + "%";
+
+        ultimatePowerOverlay.fillAmount = 1 - ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
     }
 
     public void ButtonClick()
