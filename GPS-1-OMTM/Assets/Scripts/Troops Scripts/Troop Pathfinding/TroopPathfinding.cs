@@ -43,8 +43,11 @@ public class TroopClass : MonoBehaviour
     public GameObject TroopModel;
     TroopAnimationsManager TroopAnimator;
     public bool GoingLeft;
-    float climbDelay;
+    float moveDelayTimer;
+    float moveDelay;
     float climbDelayTimer;
+    float climbDelay;
+    float fallDelay;
 
     public float MiddleGroundYSnap;
     public float UpperGroundYSnap;
@@ -62,35 +65,57 @@ public class TroopClass : MonoBehaviour
         SetTargetPositionHere();
     }
 
-    public void DetermineMoveSpeed() //determine movement speed & climbDelay & y-axis height based on selected weapon 
+    public void DetermineMoveSpeed() //determine movement speed & climbDelay + fallDelay & y-axis height based on selected weapon 
     {
         switch (troopWeapon.selectedWeapon)
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
                 moveSpeed = 8;
                 climbDelay = 0.5f;
+                fallDelay = 0.1f;
                 MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-                moveSpeed = 6;
+                moveSpeed = 8; //here is 8 over 6 to match his climbing animation better - bray
+                climbDelay = 0.5f;
+                fallDelay = 0.1f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
-                moveSpeed = 5;
+                moveSpeed = 5; 
+                climbDelay = 0.75f;
+                fallDelay = 0.5f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_Tank:
                 moveSpeed = 7;
+                climbDelay = 0.5f;
+                fallDelay = 0.3f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon1_CC:
                 moveSpeed = 7;
+                climbDelay = 0.1f;
+                fallDelay = 0.1f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
                 moveSpeed = 7;
+                climbDelay = 0.45f;
+                fallDelay = 0.3f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Healer:
                 moveSpeed = 6;
+                climbDelay = 0.5f;
+                fallDelay = 0.1f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 moveSpeed = 6;
+                climbDelay = 0.5f;
+                fallDelay = 0.1f;
+                MiddleGroundYSnap = 4.75f;
                 break;
         }
     }
@@ -2159,6 +2184,7 @@ public class TroopClass : MonoBehaviour
     public GameObject Model;
     public void Update()
     {
+        DetermineMoveSpeed();
         CorrectTroopDirection();
 
         if (canClimb)
@@ -2283,36 +2309,50 @@ public class TroopClass : MonoBehaviour
 
             if (climbDelayTimer > climbDelay)
             {
-                transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                switch (troopWeapon.selectedWeapon) // diff climbing speed depending on weapon
+                {
+                    case TroopWeapon.Weapon.Weapon1_DPS:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_DPS:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon1_Tank:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed + 3) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_Tank:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon1_CC:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_CC:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon1_Healer:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                    case TroopWeapon.Weapon.Weapon2_Healer:
+                        transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+                        break;
+                }             
             }
-            
-            //StartCoroutine(ClimbDelay(climbDelay));
         }
 
         else if (climbingUp == false)
         {
-            {
-                //transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y - 20), moveSpeed * Time.deltaTime);
-                transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed) * Time.deltaTime));
-            }
-
             if (ClimbAnimation == false)
             {
                 ClimbAnimation = true;
                 TroopAnimator.TroopFallOn();
             }
+
+            climbDelayTimer = climbDelayTimer + Time.deltaTime;
+
+            if (climbDelayTimer > fallDelay)
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y - ((8) * Time.deltaTime)); // same climbing speed even if diff weapon
+            }
         }
     }
-/*    IEnumerator ClimbDelay(float climbDelay)
-    {
-        yield return new WaitForSeconds(climbDelay);
-        if (climbingUp == true)
-        {
-            transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
-        }
-        else if (climbingUp == false)
-        {
-            transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed) * Time.deltaTime));
-        }        
-    }*/
 }
