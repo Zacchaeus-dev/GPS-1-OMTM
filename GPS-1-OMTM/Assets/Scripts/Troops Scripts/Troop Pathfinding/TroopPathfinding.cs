@@ -4,9 +4,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TroopClass : MonoBehaviour
 {
+
     private Camera mainCamera;
     private Vector2 targetPosition;
     public bool isMoving;
@@ -27,7 +29,7 @@ public class TroopClass : MonoBehaviour
     public GameObject OnKDCollider;
     OnKDDetector OnKDScript;
 
-    public Vector2 mousePosition = new Vector2(10000,10000);
+    public Vector2 mousePosition = new Vector2(10000, 10000);
     public RaycastHit2D hit;
     public Transform killdozer;
 
@@ -42,6 +44,10 @@ public class TroopClass : MonoBehaviour
     TroopAnimationsManager TroopAnimator;
     public bool GoingLeft;
     float climbDelay;
+    float climbDelayTimer;
+
+    public float MiddleGroundYSnap;
+    public float UpperGroundYSnap;
 
     private void Start()
     {
@@ -50,19 +56,20 @@ public class TroopClass : MonoBehaviour
         controllerScript = TroopController2D.GetComponent<TroopController2D>();
         OnKDScript = OnKDCollider.GetComponent<OnKDDetector>();
 
-        TroopAnimator= TroopModel.GetComponent<TroopAnimationsManager>();
+        TroopAnimator = TroopModel.GetComponent<TroopAnimationsManager>();
 
         DetermineMoveSpeed();
         SetTargetPositionHere();
     }
 
-    public void DetermineMoveSpeed() //determine movement speed & climbDelay based on selected weapon 
+    public void DetermineMoveSpeed() //determine movement speed & climbDelay & y-axis height based on selected weapon 
     {
-        switch (troopWeapon.selectedWeapon) 
+        switch (troopWeapon.selectedWeapon)
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
                 moveSpeed = 8;
-                climbDelay = 1f;
+                climbDelay = 0.5f;
+                MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
                 moveSpeed = 6;
@@ -98,7 +105,7 @@ public class TroopClass : MonoBehaviour
     }
 
     // After Player's Right Click, determine the position & how troop should pathfind to thr
-    public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h) 
+    public void SetTroopTargetPosition(Vector2 mP, RaycastHit2D h)
     {
         if (teleported == false && gameObject.activeSelf == true)
         {
@@ -787,7 +794,7 @@ public class TroopClass : MonoBehaviour
             }
 
             // 5a. if click on UG 4      
-            else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 4") 
+            else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 4")
             || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4 (2)"))
             {
 
@@ -823,7 +830,7 @@ public class TroopClass : MonoBehaviour
                         FindAndGoToNearestVertically3(mousePosition);
                         climbingUp = false;
                     }
-                }                
+                }
                 else if (onPlatform == "Upper-Ground 1 (2)")
                 {
                     if (onPlatform != "Ground")
@@ -831,7 +838,7 @@ public class TroopClass : MonoBehaviour
                         FindAndGoToNearestVertically1TWO(mousePosition);
                         climbingUp = false;
                     }
-                }                
+                }
                 else if (onPlatform == "Upper-Ground 2 (2)")
                 {
                     if (onPlatform != "Ground")
@@ -839,7 +846,7 @@ public class TroopClass : MonoBehaviour
                         FindAndGoToNearestVertically2TWO(mousePosition);
                         climbingUp = false;
                     }
-                }                
+                }
                 else if (onPlatform == "Upper-Ground 3 (2)")
                 {
                     if (onPlatform != "Ground")
@@ -847,7 +854,7 @@ public class TroopClass : MonoBehaviour
                         FindAndGoToNearestVertically3TWO(mousePosition);
                         climbingUp = false;
                     }
-                }                
+                }
                 else if (onPlatform == "Upper-Ground 4 (2)")
                 {
                     if (onPlatform != "Ground")
@@ -874,25 +881,25 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                }                
+                }
                 else if (onPlatform == "KD Upper-Ground")
                 {
-/*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
-                    if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                    /*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                                        if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                                        {
+                                            targetPosition = new Vector2(mousePosition.x, transform.position.y);
+                                            vertPosition = Vector2.zero;
+                                            nearestVert = null;
+                                        }
+                                        // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
+                                        else
+                                        {}*/
+                    if (onPlatform != "Ground")
                     {
-                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
-                        vertPosition = Vector2.zero;
-                        nearestVert = null;
+                        FindAndGoToNearestVerticallyKD2(mousePosition);
+                        climbingUp = false;
                     }
-                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
-                    else
-                    {}*/
-                        if (onPlatform != "Ground")
-                        {
-                            FindAndGoToNearestVerticallyKD2(mousePosition);
-                            climbingUp = false;
-                        }
-                    
+
                 }
                 else if (onPlatform == "Ground")
                 {
@@ -914,14 +921,14 @@ public class TroopClass : MonoBehaviour
                         FindAndGoToNearestVertically4(mousePosition);
                     }
                 }*/
-            }            
-            
+            }
+
             // 5b. if click on UG 4 (2)      
             else if (hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 1 (2)"))
             {
 
                 if (onPlatform == "Upper-Ground 1 (2)")
-                { 
+                {
                     targetPosition = new Vector2(mousePosition.x, transform.position.y);
                     vertPosition = Vector2.zero;
                     nearestVert = null;
@@ -1001,25 +1008,25 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                }                
+                }
                 else if (onPlatform == "KD Upper-Ground")
                 {
-/*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
-                    if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                    /*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                                        if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                                        {
+                                            targetPosition = new Vector2(mousePosition.x, transform.position.y);
+                                            vertPosition = Vector2.zero;
+                                            nearestVert = null;
+                                        }
+                                        // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
+                                        else
+                                        {}*/
+                    if (onPlatform != "Ground")
                     {
-                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
-                        vertPosition = Vector2.zero;
-                        nearestVert = null;
+                        FindAndGoToNearestVerticallyKD2(mousePosition);
+                        climbingUp = false;
                     }
-                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
-                    else
-                    {}*/
-                        if (onPlatform != "Ground")
-                        {
-                            FindAndGoToNearestVerticallyKD2(mousePosition);
-                            climbingUp = false;
-                        }
-                    
+
                 }
                 else if (onPlatform == "Ground")
                 {
@@ -1047,7 +1054,7 @@ public class TroopClass : MonoBehaviour
             {
 
                 if (onPlatform == "Upper-Ground 2 (2)")
-                { 
+                {
                     targetPosition = new Vector2(mousePosition.x, transform.position.y);
                     vertPosition = Vector2.zero;
                     nearestVert = null;
@@ -1127,25 +1134,25 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                }                
+                }
                 else if (onPlatform == "KD Upper-Ground")
                 {
-/*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
-                    if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                    /*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                                        if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                                        {
+                                            targetPosition = new Vector2(mousePosition.x, transform.position.y);
+                                            vertPosition = Vector2.zero;
+                                            nearestVert = null;
+                                        }
+                                        // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
+                                        else
+                                        {}*/
+                    if (onPlatform != "Ground")
                     {
-                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
-                        vertPosition = Vector2.zero;
-                        nearestVert = null;
+                        FindAndGoToNearestVerticallyKD2(mousePosition);
+                        climbingUp = false;
                     }
-                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
-                    else
-                    {}*/
-                        if (onPlatform != "Ground")
-                        {
-                            FindAndGoToNearestVerticallyKD2(mousePosition);
-                            climbingUp = false;
-                        }
-                    
+
                 }
                 else if (onPlatform == "Ground")
                 {
@@ -1173,7 +1180,7 @@ public class TroopClass : MonoBehaviour
             {
 
                 if (onPlatform == "Upper-Ground 3 (2)")
-                { 
+                {
                     targetPosition = new Vector2(mousePosition.x, transform.position.y);
                     vertPosition = Vector2.zero;
                     nearestVert = null;
@@ -1253,25 +1260,25 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                }                
+                }
                 else if (onPlatform == "KD Upper-Ground")
                 {
-/*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
-                    if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                    /*                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                                        if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
+                                        {
+                                            targetPosition = new Vector2(mousePosition.x, transform.position.y);
+                                            vertPosition = Vector2.zero;
+                                            nearestVert = null;
+                                        }
+                                        // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
+                                        else
+                                        {}*/
+                    if (onPlatform != "Ground")
                     {
-                        targetPosition = new Vector2(mousePosition.x, transform.position.y);
-                        vertPosition = Vector2.zero;
-                        nearestVert = null;
+                        FindAndGoToNearestVerticallyKD2(mousePosition);
+                        climbingUp = false;
                     }
-                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS other than 4 === //
-                    else
-                    {}*/
-                        if (onPlatform != "Ground")
-                        {
-                            FindAndGoToNearestVerticallyKD2(mousePosition);
-                            climbingUp = false;
-                        }
-                    
+
                 }
                 else if (onPlatform == "Ground")
                 {
@@ -1299,7 +1306,7 @@ public class TroopClass : MonoBehaviour
             {
 
                 if (onPlatform == "Upper-Ground 4 (2)")
-                { 
+                {
                     targetPosition = new Vector2(mousePosition.x, transform.position.y);
                     vertPosition = Vector2.zero;
                     nearestVert = null;
@@ -1378,10 +1385,10 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                }                
+                }
                 else if (onPlatform == "KD Upper-Ground")
                 {
-                   // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
+                    // === IF DIRECTPATHING FROM KD's UPPERGROUNDS TO TERRAINS' UPPERGROUNDS IS ON 4 === //
                     if (killdozer.GetComponent<Killdozer>().directPathfinding == 4)
                     {
                         targetPosition = new Vector2(mousePosition.x, transform.position.y);
@@ -1397,8 +1404,8 @@ public class TroopClass : MonoBehaviour
                             climbingUp = false;
                         }
                     }
-                        
-                    
+
+
                 }
                 else if (onPlatform == "Ground")
                 {
@@ -1550,54 +1557,54 @@ public class TroopClass : MonoBehaviour
                 arrow.SetActive(false);
                 arrow.SetActive(true);
 
-                    // if ground level
-                    if (hit.collider.CompareTag("[PF] Ground")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 1")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4"))
-                    {
-                        arrow.transform.position = new Vector2(mousePosition.x, -2.34f);
-                        arrow.GetComponent<TroopPathfindArrow>().bop();
-                    }
+                // if ground level
+                if (hit.collider.CompareTag("[PF] Ground")
+                || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4"))
+                {
+                    arrow.transform.position = new Vector2(mousePosition.x, -2.34f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
 
 
-                    // if middleground level
-                    if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 2")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 1")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1 (2)")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 2")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2 (2)")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 3")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3 (2)")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 4")
-                    || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4 (2)"))
-                    {
-                        arrow.transform.position = new Vector2(mousePosition.x, 3.58f);
-                        arrow.GetComponent<TroopPathfindArrow>().bop();
-                    }
+                // if middleground level
+                if (hit.collider != null && hit.collider.CompareTag("[PF] KD Middle-Ground")
+                || hit.collider != null && hit.collider.CompareTag("[PF] KD Vertically 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 1")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 1 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 2")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 2 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 3")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 3 (2)")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Upper-Ground 4")
+                || hit.collider != null && hit.collider.CompareTag("[PF] Vertically 4 (2)"))
+                {
+                    arrow.transform.position = new Vector2(mousePosition.x, 3.58f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
 
 
-                    //if upperground level
-                    if (hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
-                        || hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
-                        || hit.collider.CompareTag("[PF] Upper-Ground 3 (2)")
-                        || hit.collider.CompareTag("[PF] Upper-Ground 4 (2)")
-                        || hit.collider.CompareTag("[PF] KD Upper-Ground"))
-                    {
-                    
-                        arrow.transform.position = new Vector2(mousePosition.x, 8.24f);
-                        arrow.GetComponent<TroopPathfindArrow>().bop();
-                    }
-                
-                
+                //if upperground level
+                if (hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 3 (2)")
+                    || hit.collider.CompareTag("[PF] Upper-Ground 4 (2)")
+                    || hit.collider.CompareTag("[PF] KD Upper-Ground"))
+                {
+
+                    arrow.transform.position = new Vector2(mousePosition.x, 8.24f);
+                    arrow.GetComponent<TroopPathfindArrow>().bop();
+                }
+
+
             }
 
         }
     }
-        
+
     public GameObject arrow;
 
     public bool ONCE;
@@ -1614,7 +1621,7 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1629,9 +1636,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-        
+
     }
     void FindAndGoToNearestVerticallyKD2(Vector2 mousePosition)
     {
@@ -1642,7 +1649,7 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1657,9 +1664,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-        
+
     }
     void FindAndGoToNearestVertically1(Vector2 mousePosition)
     {
@@ -1670,8 +1677,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1686,7 +1693,7 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
     }
     void FindAndGoToNearestVertically2(Vector2 mousePosition)
@@ -1698,8 +1705,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1714,7 +1721,7 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
     }
     void FindAndGoToNearestVertically3(Vector2 mousePosition)
@@ -1726,8 +1733,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1742,9 +1749,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-    }    
+    }
     void FindAndGoToNearestVertically4(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 4");
@@ -1754,8 +1761,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1770,7 +1777,7 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
     }
     void FindAndGoToNearestVertically1TWO(Vector2 mousePosition)
@@ -1782,8 +1789,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1798,9 +1805,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-    }    
+    }
     void FindAndGoToNearestVertically2TWO(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 2 (2)");
@@ -1810,8 +1817,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1826,9 +1833,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-    }   
+    }
     void FindAndGoToNearestVertically3TWO(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 3 (2)");
@@ -1838,8 +1845,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1854,9 +1861,9 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
-    }   
+    }
     void FindAndGoToNearestVertically4TWO(Vector2 mousePosition)
     {
         GameObject[] verts = GameObject.FindGameObjectsWithTag("[PF] Vertically 4 (2)");
@@ -1866,8 +1873,8 @@ public class TroopClass : MonoBehaviour
         for (int i = 0; i < verts.Length; i++)  // List of gameObjects to search through
         {
             //float dist = Vector3.Distance(verts[i].transform.position, mousePosition); // Distance to mouse position
-            float dist = Vector3.Distance(verts[i].transform.position, transform.position); 
-            
+            float dist = Vector3.Distance(verts[i].transform.position, transform.position);
+
             if (dist < closest)
             {
                 closest = dist;
@@ -1882,14 +1889,14 @@ public class TroopClass : MonoBehaviour
             vertPosition = new Vector2(closestVertCollider.transform.position.x, transform.position.y); // Move to vert X position first
             targetPosition = new Vector2(mousePosition.x, transform.position.y);
 
-            
+
         }
     }
 
     // Assist Pathfinding by Changing Troop's "onPlatform" to the correct value
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+
         // from down to up
         if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 1" || onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Upper-Ground 1")
         {
@@ -1920,7 +1927,7 @@ public class TroopClass : MonoBehaviour
             nearestVert = null;
             onPlatform = "Upper-Ground 3";
             SetTroopTargetPosition(mousePosition, hit);
-        }        
+        }
         else if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 4" || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Upper-Ground 4")
         {
             Debug.Log("Upper Ground 4");
@@ -1931,7 +1938,7 @@ public class TroopClass : MonoBehaviour
             onPlatform = "Upper-Ground 4";
             SetTroopTargetPosition(mousePosition, hit);
         }
-        else if (onPlatform == "Ground" && collision.tag == "[PF] KD Middle-Ground" || onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Middle-Ground")
+        else if (onPlatform == "Ground" && collision.tag == "[PF] KD Middle-Ground")// || onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Middle-Ground")
         {
             Debug.Log("KD Middle Ground");
             canClimb = false;
@@ -2015,10 +2022,12 @@ public class TroopClass : MonoBehaviour
             nearestVert = null;
             onPlatform = "Ground";
             SetTroopTargetPosition(mousePosition, hit);
-        }     
+        }
         else if (onPlatform == "KD Upper-Ground" && collision.tag == "[PF] KD Middle-Ground Check" || onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Middle-Ground Check")
         {
             Debug.Log("KD Middle-Ground Check");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
+
             canClimb = false;
             isMoving = true;
 
@@ -2055,7 +2064,7 @@ public class TroopClass : MonoBehaviour
             nearestVert = null;
             onPlatform = "Upper-Ground 3";
             SetTroopTargetPosition(mousePosition, hit);
-        } 
+        }
         else if (onPlatform == "Upper-Ground 4 (2)" && collision.tag == "[PF] Upper-Ground 4 Check" || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Upper-Ground 4 Check")
         {
             Debug.Log("Upper-Ground 4 Check");
@@ -2068,75 +2077,75 @@ public class TroopClass : MonoBehaviour
         }
 
     }
-    
-/*   MOST PROB NOT NEEDED - For when killdozer connects with another upperground
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (isMoving == false)
+
+    /*   MOST PROB NOT NEEDED - For when killdozer connects with another upperground
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 1")
+            if (isMoving == false)
             {
-                
+                if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 1")
+                {
+
+                    canClimb = false;
+                    //isMoving = true;
+
+                    nearestVert = null;
+                    onPlatform = "Upper-Ground 1";
+                    //SetTroopTargetPosition(mousePosition, hit);
+
+                }
+                if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 2")
+                {
+
+                    canClimb = false;
+                    //isMoving = true;
+
+                    nearestVert = null;
+                    onPlatform = "Upper-Ground 2";
+                    //SetTroopTargetPosition(mousePosition, hit);
+
+                }
+                if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 3")
+                {
+
+                    canClimb = false;
+                    //isMoving = true;
+
+                    nearestVert = null;
+                    onPlatform = "Upper-Ground 3";
+                    //SetTroopTargetPosition(mousePosition, hit);
+
+                }
+                if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 4")
+                {
+
+                     //isMoving = true;
+
+                    nearestVert = null;
+                    onPlatform = "Upper-Ground 4";
+                    //SetTroopTargetPosition(mousePosition, hit);
+
+                }
+            }
+            if (onPlatform == "Upper-Ground 1" && collision.tag == "[PF] KD Middle-Ground"
+                || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] KD Middle-Ground"
+                || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] KD Middle-Ground"
+                || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] KD Middle-Ground")
+            {
+
                 canClimb = false;
-                //isMoving = true;
+               //isMoving = true;
 
                 nearestVert = null;
-                onPlatform = "Upper-Ground 1";
-                //SetTroopTargetPosition(mousePosition, hit);
-
-            }
-            if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 2")
-            {
-
-                canClimb = false;
-                //isMoving = true;
-
-                nearestVert = null;
-                onPlatform = "Upper-Ground 2";
-                //SetTroopTargetPosition(mousePosition, hit);
-
-            }
-            if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 3")
-            {
-
-                canClimb = false;
-                //isMoving = true;
-
-                nearestVert = null;
-                onPlatform = "Upper-Ground 3";
-                //SetTroopTargetPosition(mousePosition, hit);
-
-            }
-            if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Upper-Ground 4")
-            {
-
-                canClimb = false;
-                //isMoving = true;
-
-                nearestVert = null;
-                onPlatform = "Upper-Ground 4";
-                //SetTroopTargetPosition(mousePosition, hit);
-
-            }
-        }
-        if (onPlatform == "Upper-Ground 1" && collision.tag == "[PF] KD Middle-Ground"
-            || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] KD Middle-Ground"
-            || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] KD Middle-Ground"
-            || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] KD Middle-Ground")
-        {
-           
+                onPlatform = "KD Middle-Ground";
+                FindAndGoToNearestVerticallyKD(mousePosition);
+               //SetTroopTargetPosition(mousePosition, hit);
             canClimb = false;
-           //isMoving = true;
-
-            nearestVert = null;
-            onPlatform = "KD Middle-Ground";
-            FindAndGoToNearestVerticallyKD(mousePosition);
-           //SetTroopTargetPosition(mousePosition, hit);
+       
+            }
 
         }
-
-    }
-*/
+    */
 
     public void SetTargetPosition(Vector2 targetPosition, Vector2 vertPosition, Collider2D nearestVert, bool climbingUp)
     {
@@ -2152,25 +2161,25 @@ public class TroopClass : MonoBehaviour
     {
         CorrectTroopDirection();
 
-            if (canClimb)
-                {
-                    ClimbAndMove();
-                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
-                }
-                else
-                {
-                    StopClimb();
-                }
+        if (canClimb)
+        {
+            ClimbAndMove();
+            gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        }
+        else
+        {
+            StopClimb();
+        }
 
-            if (isMoving)
-                {
-                    Move();
-                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
-                }
-                else
-                {
-                    StopMove();
-                }
+        if (isMoving)
+        {
+            Move();
+            gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        }
+        else
+        {
+            StopMove();
+        }
 
         if (teleported == true)
         {
@@ -2200,39 +2209,39 @@ public class TroopClass : MonoBehaviour
     bool WalkOrStopAnimation;
     void Move()
     {
-            
-            if (WalkOrStopAnimation == false) 
-            {
-                WalkOrStopAnimation = true;
-                TroopAnimator.TroopWalkOn();
-            }
 
-            if (nearestVert != null) // if changing elevation
+        if (WalkOrStopAnimation == false)
+        {
+            WalkOrStopAnimation = true;
+            TroopAnimator.TroopWalkOn();
+        }
+
+        if (nearestVert != null) // if changing elevation
+        {
+            if (canClimb == false)
             {
-                if (canClimb == false)
+                transform.position = Vector2.MoveTowards(transform.position, vertPosition, moveSpeed * Time.deltaTime); // move to nearest vert
+                if (Vector2.Distance(transform.position, vertPosition) < 0.2f) // when reached vert, activate climb
                 {
-                    transform.position = Vector2.MoveTowards(transform.position, vertPosition, moveSpeed * Time.deltaTime); // move to nearest vert
-                    if (Vector2.Distance(transform.position, vertPosition) < 0.1f) // when reached vert, activate climb
-                    {
-                        transform.position = vertPosition;
-                        canClimb = true;
-                        Debug.Log("STARTING CLIMB NOW");
-                    }
+                    transform.position = vertPosition;
+                    canClimb = true;
+                    Debug.Log("STARTING CLIMB NOW");
                 }
             }
-            else // if staying on same elevation
+        }
+        else // if staying on same elevation
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            targetPosition.y = transform.position.y;
+            if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
             {
-                transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-                targetPosition.y = transform.position.y;
-                if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
-                {
-                    transform.position = targetPosition;
-                    isMoving = false;
+                transform.position = targetPosition;
+                isMoving = false;
 
-                    //Debug.Log("Troop arrived at target position: " + targetPosition);
-                }
+                //Debug.Log("Troop arrived at target position: " + targetPosition);
             }
-        
+        }
+
     }
 
     void StopMove()
@@ -2253,35 +2262,38 @@ public class TroopClass : MonoBehaviour
             TroopAnimator.TroopClimbOff();
             TroopAnimator.TroopFallOff();
             //gameObject.GetComponent<TroopAutoAttack>().AttackModelParts.SetActive(false);
+            climbDelayTimer = 0;
         }
     }
 
     bool ClimbAnimation;
     void ClimbAndMove()
     {
-
         isMoving = false;
 
         if (climbingUp == true)
         {
-            {
-                transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed ) * Time.deltaTime));
-                //transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y + 20), (moveSpeed * Time.deltaTime) + 0.015f);
-            }
-
             if (ClimbAnimation == false)
             {
                 ClimbAnimation = true;
                 TroopAnimator.TroopClimbOn();
             }
-        }        
-        
+
+            climbDelayTimer = climbDelayTimer + Time.deltaTime;
+
+            if (climbDelayTimer > climbDelay)
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+            }
+            
+            //StartCoroutine(ClimbDelay(climbDelay));
+        }
+
         else if (climbingUp == false)
         {
-            
             {
                 //transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, transform.position.y - 20), moveSpeed * Time.deltaTime);
-                transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed ) * Time.deltaTime));
+                transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed) * Time.deltaTime));
             }
 
             if (ClimbAnimation == false)
@@ -2289,12 +2301,18 @@ public class TroopClass : MonoBehaviour
                 ClimbAnimation = true;
                 TroopAnimator.TroopFallOn();
             }
-
         }
-
-
-
     }
-
-
+/*    IEnumerator ClimbDelay(float climbDelay)
+    {
+        yield return new WaitForSeconds(climbDelay);
+        if (climbingUp == true)
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y + ((moveSpeed) * Time.deltaTime));
+        }
+        else if (climbingUp == false)
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y - ((moveSpeed) * Time.deltaTime));
+        }        
+    }*/
 }
