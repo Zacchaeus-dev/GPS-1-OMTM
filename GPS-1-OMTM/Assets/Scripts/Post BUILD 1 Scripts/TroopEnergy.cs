@@ -21,7 +21,7 @@ public class TroopEnergy : MonoBehaviour
 
     void Start()
     {
-        currentPower = maxPower;
+        currentPower = 0;
         troop = GetComponent<Troop>();
         UpdateHUD();
     }

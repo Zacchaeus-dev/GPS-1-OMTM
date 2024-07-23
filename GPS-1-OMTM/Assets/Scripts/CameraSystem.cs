@@ -31,6 +31,8 @@ public class CameraSystem : MonoBehaviour
 
     private bool focusOnKD;
 
+    public TutorialPhase tutorialPhase;
+
     // Borders
     public Vector3 leftBorder = new Vector3(-24.5f, 0, 0);
     public Vector3 rightBorder = new Vector3(220, 0, 0);
@@ -70,6 +72,11 @@ public class CameraSystem : MonoBehaviour
 
     void HandleCameraMovement()
     {
+        if (tutorialPhase.tutorialOn)
+        {
+            return;
+        }
+
         Vector3 inputDir = new Vector3(0, 0, 0);
         int edgeScrollSize = 20; //cursoe hover area
 
@@ -169,6 +176,11 @@ public class CameraSystem : MonoBehaviour
 
     public void FocusOnTroop(GameObject troop)
     {
+        if (tutorialPhase.tutorialOn)
+        {
+            return;
+        }
+
         if (focusedTroop == troop)
         {
             // Unfocus the troop if it's already focused

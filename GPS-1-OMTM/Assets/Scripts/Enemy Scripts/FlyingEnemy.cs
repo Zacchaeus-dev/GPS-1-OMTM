@@ -18,6 +18,11 @@ public class FlyingEnemy : MonoBehaviour
 
     private GameObject targetTroop;
     private GameObject killdozer;
+    private GameObject killdozerLeftTarget;
+    private GameObject killdozerRightTarget;
+    private Vector3 rightOffset = new Vector3 (30f,0,0);
+    private Vector3 leftOffset = new Vector3 (-30f,0,0);
+    private bool attackingKilldozer;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement
 
@@ -29,14 +34,21 @@ public class FlyingEnemy : MonoBehaviour
 
         // Find the Killdozer in the scene
         killdozer = GameObject.FindWithTag("Killdozer");
+        killdozerLeftTarget = killdozer.GetComponent<Killdozer>().leftTarget;
+        killdozerRightTarget = killdozer.GetComponent<Killdozer>().rightTarget;
     }
 
     void Update()
     {
-        if (shouldMove)
+        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x  < transform.position.x) //move depending on killdozer's location
         {
             MoveLeft();
         }
+        else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x)
+        {
+            MoveRight();
+        }
+
         DetectTargets();
         MoveTowardsTarget();
         HandleAttack();
@@ -48,8 +60,18 @@ public class FlyingEnemy : MonoBehaviour
         transform.position -= Vector3.right * speed * Time.deltaTime;
     }
 
+    void MoveRight()
+    {
+        transform.position -= Vector3.left * speed * Time.deltaTime;
+    }
+
     void DetectTargets()
     {
+        if (attackingKilldozer)
+        {
+            return;
+        }
+
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
         float closestDistance = Mathf.Infinity;
         GameObject closestTroop = null;
@@ -81,13 +103,26 @@ public class FlyingEnemy : MonoBehaviour
     {
         if (killdozer != null)
         {
-            // Calculate distance to the Killdozer
-            float distanceToKilldozer = Vector2.Distance(transform.position, killdozer.transform.position);
+            float distanceToKilldozer = 0;
+            Vector3 direction = (killdozer.transform.position - transform.position).normalized;
+
+            if (killdozer.transform.position.x < transform.position.x)
+            {
+                // Calculate distance to the Killdozer
+                distanceToKilldozer = Vector2.Distance(transform.position, killdozerRightTarget.transform.position);
+                direction = (killdozerRightTarget.transform.position - transform.position + rightOffset).normalized;
+            }
+            else if (killdozer.transform.position.x> transform.position.x)
+            {
+                // Calculate distance to the Killdozer
+                distanceToKilldozer = Vector2.Distance(transform.position, killdozerLeftTarget.transform.position);
+                direction = (killdozerLeftTarget.transform.position - transform.position + leftOffset).normalized;
+            }
 
             // Move towards the Killdozer if it's within detection range
             if (distanceToKilldozer > attackRange)
             {
-                Vector3 direction = (killdozer.transform.position - transform.position).normalized;
+                //Vector3 direction = (killdozer.transform.position - transform.position).normalized;
                 direction.y = 0; // Ensure no movement in Y-axis
                 transform.position += direction * speed * Time.deltaTime;
             }
@@ -114,12 +149,13 @@ public class FlyingEnemy : MonoBehaviour
 
     void HandleAttack()
     {
-        if (killdozer != null && Vector2.Distance(transform.position, killdozer.transform.position) <= attackRange)
+        if (killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange) || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange)
         {
             if (Time.time >= lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
                 AttackKilldozer();
+                attackingKilldozer = true;
             }
         }
         else if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
@@ -158,8 +194,16 @@ public class FlyingEnemy : MonoBehaviour
                 kd.TakeDamage(attackDamage);
                 Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
 
-                // Draw bullet tracer
-                StartCoroutine(DrawBulletTracer(killdozer.transform.position));
+                if (killdozer.transform.position.x < transform.position.x)
+                {
+                    StartCoroutine(DrawBulletTracer(killdozerLeftTarget.transform.position));
+                }
+                else if (killdozer.transform.position.x > transform.position.x)
+                {
+                    StartCoroutine(DrawBulletTracer(killdozerRightTarget.transform.position));
+                }
+
+                //StartCoroutine(DrawBulletTracer(killdozer.transform.position));
             }
         }
     }
@@ -190,7 +234,7 @@ public class FlyingEnemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log(name + " took " + damage + " damage, remaining health: " + currentHealth);
+        //Debug.Log(name + " took " + damage + " damage, remaining health: " + currentHealth);
 
         if (currentHealth <= 0)
         {

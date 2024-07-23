@@ -1000,7 +1000,8 @@ public class WaveSystem : MonoBehaviour
 
     void UpdateButtonState()
     {
-        bool isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
+        //bool isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
+        bool isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;
         commandCentreButton.SetActive(isActive);
 
         if (!isActive)

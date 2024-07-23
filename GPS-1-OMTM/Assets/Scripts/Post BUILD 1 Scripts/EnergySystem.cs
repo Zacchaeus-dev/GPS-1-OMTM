@@ -29,6 +29,11 @@ public class EnergySystem : MonoBehaviour
 
     void Update()
     {
+        if (Killdozer.gameOver)
+        {
+            return;
+        }
+
         RegenerateEnergy();
         UpdateEnergyUI();
     }

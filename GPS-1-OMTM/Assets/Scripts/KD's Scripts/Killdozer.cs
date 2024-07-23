@@ -23,6 +23,11 @@ public class Killdozer : MonoBehaviour
 
     public static bool gameOver = false;
 
+    public GameObject leftTarget;
+    public GameObject rightTarget;
+
+    public GameObject redOverlay;
+
     /*public GameObject KDUI;
     KDHealthUI KDUIScript;*/
 
@@ -93,6 +98,8 @@ public class Killdozer : MonoBehaviour
         if (damage <= currentHealth)
         {
             currentHealth -= damage;
+            redOverlay.SetActive(true);
+            StartCoroutine(DisableOverlay());
         }
         else if (damage > currentHealth)
         {
@@ -127,6 +134,13 @@ public class Killdozer : MonoBehaviour
 
         //lose screen
         //SceneManager.LoadScene("GameOver");
+    }
+
+    IEnumerator DisableOverlay()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        redOverlay.SetActive(false);
     }
 
 

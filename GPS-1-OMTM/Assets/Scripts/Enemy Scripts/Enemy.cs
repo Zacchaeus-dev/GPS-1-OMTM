@@ -18,6 +18,12 @@ public class Enemy: MonoBehaviour
     public bool slowed = false;
 
     public float detectionRange = 10f; // enemy detection range
+
+    public float detectionRangeX1 = 10f;
+    public float detectionRangeY1 = 10f;
+    //public float detectionRangeX2 = 5f;
+    //public float detectionRangeY2 = 5f;
+
     public float troopStoppingDistance = 1f; // distance which the enemy stops moving towards the target 
     public List<Transform> potentialTargets; // list of potential targets (players, killdozer)
     private Transform closestTarget;
@@ -53,6 +59,9 @@ public class Enemy: MonoBehaviour
 
     private bool moveRight; //initial move direction
     float radius = 0.1f;  //check targets inside the Killdozer
+
+    public bool isDummy;
+    public bool dummyDead;
 
     private void Start()
     {
@@ -119,17 +128,11 @@ public class Enemy: MonoBehaviour
             // Check if the target is in the initial move direction
             bool isTargetInInitialDirection = (moveRight && target.position.x > transform.position.x) || (!moveRight && target.position.x < transform.position.x);
 
-            if (distanceSqr < closestDistanceSqr && distanceSqr <= detectionRange * detectionRange && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
+            if (distanceSqr < closestDistanceSqr && distanceSqr <= Mathf.Max(detectionRangeX1, detectionRangeY1) * Mathf.Max(detectionRangeX1, detectionRangeY1) && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
             {
                 if (target != null)
                 {
-                    if (killdozerTransform == null)
-                    {
-                        Debug.LogError("Killdozer Transform is null");
-                        return; // Early exit to prevent further errors
-                    }
-
-                    if (target == killdozerTransform && (IsInsideKilldozer(target) || attackingKilldozer))
+                    if (target != killdozerTransform && (IsInsideKilldozer(target) || attackingKilldozer))
                     {
                         // Prioritize the Killdozer if the target is inside it or if enemy is already attacking killdozer
                         closestTarget = killdozerTransform;
@@ -277,13 +280,22 @@ public class Enemy: MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red; //enemy detection range
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        //Gizmos.DrawWireSphere(transform.position, detectionRange);
 
         Gizmos.color = Color.white; //enemy slowed affected range
         Gizmos.DrawWireSphere(transform.position, slowEffectRadius);
 
         Gizmos.color = Color.blue; //targets in kd range
-        Gizmos.DrawWireSphere(killdozerTransform.position, radius);
+        //Gizmos.DrawWireSphere(killdozerTransform.position, radius);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX1, detectionRangeY1));
+
+        Gizmos.color = Color.red;
+        //Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX2, detectionRangeY2));
+
+        Gizmos.color = Color.blue;
+        //Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX3, detectionRangeY3));
     }
 
     public void TakeDamage(int damage)
@@ -298,15 +310,15 @@ public class Enemy: MonoBehaviour
             damage = damage * 2;
         }
 
+        tookdamage = true;
         currentHealth -= damage;
         //Debug.Log("Enemy took " + damage + " damage.");
 
         if (currentHealth <= 0)
         {
+            tookdamage = false;
             Death();
         }
-
-        tookdamage = true;
     }
 
     public void Death()
@@ -315,6 +327,14 @@ public class Enemy: MonoBehaviour
         {
             energyOrb.DropEnergyOrb();
             i++;
+        }
+
+        if (isDummy)
+        {
+            dummyDead = true;
+            i = 0; //reset energy dropped amount
+            gameObject.SetActive(false);
+            return;
         }
 
         onDeath.Invoke();
