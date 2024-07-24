@@ -138,7 +138,7 @@ public class WaveSystem : MonoBehaviour
     public GameObject wave2Screen;
     public GameObject wave3Screen;
     public GameObject wave4Screen;
-
+    public bool wave1Started;
 
     void Start()
     {
@@ -225,6 +225,8 @@ public class WaveSystem : MonoBehaviour
     {
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
+
+        wave1Started = true;
 
         waves[currentWaveIndex].spawnMarkers.SetActive(false);
 
@@ -436,10 +438,10 @@ public class WaveSystem : MonoBehaviour
         troop3.transform.position = killdozerTransform3.position;
         troop4.transform.position = killdozerTransform4.position;
 
-        troop1.GetComponent<TroopClass>().SetTargetPositionHere();
-        troop2.GetComponent<TroopClass>().SetTargetPositionHere();
-        troop3.GetComponent<TroopClass>().SetTargetPositionHere();
-        troop4.GetComponent<TroopClass>().SetTargetPositionHere();
+        //troop1.GetComponent<TroopClass>().SetTargetPositionHere();
+        //troop2.GetComponent<TroopClass>().SetTargetPositionHere();
+        //troop3.GetComponent<TroopClass>().SetTargetPositionHere();
+        //troop4.GetComponent<TroopClass>().SetTargetPositionHere();
 
         troop1.GetComponent<BoxCollider2D>().enabled = false;
         troop2.GetComponent<BoxCollider2D>().enabled = false;
@@ -452,6 +454,7 @@ public class WaveSystem : MonoBehaviour
         killdozerAnimator.SetTrigger("Move Right");
 
         transitioned = true;
+
         StartCoroutine(TransitionDelay());
     }
 
@@ -509,6 +512,7 @@ public class WaveSystem : MonoBehaviour
         waves[currentWaveIndex].spawnMarkers.SetActive(true);
         cameraSystem.leftBorder = waves[currentWaveIndex].leftBorder;
         cameraSystem.rightBorder = waves[currentWaveIndex].rightBorder;
+        cameraSystem.UpdateZoomPosition();
     }
 
     void StartMiniWave()
@@ -654,6 +658,18 @@ public class WaveSystem : MonoBehaviour
     //========================================SPAWN ENEMIES======================================
     IEnumerator SpawnEnemies1(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations1 == null || currentMiniWave.enemiesToSpawn1 == null)
+        {
+            Debug.Log("spawnLocations1 or enemiesToSpawn1 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns1;
         int enemyIndex = 0;
 
@@ -664,24 +680,55 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations1[enemyIndex % currentMiniWave.spawnLocations1.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn1[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer1 = 0;
     }
+
+    // Repeat similar methods for SpawnEnemies2 to SpawnEnemies12
 
     IEnumerator SpawnEnemies2(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations2 == null || currentMiniWave.enemiesToSpawn2 == null)
+        {
+            Debug.Log("spawnLocations2 or enemiesToSpawn2 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns2;
         int enemyIndex = 0;
 
@@ -692,24 +739,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations2[enemyIndex % currentMiniWave.spawnLocations2.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn2[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer2 = 0;
     }
 
     IEnumerator SpawnEnemies3(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations3 == null || currentMiniWave.enemiesToSpawn3 == null)
+        {
+            Debug.Log("spawnLocations3 or enemiesToSpawn3 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns3;
         int enemyIndex = 0;
 
@@ -720,24 +796,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations3[enemyIndex % currentMiniWave.spawnLocations3.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn3[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer3 = 0;
     }
 
     IEnumerator SpawnEnemies4(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations4 == null || currentMiniWave.enemiesToSpawn4 == null)
+        {
+            Debug.Log("spawnLocations4 or enemiesToSpawn4 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns4;
         int enemyIndex = 0;
 
@@ -748,24 +853,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations4[enemyIndex % currentMiniWave.spawnLocations4.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn4[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer4 = 0;
     }
 
     IEnumerator SpawnEnemies5(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations5 == null || currentMiniWave.enemiesToSpawn5 == null)
+        {
+            Debug.Log("spawnLocations5 or enemiesToSpawn5 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns5;
         int enemyIndex = 0;
 
@@ -776,24 +910,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations5[enemyIndex % currentMiniWave.spawnLocations5.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn5[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer5 = 0;
     }
 
     IEnumerator SpawnEnemies6(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations6 == null || currentMiniWave.enemiesToSpawn6 == null)
+        {
+            Debug.Log("spawnLocations6 or enemiesToSpawn6 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns6;
         int enemyIndex = 0;
 
@@ -804,24 +967,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations6[enemyIndex % currentMiniWave.spawnLocations6.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn6[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer6 = 0;
     }
 
     IEnumerator SpawnEnemies7(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations7 == null || currentMiniWave.enemiesToSpawn7 == null)
+        {
+            Debug.Log("spawnLocations7 or enemiesToSpawn7 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns7;
         int enemyIndex = 0;
 
@@ -832,24 +1024,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations7[enemyIndex % currentMiniWave.spawnLocations7.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn7[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer7 = 0;
     }
 
     IEnumerator SpawnEnemies8(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations8 == null || currentMiniWave.enemiesToSpawn8 == null)
+        {
+            Debug.Log("spawnLocations8 or enemiesToSpawn8 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns8;
         int enemyIndex = 0;
 
@@ -860,24 +1081,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations8[enemyIndex % currentMiniWave.spawnLocations8.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn8[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer8 = 0;
     }
 
     IEnumerator SpawnEnemies9(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations9 == null || currentMiniWave.enemiesToSpawn9 == null)
+        {
+            Debug.Log("spawnLocations9 or enemiesToSpawn9 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns9;
         int enemyIndex = 0;
 
@@ -888,24 +1138,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations9[enemyIndex % currentMiniWave.spawnLocations9.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn9[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer9 = 0;
     }
 
     IEnumerator SpawnEnemies10(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations10 == null || currentMiniWave.enemiesToSpawn10 == null)
+        {
+            Debug.Log("spawnLocations10 or enemiesToSpawn10 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns10;
         int enemyIndex = 0;
 
@@ -916,24 +1195,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations10[enemyIndex % currentMiniWave.spawnLocations10.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn10[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer10 = 0;
     }
 
     IEnumerator SpawnEnemies11(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations11 == null || currentMiniWave.enemiesToSpawn11 == null)
+        {
+            Debug.Log("spawnLocations11 or enemiesToSpawn11 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns11;
         int enemyIndex = 0;
 
@@ -944,24 +1252,53 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations11[enemyIndex % currentMiniWave.spawnLocations11.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn11[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer11 = 0;
     }
 
     IEnumerator SpawnEnemies12(MiniWave currentMiniWave)
     {
+        if (currentMiniWave == null)
+        {
+            Debug.Log("currentMiniWave is null.");
+            yield break;
+        }
+
+        if (currentMiniWave.spawnLocations12 == null || currentMiniWave.enemiesToSpawn12 == null)
+        {
+            Debug.Log("spawnLocations12 or enemiesToSpawn12 in currentMiniWave is null.");
+            yield break;
+        }
+
         float timeBetweenSpawns = currentMiniWave.timeBetweenSpawns12;
         int enemyIndex = 0;
 
@@ -972,23 +1309,40 @@ public class WaveSystem : MonoBehaviour
                 Transform spawnLocation = currentMiniWave.spawnLocations12[enemyIndex % currentMiniWave.spawnLocations12.Count];
                 GameObject enemy = Instantiate(currentMiniWave.enemiesToSpawn12[enemyIndex], spawnLocation.position, spawnLocation.rotation);
                 aliveEnemies.Add(enemy);
+
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
-                enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                FlyingEnemy flyingEnemyScript = null;
+
+                if (enemyScript == null)
+                {
+                    flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                }
+
+                if (enemyScript != null)
+                {
+                    enemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else if (flyingEnemyScript != null)
+                {
+                    flyingEnemyScript.onDeath += () => aliveEnemies.Remove(enemy);
+                }
+                else
+                {
+                    Debug.Log("Spawned enemy does not have Enemy or FlyingEnemy component.");
+                }
+
                 enemyIndex++;
             }
             else
             {
-                Debug.LogWarning("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
-
-        //currentMiniWaveIndex++;
-        //inwaveTimer12 = 0;
     }
 
-    void TeleportTroopsToKilldozer()
+    public void TeleportTroopsToKilldozer()
     {
         //Vector3 offset = new Vector3(0, 0, 0); 
 
@@ -996,6 +1350,11 @@ public class WaveSystem : MonoBehaviour
         troop2.transform.position = killdozerTransform2.position;
         troop3.transform.position = killdozerTransform3.position;
         troop4.transform.position = killdozerTransform4.position;
+
+        troop1.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop2.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop3.GetComponent<TroopClass>().SetTargetPositionHere();
+        troop4.GetComponent<TroopClass>().SetTargetPositionHere();
     }
 
     void UpdateButtonState()

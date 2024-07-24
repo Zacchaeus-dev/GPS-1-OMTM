@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,12 +26,25 @@ public class FlyingEnemy : MonoBehaviour
     private bool attackingKilldozer;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement
+    public event Action onDeath;
+    private bool lineRendererDestroyed;
+
+    LineRenderer lineRenderer;
+
+    public SpriteRenderer enemySprite;
+    public Color DamagedColor;
+    public Color NormalColor;
+    float timer;
+    private bool tookdamage;
+    Vector3 normalScale;
 
     void Start()
     {
         // Initialize health
         currentHealth = maxHealth;
         lastAttackTime = Time.time;
+
+        normalScale = transform.localScale;
 
         // Find the Killdozer in the scene
         killdozer = GameObject.FindWithTag("Killdozer");
@@ -52,6 +66,21 @@ public class FlyingEnemy : MonoBehaviour
         DetectTargets();
         MoveTowardsTarget();
         HandleAttack();
+
+        if (tookdamage == true)
+        {
+            enemySprite.color = DamagedColor;
+            timer = timer + Time.deltaTime;
+            transform.localScale += transform.localScale / 1000;
+
+            if (timer >= 0.3)
+            {
+                enemySprite.color = NormalColor;
+                transform.localScale = normalScale;
+                timer = 0;
+                tookdamage = false;
+            }
+        }
     }
 
     void MoveLeft()
@@ -170,7 +199,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void AttackTroop()
     {
-        if (targetTroop != null)
+        if (targetTroop != null && targetTroop.activeInHierarchy == true)
         {
             Troop troop = targetTroop.GetComponent<Troop>();
             if (troop != null)
@@ -210,7 +239,7 @@ public class FlyingEnemy : MonoBehaviour
 
     IEnumerator DrawBulletTracer(Vector3 targetPosition)
     {
-        LineRenderer lineRenderer = Instantiate(lineRendererPrefab);
+        lineRenderer = Instantiate(lineRendererPrefab);
         lineRenderer.SetPosition(0, transform.position + startOffset);
         lineRenderer.SetPosition(1, targetPosition);
 
@@ -233,19 +262,32 @@ public class FlyingEnemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        tookdamage = true;
         currentHealth -= damage;
         //Debug.Log(name + " took " + damage + " damage, remaining health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
+            tookdamage = false;
             Die();
         }
     }
 
     void Die()
     {
-        Debug.Log(name + " died.");
+        //Debug.Log(name + " died.");
         // Add death logic here (e.g., destroy the GameObject, play an animation, etc.)
+
+        /*
+        if (lineRenderer.gameObject != null && lineRendererDestroyed == false)
+        {
+            //Destroy(lineRenderer.gameObject);
+            lineRenderer.enabled = false;
+            lineRendererDestroyed = true;
+        }
+        */
+        onDeath.Invoke();
+
         Destroy(gameObject);
     }
 

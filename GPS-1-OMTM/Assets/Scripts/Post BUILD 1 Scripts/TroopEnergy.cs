@@ -12,6 +12,9 @@ public class TroopEnergy : MonoBehaviour
     public PowerMethod powerMethod;
     public TextMeshProUGUI powerText;
     private Troop troop;
+    public TutorialPhase tutorialPhase;
+    public GameObject instruction4;
+    public GameObject instruction5;
 
     public enum PowerMethod
     {
@@ -39,6 +42,8 @@ public class TroopEnergy : MonoBehaviour
             currentPower = currentPower + powerGainAmount;
         }
 
+        Instruction5();
+
         UpdateHUD();
     }
 
@@ -46,5 +51,17 @@ public class TroopEnergy : MonoBehaviour
     {
         currentPower = 0;
         UpdateHUD();
+    }
+
+    public void Instruction5()
+    {
+        if (tutorialPhase != null && tutorialPhase.tutorialOn == true)
+        {
+            if (currentPower == maxPower)
+            {
+                instruction4.SetActive(false);
+                instruction5.SetActive(true);
+            }
+        }
     }
 }

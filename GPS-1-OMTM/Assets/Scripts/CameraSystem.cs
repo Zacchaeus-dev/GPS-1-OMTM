@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using TMPro;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class CameraSystem : MonoBehaviour
     private float originalCameraSize;
     public float zoomOutSize = 50f;
     private bool isZooming = false;
+    private Vector3 zoomOutPosition;
     public GameObject zoomDim;
     public CinemachineVirtualCamera vcam;
     public TroopController2D troopController2D;
@@ -42,6 +44,10 @@ public class CameraSystem : MonoBehaviour
         var camera = Camera.main;
         var brain = (camera == null) ? null : camera.GetComponent<CinemachineBrain>();
         originalCameraSize = vcam.m_Lens.OrthographicSize;
+
+        UpdateZoomPosition();
+
+        zoomOutPosition = new Vector3((leftBorder.x + rightBorder.x) / 2, transform.position.y, transform.position.z);
 
         Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
     }
@@ -72,21 +78,23 @@ public class CameraSystem : MonoBehaviour
 
     void HandleCameraMovement()
     {
-        if (tutorialPhase.tutorialOn)
+        if (tutorialPhase.tutorialOn || !cameraMovement)
         {
             return;
         }
 
         Vector3 inputDir = new Vector3(0, 0, 0);
-        int edgeScrollSize = 20; //cursoe hover area
+        int edgeScrollSize = 20; //cursor hover area
 
         if (Input.mousePosition.x < edgeScrollSize && transform.position.x > leftBorder.x) // Move left
         {
             inputDir.x = -1f;
+            //Debug.Log(leftBorder.x);
         }
         if (Input.mousePosition.x > Screen.width - edgeScrollSize && transform.position.x < rightBorder.x) // Move right
         {
             inputDir.x = 1f;
+            //Debug.Log(rightBorder.x);
         }
         if (Input.GetKey(KeyCode.A)) // Move left
         {
@@ -100,6 +108,9 @@ public class CameraSystem : MonoBehaviour
         Vector3 moveDir = transform.right * inputDir.x;
         float moveSpeed = cameraSpeed; 
         transform.position += moveDir * moveSpeed * Time.deltaTime;
+
+        float clampedX = Mathf.Clamp(transform.position.x, leftBorder.x, rightBorder.x);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
     }
 
     void LimitCameraMovement()
@@ -135,42 +146,67 @@ public class CameraSystem : MonoBehaviour
         }
     }
 
+    public void UpdateZoomPosition()
+    {
+        float screenAspect = Screen.width / (float)Screen.height;
+        float horizontalSize = (rightBorder.x - leftBorder.x) / 2;
+        zoomOutSize = horizontalSize / screenAspect;
+
+        // Calculate the center position between left and right borders
+        zoomOutPosition = new Vector3((leftBorder.x + rightBorder.x) / 2, transform.position.y, transform.position.z);
+    }
+
     public void ToggleZoom()
     {
         if (isZooming) return;
+
+        if (tutorialPhase.tutorialOn) //does not zoom out in tutorial
+        {
+            //zoomDim.SetActive(true);
+            isZoomedOut = true;
+            //Cursor.SetCursor(zoomedOutCursor, Vector2.zero, CursorMode.Auto);
+            return;
+        }
 
         if (isZoomedOut)
         {
             StartCoroutine(ZoomCamera(originalCameraSize, 1f, 0.3f)); // Zoom in
             zoomDim.SetActive(false);
             Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
+            cameraMovement = true;
         }
         else if (troopController2D.selectedTroop != null)
         {
-            StartCoroutine(ZoomCamera(zoomOutSize, 0.25f, 0.3f)); // Zoom out
+            StartCoroutine(ZoomCamera(zoomOutSize, 0.25f, 0.3f, zoomOutPosition)); // Zoom out
             zoomDim.SetActive(true);
             Cursor.SetCursor(zoomedOutCursor, Vector2.zero, CursorMode.Auto);
+            cameraMovement = false;
         }
         isZoomedOut = !isZoomedOut;
     }
 
-    private IEnumerator ZoomCamera(float targetSize, float targetTimeScale, float duration)
+    private IEnumerator ZoomCamera(float targetSize, float targetTimeScale, float duration, Vector3? targetPosition = null)
     {
         float startSize = vcam.m_Lens.OrthographicSize;
         float startTimeScale = Time.timeScale;
         float elapsedTime = 0f;
         isZooming = true;
 
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = targetPosition ?? transform.position; // Use targetPosition if provided, else current position
+
         while (elapsedTime < duration)
         {
             vcam.m_Lens.OrthographicSize = Mathf.Lerp(startSize, targetSize, elapsedTime / duration);
             Time.timeScale = Mathf.Lerp(startTimeScale, targetTimeScale, elapsedTime / duration);
+            transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration); // Lerp position
             elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
         vcam.m_Lens.OrthographicSize = targetSize;
         Time.timeScale = targetTimeScale;
+        transform.position = endPosition; // Set final position
         isZooming = false;
     }
 

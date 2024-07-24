@@ -9,13 +9,14 @@ public class EnergySystem : MonoBehaviour
     public float maxEnergy = 5000f; // Maximum energy value
     public float regenRate = 1f; // Energy regeneration rate per second
 
-    public float currentEnergy;
+    public float currentEnergy = 0f;
     public Text energyText; // Reference to UI Text to display energy
     public Text energyTextDPS;
     public Text energyTextTank;
     public Text energyTextCC;
     public Text energyTextHealer;
     public Text energyTextKD;
+    public Image energyBar;
 
     public int energyAmount = 10; // Amount of energy to add to the troop
 
@@ -25,6 +26,8 @@ public class EnergySystem : MonoBehaviour
     {
         currentEnergy = 0f;
         //StartCoroutine(RegenerateEnergy());
+
+        UpdateEnergyUI();   
     }
 
     void Update()
@@ -107,6 +110,8 @@ public class EnergySystem : MonoBehaviour
             energyTextCC.text = Mathf.FloorToInt(currentEnergy).ToString();
             energyTextHealer.text = Mathf.FloorToInt(currentEnergy).ToString();
             energyTextKD.text = Mathf.FloorToInt(currentEnergy).ToString();
+
+            energyBar.fillAmount = (currentEnergy / maxEnergy);
         }
     }
 

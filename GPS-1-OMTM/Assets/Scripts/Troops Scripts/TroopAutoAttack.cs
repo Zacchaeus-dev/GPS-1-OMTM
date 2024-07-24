@@ -189,7 +189,7 @@ public class TroopAutoAttack : MonoBehaviour
     {
         if (troopClass.isMoving == false) //refering to the TroopClass on "(moving == false)" then this autoattack is activated......
         {
-            if (targetEnemy != null)
+            if (targetEnemy != null && targetEnemy.activeInHierarchy == true)
             {
                 // to check whether Troop is attacking Left or Right
                 if (targetEnemy.transform.position.x < gameObject.transform.position.x)
@@ -219,10 +219,10 @@ public class TroopAutoAttack : MonoBehaviour
 
                         if (Time.time >= lastAttackTime + attackCooldown)
                         {
-                            Enemy enemy = targetEnemy.GetComponent<Enemy>();
+                            //Enemy enemy = targetEnemy.GetComponent<Enemy>();
 
 
-                            if (enemy != null)
+                            if (targetEnemy != null)
                             {
                                 switch (troopCharacter) //do different attack based on the troop and weapon
                                 {
@@ -230,10 +230,10 @@ public class TroopAutoAttack : MonoBehaviour
                                         switch (troopWeapon.selectedWeapon)
                                         {
                                             case TroopWeapon.Weapon.Weapon1_DPS:
-                                                DPS_Weapon1Attack(enemy);
+                                                DPS_Weapon1Attack(targetEnemy);
                                                 break;
                                             case TroopWeapon.Weapon.Weapon2_DPS:
-                                                DPS_Weapon2Attack(enemy);
+                                                DPS_Weapon2Attack(targetEnemy);
                                                 break;
                                         }
                                         break;
@@ -244,7 +244,7 @@ public class TroopAutoAttack : MonoBehaviour
                                                 Tank_Weapon1Attack();
                                                 break;
                                             case TroopWeapon.Weapon.Weapon2_Tank:
-                                                Tank_Weapon2Attack(enemy);
+                                                Tank_Weapon2Attack(targetEnemy);
                                                 break;
                                         }
                                         break;
@@ -252,10 +252,10 @@ public class TroopAutoAttack : MonoBehaviour
                                         switch (troopWeapon.selectedWeapon)
                                         {
                                             case TroopWeapon.Weapon.Weapon1_CC:
-                                                CC_Weapon1Attack(enemy);
+                                                CC_Weapon1Attack(targetEnemy);
                                                 break;
                                             case TroopWeapon.Weapon.Weapon2_CC:
-                                                CC_Weapon2Attack(enemy);
+                                                CC_Weapon2Attack(targetEnemy);
                                                 break;
                                         }
                                         break;
@@ -359,14 +359,25 @@ public class TroopAutoAttack : MonoBehaviour
 
     }
 
-    void DPS_Weapon1Attack(Enemy enemy)
+    void DPS_Weapon1Attack(GameObject _enemy)
     {
-        enemy.TakeDamage(attackDamage);
-        DrawBulletTracer(shootingPoint1.transform.position, new Vector2(targetEnemy.transform.position.x, targetEnemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
+        Enemy enemy = _enemy.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(attackDamage);
+            DrawBulletTracer(shootingPoint1.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
+        }
+        else
+        {
+            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+            flyingEnemy.TakeDamage(attackDamage);
+            DrawBulletTracer(shootingPoint1.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
+        }
+        
         troopEnergy.GainPower();
     }
 
-    void DPS_Weapon2Attack(Enemy _enemy)
+    void DPS_Weapon2Attack(GameObject _enemy)
     {
         Vector3 targetPosition = _enemy.transform.position;
         Vector2 attackDirection = (targetPosition - transform.position).normalized;
@@ -391,9 +402,24 @@ public class TroopAutoAttack : MonoBehaviour
                 if (distanceAlongDirection > 0 && distanceAlongDirection <= length && distancePerpendicular <= halfWidth)
                 {
                     enemy.TakeDamage(attackDamage);
-                    DrawBulletTracer(shootingPoint2.transform.position, new Vector2(targetEnemy.transform.position.x, targetEnemy.transform.position.y + 0.8f));
                 }
             }
+            else
+            {
+                FlyingEnemy flyingEnemy = enemyCollider.GetComponent<FlyingEnemy>();
+
+                Vector2 toEnemy = flyingEnemy.transform.position - transform.position;
+                float distanceAlongDirection = Vector2.Dot(toEnemy, attackDirection);
+                float distancePerpendicular = Mathf.Abs(Vector2.Dot(toEnemy, new Vector2(-attackDirection.y, attackDirection.x)));
+
+                // Check if the enemy is within the length and width of the attack rectangle
+                if (distanceAlongDirection > 0 && distanceAlongDirection <= length && distancePerpendicular <= halfWidth)
+                {
+                    flyingEnemy.TakeDamage(attackDamage);
+                }
+            }
+
+            DrawBulletTracer(shootingPoint2.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f));
         }
 
         DrawAttackRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
@@ -466,43 +492,76 @@ public class TroopAutoAttack : MonoBehaviour
                     enemy.ApplyKnockback(transform.position);
                     //Debug.Log("Knockback and Damage");
                 }
+                else
+                {
+                    FlyingEnemy flyingEnemy = enemyCollider.GetComponent<FlyingEnemy>();
+                    flyingEnemy.TakeDamage(attackDamage);
+                }
             }
             tankAttackCounter = 0; // Reset the counter
         }
     }
 
-    void Tank_Weapon2Attack(Enemy enemy)
+    void Tank_Weapon2Attack(GameObject _enemy)
     {
         //single attack
-        enemy.TakeDamage(attackDamage);
+        Enemy enemy = _enemy.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(attackDamage);
+        }
+        else
+        {
+            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+            flyingEnemy.TakeDamage(attackDamage);
+        }
     }
 
-    void CC_Weapon1Attack(Enemy enemy)
+    void CC_Weapon1Attack(GameObject _enemy)
     {
-        enemy.TakeDamage(attackDamage);
-        enemy.slowArea = true;
-        enemy.MarkForDeathStart();
-        DrawBulletTracer(shootingPoint1.transform.position, targetEnemy.transform.position);
+        Enemy enemy = _enemy.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(attackDamage);
+            enemy.slowArea = true;
+            enemy.MarkForDeathStart();
+        }
+        else
+        {
+            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+            flyingEnemy.TakeDamage(attackDamage);
+        }
+
         troopEnergy.GainPower();
+        DrawBulletTracer(shootingPoint1.transform.position, _enemy.transform.position);
 
         //visual effect here
         //projectile
-        
+
     }
 
-    void CC_Weapon2Attack(Enemy _enemy)
+    void CC_Weapon2Attack(GameObject _enemy)
     {
-        _enemy.MarkForDeathStart();
+        Enemy enemy = _enemy.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.MarkForDeathStart();
+        }
 
         Vector2 attackCenter = _enemy.transform.position; // Center of the attack
         Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 4f, LayerMask.GetMask("Enemy")); // AOE detection
 
         foreach (Collider2D enemyCollider in enemiesHit)
         {
-            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            enemy = enemyCollider.GetComponent<Enemy>();
             if (enemy != null)
             {
                 enemy.TakeDamage(attackDamage);
+            }
+            else
+            {
+                FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+                flyingEnemy.TakeDamage(attackDamage);
             }
         }
 

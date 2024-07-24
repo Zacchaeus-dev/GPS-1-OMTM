@@ -31,7 +31,7 @@ public class Troop : MonoBehaviour
 
     //Attacks
     private GameObject targetEnemy;
-    private bool isAttacking;
+    //private bool isAttacking;
     public bool canAttack = true;
 
     // Ultimate
@@ -74,6 +74,10 @@ public class Troop : MonoBehaviour
     private Color originalColor;
 
     public bool troopOnKilldozer = false;
+
+    public TutorialPhase tutorialPhase;
+    public GameObject instruction5;
+    public GameObject instruction6;
 
     [Header(" Art / Animations ")]
     // Animation
@@ -422,6 +426,16 @@ public class Troop : MonoBehaviour
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
 
+        if (tutorialPhase != null && tutorialPhase.tutorialOn) //tutorial
+        {
+            yield return new WaitForSeconds(5f);
+
+            if (instruction5.activeInHierarchy == true)
+            {
+                instruction5.SetActive(false);
+                instruction6.SetActive(true);
+            }
+        }
     }
 
     void Ultimate_Tank()
@@ -609,7 +623,7 @@ public class Troop : MonoBehaviour
     public void SetTargetEnemy(GameObject enemy, float attackRange)
     {
         this.targetEnemy = enemy;
-        this.isAttacking = false;
+        //this.isAttacking = false;
         this.stopAction = false;
     }
 

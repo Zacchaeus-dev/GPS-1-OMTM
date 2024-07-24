@@ -58,7 +58,7 @@ public class Enemy: MonoBehaviour
     private int i = 0;
 
     private bool moveRight; //initial move direction
-    float radius = 0.1f;  //check targets inside the Killdozer
+    //float radius = 0.1f;  //check targets inside the Killdozer
 
     public bool isDummy;
     public bool dummyDead;

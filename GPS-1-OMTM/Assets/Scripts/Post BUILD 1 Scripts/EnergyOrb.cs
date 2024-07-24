@@ -24,6 +24,8 @@ public class EnergyOrb : MonoBehaviour
                 }
                 otherTroopEnergy.UpdateHUD();
 
+                otherTroopEnergy.Instruction5();
+
                 // Optionally, play a sound, deactivate the energy orb, etc.
                 Destroy(gameObject); // Destroy the energy orb after collision
             }
@@ -41,6 +43,8 @@ public class EnergyOrb : MonoBehaviour
                 {
                     energySystem.energyText.text = Mathf.FloorToInt(energySystem.currentEnergy).ToString();
                 }
+
+                energySystem.UpdateEnergyUI();
             }
 
             // Optionally, play a sound, deactivate the energy orb, etc.

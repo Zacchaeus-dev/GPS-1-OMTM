@@ -17,9 +17,20 @@ public class TutorialPhase : MonoBehaviour
     public Transform dummyTransform;
     public Enemy dummyEnemy;
     private bool respawning;
+    private bool dummyDiedOnce;
     private GameObject dummy;
+    public WaveSystem waveSystem;
     public GameObject tutorialPanel;
     public GameObject objectivePanel;
+    public GameObject edgePanTutorial;
+    public GameObject tutorialInstructions;
+    public GameObject instruction1;
+    public GameObject instruction3;
+    public GameObject instruction4;
+    public GameObject instruction5;
+    public GameObject instruction7;
+    public GameObject labels;
+    public GameObject wavesObject;
 
     void Start()
     {
@@ -31,10 +42,30 @@ public class TutorialPhase : MonoBehaviour
 
     private void Update()
     {
-        if (dummyEnemy.dummyDead == true && !respawning)
+        if (waveSystem.wave1Started == true)
         {
-            respawning = true;
-            StartCoroutine(RespawnDummy());
+            if (dummy != null)
+            {
+                Destroy(dummy);
+            }
+
+            return;
+        }
+        if (dummyEnemy != null)
+        {
+            if (dummyEnemy.dummyDead == true && !respawning)
+            {
+                if (!dummyDiedOnce)
+                {
+                    dummyDiedOnce = true;
+                    instruction3.SetActive(false);
+                    instruction4.SetActive(true);
+                    labels.SetActive(false);
+                }
+
+                respawning = true;
+                StartCoroutine(RespawnDummy());
+            }
         }
     }
 
@@ -50,10 +81,16 @@ public class TutorialPhase : MonoBehaviour
         healerHUD.DimOn();
         dummy = Instantiate(dummyPrefab, dummyTransform.position, Quaternion.identity);
         dummyEnemy = dummy.GetComponent<Enemy>();
+        tutorialInstructions.SetActive(true);
+        instruction1.SetActive(true);
+        labels.SetActive(true);
+        wavesObject.SetActive(false);
+        //waveSystem.gameObject.SetActive(false);
     }
 
     public void TutorialEnd()
     {
+        //waveSystem.gameObject.SetActive(true);
         tank.SetActive(true);
         cc.SetActive(true);
         healer.SetActive(true);
@@ -62,21 +99,34 @@ public class TutorialPhase : MonoBehaviour
         healerHUD.DimOff();
         kdd.SetActive(true);
         healerHUD.DimOff();
-        tutorialOn = false; 
+        instruction5.SetActive(false);
+        instruction7.SetActive(true);
+        wavesObject.SetActive(true);
+        waveSystem.TeleportTroopsToKilldozer();
+        cameraSystem.FocusOnKilldozer();
+        StartCoroutine(DefocusKilldozer());
+        edgePanTutorial.SetActive(true);
+        StartCoroutine(CloseEdgePanTutorial());
+        tutorialOn = false;    
     }
 
     IEnumerator RespawnDummy()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         //GameObject dummy = Instantiate(dummyPrefab, dummyTransform.position, Quaternion.identity);
-        dummy.SetActive(true);
-        dummyEnemy.currentHealth = dummyEnemy.maxHealth;
+        if (dummy != null)
+        {
+            dummy.SetActive(true);
+            dummyEnemy.currentHealth = dummyEnemy.maxHealth;
+        }
+
         respawning = false;
     }
 
     public void CloseTutorialPanel()
     {
+        Time.timeScale = 1.0f;
         tutorialPanel.SetActive(false);
         objectivePanel.SetActive(true);
     }
@@ -85,5 +135,20 @@ public class TutorialPhase : MonoBehaviour
     {
         objectivePanel.SetActive(false);
         TutorialEnd();
+    }
+
+    IEnumerator DefocusKilldozer()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        cameraSystem.DefocusKilldozer();
+    }
+
+    IEnumerator CloseEdgePanTutorial()
+    {
+        yield return new WaitForSeconds(10f);
+
+        edgePanTutorial.SetActive(false);
+        instruction7.SetActive(false);
     }
 }

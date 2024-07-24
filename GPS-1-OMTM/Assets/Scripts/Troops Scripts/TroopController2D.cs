@@ -53,6 +53,13 @@ public class TroopController2D : MonoBehaviour
 
     private TroopClass troopPathfinding;
 
+    public TutorialPhase tutorialPhase;
+    public GameObject instruction1;
+    public GameObject instruction2;
+    public GameObject instruction3;
+    public GameObject instruction6;
+    public GameObject tutorialPanel;
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -98,9 +105,16 @@ public class TroopController2D : MonoBehaviour
                     {
                         DeselectTroop(); //deselect old troop
                     }
+
+                    if (tutorialPhase.tutorialOn == true && instruction1.activeInHierarchy == true) //tutorial selecting troop
+                    {
+                        instruction1.SetActive(false);
+                        instruction2.SetActive(true);
+                    }
+                    
                     SelectTroop(hit.collider.gameObject);
                 }
-                else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50) //clicking when zoomed out
+                else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50 && teleporting == false) //clicking when zoomed out
                 {
                     Debug.Log("Teleport");
                     if (teleporting == false)
@@ -123,7 +137,13 @@ public class TroopController2D : MonoBehaviour
 
             bool GoingLeft = mousePosition.x < selectedTroop.transform.position.x;
             Vector2 pos = new Vector2(mousePosition.x, transform.position.y);
-            
+
+            if (tutorialPhase.tutorialOn == true && instruction2.activeInHierarchy == true) //tutorial 
+            {
+                instruction2.SetActive(false);
+                instruction3.SetActive(true);
+            }
+
             if (GoingLeft == true)
             {
                 selectedTroop.GetComponent<TroopClass>().ONCE = false;
@@ -162,6 +182,7 @@ public class TroopController2D : MonoBehaviour
             }
         }
     }
+
     void DetectDoubleClick() //focus camera on troop
     {
         if (WaveSystem.transitioning == true)
@@ -215,7 +236,7 @@ public class TroopController2D : MonoBehaviour
 
     void HandleKeyPress(KeyCode key, GameObject troop)
     {
-        if (WaveSystem.transitioning == true)
+        if (WaveSystem.transitioning == true || tutorialPhase.tutorialOn == true)
         {
             return;
         }
@@ -316,7 +337,9 @@ public class TroopController2D : MonoBehaviour
 
         foreach (var Hit in hits)
         {
-            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1"))
+            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Upper-Ground 1") || Hit.collider.CompareTag("[TP] Upper-Ground 2")
+                || Hit.collider.CompareTag("[TP] Upper-Ground 3") || Hit.collider.CompareTag("[TP] Upper-Ground 4") || Hit.collider.CompareTag("[TP] Upper-Ground 1 (2)") 
+                || Hit.collider.CompareTag("[TP] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[TP] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[TP] Upper-Ground 4 (2)"))
             {
                 if (Hit.collider != null)
                 {
@@ -324,17 +347,55 @@ public class TroopController2D : MonoBehaviour
                     {
                         newPosition.x = MousePosition.x;
                         newPosition.y = -1; //Y value for ground
-
+                        troopPathfinding.onPlatform = "Ground";
                     }
-                    else if (Hit.collider.CompareTag("[TP] Platform"))
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 1"))
                     {
                         newPosition.x = MousePosition.x;
-                        newPosition.y = 4.7f; //Y value for platform
+                        newPosition.y = 4.7f; //Y value for platform 1
+                        troopPathfinding.onPlatform = "Upper-Ground 1";
                     }
-                    else if (Hit.collider.CompareTag("[TP] Platform 1"))
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 2"))
                     {
                         newPosition.x = MousePosition.x;
-                        newPosition.y = 9.3f; //Y value for platform
+                        newPosition.y = 4.7f; 
+                        troopPathfinding.onPlatform = "Upper-Ground 2";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 3"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 4.7f;
+                        troopPathfinding.onPlatform = "Upper-Ground 3";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 4"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 4.7f;
+                        troopPathfinding.onPlatform = "Upper-Ground 4";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 1 (2)"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 9.3f; //Y value for platform 2
+                        troopPathfinding.onPlatform = "Upper-Ground 1 (2)";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 2 (2)"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 9.3f;
+                        troopPathfinding.onPlatform = "Upper-Ground 2 (2)";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 3 (2)"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 9.3f;
+                        troopPathfinding.onPlatform = "Upper-Ground 3 (2)";
+                    }
+                    else if (Hit.collider.CompareTag("[TP] Upper-Ground 4 (2)"))
+                    {
+                        newPosition.x = MousePosition.x;
+                        newPosition.y = 9.3f;
+                        troopPathfinding.onPlatform = "Upper-Ground 4 (2)";
                     }
                     else
                     {
@@ -450,9 +511,27 @@ public class TroopController2D : MonoBehaviour
             troop4.GetComponent<Troop>().invincible = false;
         }
 
-        cameraSystem.ToggleZoom();
+        if (tutorialPhase.tutorialOn == false)
+        {
+            cameraSystem.ToggleZoom();
+            teleporting = false;
+        }
+        if (tutorialPhase.tutorialOn == true)
+        {
+            teleporting = false;
+            cameraSystem.isZoomedOut = false;
+            StartCoroutine(TutorialDelay());
+        }
+    }
 
-        teleporting = false;
+    IEnumerator TutorialDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        instruction6.SetActive(false);
+        tutorialPanel.SetActive(true);
+        Debug.Log("Tutorial Panel On");
+        Time.timeScale = 0.0f;
     }
 }
 
