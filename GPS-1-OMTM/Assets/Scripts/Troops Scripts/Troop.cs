@@ -590,6 +590,8 @@ public class Troop : MonoBehaviour
         UpdateHUD();
     }
 
+    public bool healer = false;
+
     IEnumerator Death()
     {
         tookdamage = false;
@@ -600,8 +602,18 @@ public class Troop : MonoBehaviour
 
         // Death Animation
         TroopModel.GetComponent<TroopAnimationsManager>().TroopDies();
-        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
-        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false; // stops shooting
+
+        if (healer == false)
+        {
+            gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+            gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false; // stops shooting
+        }
+        else if (healer == true)
+        {
+            TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
+            gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = false; // stops healing
+        }
+
 
         yield return new WaitForSeconds(2f);
 
