@@ -73,6 +73,13 @@ public class Troop : MonoBehaviour
     private Image iconBorder;
     private Color originalColor;
 
+    //visual effect from damaged
+    public SpriteRenderer[] troopSprite;
+    public Color DamagedColor;
+    public Color NormalColor;
+    float timer;
+    private bool tookdamage;
+
     public bool troopOnKilldozer = false;
 
     public TutorialPhase tutorialPhase;
@@ -123,6 +130,29 @@ public class Troop : MonoBehaviour
         CheckGround();
         UpdateUltimateUI();
         DrainShield();
+
+        
+        if (tookdamage == true)
+        {
+            foreach(SpriteRenderer sprite in troopSprite)
+            {
+                sprite.color = DamagedColor;
+            }
+            //troopSprite.color = DamagedColor;
+            timer = timer + Time.deltaTime;
+
+            if (timer >= 0.3)
+            {
+                foreach (SpriteRenderer sprite in troopSprite)
+                {
+                    sprite.color = NormalColor;
+                }
+                //troopSprite.color = NormalColor;
+                timer = 0;
+                tookdamage = false;
+            }
+        }
+        
     }
 
     IEnumerator ReduceShieldOverTime()
@@ -533,6 +563,7 @@ public class Troop : MonoBehaviour
         }
         else
         {
+            tookdamage = true;
             currentHealth -= damage;
         }
 
@@ -561,7 +592,8 @@ public class Troop : MonoBehaviour
 
     IEnumerator Death()
     {
-        Debug.Log(gameObject.name + " is dead");
+        tookdamage = false;
+        //Debug.Log(gameObject.name + " is dead");
 
         // Deactivate the troop's pathfind arrow
         gameObject.GetComponent<TroopClass>().arrow.SetActive(false);

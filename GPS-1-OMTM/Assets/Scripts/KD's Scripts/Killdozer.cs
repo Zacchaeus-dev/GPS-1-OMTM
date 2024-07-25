@@ -28,6 +28,8 @@ public class Killdozer : MonoBehaviour
 
     public GameObject redOverlay;
 
+    public Animator healthAnimator;
+
     /*public GameObject KDUI;
     KDHealthUI KDUIScript;*/
 
@@ -98,6 +100,7 @@ public class Killdozer : MonoBehaviour
         if (damage <= currentHealth)
         {
             currentHealth -= damage;
+            healthAnimator.SetTrigger("Damaged");
             redOverlay.SetActive(true);
             StartCoroutine(DisableOverlay());
         }

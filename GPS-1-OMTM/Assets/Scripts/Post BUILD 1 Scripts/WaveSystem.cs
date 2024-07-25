@@ -89,7 +89,7 @@ public class WaveSystem : MonoBehaviour
     }
 
     public List<Wave> waves;
-    private int currentWaveIndex = 0;
+    public int currentWaveIndex = 0;
     private int currentMiniWaveIndex = 0;
     private float prewaveTimer;
     private float inwaveTimer1 = 0;

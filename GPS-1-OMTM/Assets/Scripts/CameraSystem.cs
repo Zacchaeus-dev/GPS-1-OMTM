@@ -34,6 +34,7 @@ public class CameraSystem : MonoBehaviour
     private bool focusOnKD;
 
     public TutorialPhase tutorialPhase;
+    public WaveSystem waveSystem;
 
     // Borders
     public Vector3 leftBorder = new Vector3(-24.5f, 0, 0);
@@ -150,10 +151,27 @@ public class CameraSystem : MonoBehaviour
     {
         float screenAspect = Screen.width / (float)Screen.height;
         float horizontalSize = (rightBorder.x - leftBorder.x) / 2;
-        zoomOutSize = horizontalSize / screenAspect;
+        float offset = 20f;
+        
+        /*
+        switch (waveSystem.currentWaveIndex)
+        {
+            case 0:
+                offset = 40f;
+                break;
+            case 1:
+                offset = 20f;
+                break;
+            default:
+                offset = 40f;
+                break;
+        }
+        */
 
+        horizontalSize += offset / 2;
+        zoomOutSize = horizontalSize / screenAspect;
         // Calculate the center position between left and right borders
-        zoomOutPosition = new Vector3((leftBorder.x + rightBorder.x) / 2, transform.position.y, transform.position.z);
+        zoomOutPosition = new Vector3((leftBorder.x + rightBorder.x + offset) / 2, transform.position.y, transform.position.z);
     }
 
     public void ToggleZoom()
