@@ -9,6 +9,8 @@ public class HealerAutoHeal : MonoBehaviour
     TroopAnimationsManager TroopAnimator;
     TroopClass troopClass;
 
+    public GameObject shootingPoint;
+
     public bool autoHealEnabled = false;
     public int healAmount = 10; // Amount of health to heal per heal
     public float detectionRange = 3f; // Range within which the healer can detect allies
@@ -16,7 +18,7 @@ public class HealerAutoHeal : MonoBehaviour
     public float healCooldown = 1f; // Time between heals
     public float AnimationDelay = 0.4f;
     public float ShootingDelay = 0.5f;
-    float delay;
+    float delay = 0;
     public float moveSpeed = 2f; // Speed at which the healer moves towards the ally
 
     private float lastHealTime = 0f;
@@ -43,10 +45,11 @@ public class HealerAutoHeal : MonoBehaviour
             lineRenderer.enabled = false; // Initially disable the line renderer
         }
 
-        DetermineHeal();
-
         TroopAnimator = TroopModel.GetComponent<TroopAnimationsManager>();
         troopClass = gameObject.GetComponent<TroopClass>();
+
+
+        DetermineHeal();
 
     }
 
@@ -57,6 +60,8 @@ public class HealerAutoHeal : MonoBehaviour
             case TroopWeapon.Weapon.Weapon1_Healer:
                 healAmount = 50;
                 healCooldown = 1.5f;
+
+                TroopAnimator.TroopOnWeapon1();
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 healAmount = 20;
@@ -70,17 +75,28 @@ public class HealerAutoHeal : MonoBehaviour
                 lineRenderer.endColor = lineColor;
                 lineRenderer.useWorldSpace = false;
                 lineRenderer.enabled = false;
+
+                TroopAnimator.TroopOnWeapon2();
                 break;
         }
     }
 
     void Update()
     {
+        if (Killdozer.gameOver)
+        {
+            return;
+        }
+
+        DetermineHeal();
+
         if (autoHealEnabled)
         {
             if (targetAlly == null)
             {
                 FindTarget();
+                TroopAnimator.TroopAttackOff();
+                delay = 0;
             }
             else
             {
@@ -123,7 +139,7 @@ public class HealerAutoHeal : MonoBehaviour
                     closestAlly = hitCollider.gameObject;
                 }
                 */
-                
+
                 if (allyTroop != null && allyTroop.currentHealth < allyTroop.maxHealth)
                 {
                     closestDistance = distanceToAlly;
@@ -132,7 +148,10 @@ public class HealerAutoHeal : MonoBehaviour
             }
         }
 
-        targetAlly = closestAlly;
+        if (closestAlly != null)
+        {
+            targetAlly = closestAlly;
+        }
     }
 
     void MoveTowardsTarget()
@@ -169,6 +188,16 @@ public class HealerAutoHeal : MonoBehaviour
         {
             if (targetAlly != null)
             {
+                // to check whether Troop is attacking Left or Right
+                if (targetAlly.transform.position.x < gameObject.transform.position.x)
+                {
+                    gameObject.GetComponent<TroopClass>().GoingLeft = true;
+                }
+                else if (targetAlly.transform.position.x > gameObject.transform.position.x)
+                {
+                    gameObject.GetComponent<TroopClass>().GoingLeft = false;
+                }
+
                 float distanceToAlly = Vector2.Distance(transform.position, targetAlly.transform.position);
                 if (distanceToAlly <= healRange)
                 {
@@ -177,11 +206,12 @@ public class HealerAutoHeal : MonoBehaviour
                     if (delay > AnimationDelay)
                     {
                         TroopAnimator.TroopAttackOn();
+                        delay = 0;
                     }
 
                     if (delay >= ShootingDelay) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
                     {
-                        delay = 0;
+                        
 
                         if (Time.time >= lastHealTime + healCooldown)
                         {
@@ -197,10 +227,10 @@ public class HealerAutoHeal : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        targetAlly = null; // Lost range, find another target
-                    }
+                }
+                else
+                {
+                    targetAlly = null; // Lost range, find another target
                 }
             }
         }
@@ -238,8 +268,8 @@ public class HealerAutoHeal : MonoBehaviour
         if (lineRenderer != null)
         {
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, transform.position + startPositionOffset);
-            lineRenderer.SetPosition(1, target.position);
+            lineRenderer.SetPosition(0, shootingPoint.transform.position);
+            lineRenderer.SetPosition(1, new Vector2(target.transform.position.x, target.transform.position.y + 0.8f));
 
             float elapsedTime = 0f;
             float tracerDuration = 0.5f; // Duration for which the tracer is visible
