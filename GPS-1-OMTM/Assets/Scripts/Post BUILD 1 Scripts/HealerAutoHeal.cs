@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TroopAutoAttack;
 
 public class HealerAutoHeal : MonoBehaviour
 {
+    public GameObject TroopModel;
+    TroopAnimationsManager TroopAnimator;
+    TroopClass troopClass;
+
     public bool autoHealEnabled = false;
     public int healAmount = 10; // Amount of health to heal per heal
     public float detectionRange = 3f; // Range within which the healer can detect allies
     public float healRange = 1.5f; // Range within which the healer can heal allies
     public float healCooldown = 1f; // Time between heals
+    public float AnimationDelay = 0.4f;
+    public float ShootingDelay = 0.5f;
+    float delay;
     public float moveSpeed = 2f; // Speed at which the healer moves towards the ally
 
     private float lastHealTime = 0f;
@@ -36,6 +44,10 @@ public class HealerAutoHeal : MonoBehaviour
         }
 
         DetermineHeal();
+
+        TroopAnimator = TroopModel.GetComponent<TroopAnimationsManager>();
+        troopClass = gameObject.GetComponent<TroopClass>();
+
     }
 
     void DetermineHeal()
@@ -150,31 +162,51 @@ public class HealerAutoHeal : MonoBehaviour
         }
     }
 
+
     void Healer_Weapon1Heal()
     {
-        if (targetAlly != null)
+        if (troopClass.isMoving == false) //refering to the TroopClass on "(moving == false)" then this autoattack is activated......
         {
-            float distanceToAlly = Vector2.Distance(transform.position, targetAlly.transform.position);
-            if (distanceToAlly <= healRange)
+            if (targetAlly != null)
             {
-                if (Time.time >= lastHealTime + healCooldown)
+                float distanceToAlly = Vector2.Distance(transform.position, targetAlly.transform.position);
+                if (distanceToAlly <= healRange)
                 {
-                    Troop allyTroop = targetAlly.GetComponent<Troop>();
-                    if (allyTroop != null)
+                    //delay bc troops need a window of time to get into attack stance when transitioning from walking to attacking
+                    delay = delay + Time.deltaTime;
+                    if (delay > AnimationDelay)
                     {
-                        allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
-                        lastHealTime = Time.time;
-                        Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
-                        allyTroop.UpdateHUD();
-                        troopEnergy.GainPower();
-                        StartCoroutine(ShowHealTracer(targetAlly.transform));
+                        TroopAnimator.TroopAttackOn();
+                    }
+
+                    if (delay >= ShootingDelay) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
+                    {
+                        delay = 0;
+
+                        if (Time.time >= lastHealTime + healCooldown)
+                        {
+                            Troop allyTroop = targetAlly.GetComponent<Troop>();
+                            if (allyTroop != null)
+                            {
+                                allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                                lastHealTime = Time.time;
+                                Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                                allyTroop.UpdateHUD();
+                                troopEnergy.GainPower();
+                                StartCoroutine(ShowHealTracer(targetAlly.transform));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        targetAlly = null; // Lost range, find another target
                     }
                 }
             }
-            else
-            {
-                targetAlly = null; // Lost range, find another target
-            }
+        }
+        else
+        {
+            delay = 0;
         }
     }
 

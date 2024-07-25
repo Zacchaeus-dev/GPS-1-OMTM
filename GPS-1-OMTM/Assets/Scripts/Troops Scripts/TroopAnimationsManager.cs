@@ -39,7 +39,7 @@ public class TroopAnimationsManager : MonoBehaviour
     {
         TroopAnimator.SetBool("climbing", true);
         TroopAnimator.SetBool("attack", false);
-        TroopAnimator.SetBool("walking", false);
+        //TroopAnimator.SetBool("walking", false);
     }      
     
     public void TroopClimbOff()
@@ -51,7 +51,7 @@ public class TroopAnimationsManager : MonoBehaviour
     {
         TroopAnimator.SetBool("falling", true);
         TroopAnimator.SetBool("attack", false);
-        TroopAnimator.SetBool("walking", false);
+        //TroopAnimator.SetBool("walking", false);
     }      
     
     public void TroopFallOff()

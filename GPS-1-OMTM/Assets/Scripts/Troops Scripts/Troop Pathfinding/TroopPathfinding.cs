@@ -2190,7 +2190,33 @@ public class TroopClass : MonoBehaviour
         if (canClimb)
         {
             ClimbAndMove();
-            gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+            switch (troopWeapon.selectedWeapon)
+            {
+                case TroopWeapon.Weapon.Weapon1_DPS:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_DPS:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_Tank:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_Tank:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_CC:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_CC:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_Healer:
+                    TroopAnimator.TroopAttackOff();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_Healer:
+                    TroopAnimator.TroopAttackOff();
+                    break;
+            }   
         }
         else
         {
@@ -2200,7 +2226,33 @@ public class TroopClass : MonoBehaviour
         if (isMoving)
         {
             Move();
-            gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+            switch (troopWeapon.selectedWeapon)
+            {
+                case TroopWeapon.Weapon.Weapon1_DPS:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_DPS:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_Tank:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_Tank:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_CC:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_CC:
+                    gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                    break;
+                case TroopWeapon.Weapon.Weapon1_Healer:
+                    TroopAnimator.TroopAttackOff();
+                    break;
+                case TroopWeapon.Weapon.Weapon2_Healer:
+                    TroopAnimator.TroopAttackOff();
+                    break;
+            }
         }
         else
         {
