@@ -64,7 +64,7 @@ public class IndicatorManager : MonoBehaviour
         {
             case EnemyIndicator.Tier.Tier1:
                 arrowPrefab = arrowPrefabTier1;
-                yOffset = 150f;
+                yOffset = 150f +50;
                 break;
             case EnemyIndicator.Tier.Tier2:
                 arrowPrefab = arrowPrefabTier2;
@@ -86,7 +86,7 @@ public class IndicatorManager : MonoBehaviour
         if (left)
         {
             // Flip the arrow horizontally
-            rectTransform.localScale = new Vector3(-1, 1, 1);
+            rectTransform.localScale = new Vector3(-0.5f, -0.5f, -0.5f);
         }
 
         return arrow;
