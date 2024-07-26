@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static TroopAutoAttack;
 
@@ -27,6 +28,9 @@ public class HealerAutoHeal : MonoBehaviour
 
     private TroopEnergy troopEnergy;
     public TroopWeapon troopWeapon;
+
+    public GameObject healSpritePrefab;
+    //public Transform shootingPoint;
 
     // Public references for LineRenderer and start position offset
     public LineRenderer lineRenderer;
@@ -104,10 +108,13 @@ public class HealerAutoHeal : MonoBehaviour
 
                 if (troopWeapon.selectedWeapon == TroopWeapon.Weapon.Weapon1_Healer)
                 {
-                    Troop allyTroop = targetAlly.GetComponent<Troop>();
-                    if (allyTroop != null && allyTroop.currentHealth == allyTroop.maxHealth)
+                    if (targetAlly != null)
                     {
-                        FindTarget(); // Change target if the current ally is fully healed
+                        Troop allyTroop = targetAlly.GetComponent<Troop>();
+                        if (allyTroop != null && allyTroop.currentHealth == allyTroop.maxHealth)
+                        {
+                            FindTarget(); // Change target if the current ally is fully healed
+                        }
                     }
                 }
             }
@@ -218,12 +225,18 @@ public class HealerAutoHeal : MonoBehaviour
                             Troop allyTroop = targetAlly.GetComponent<Troop>();
                             if (allyTroop != null)
                             {
+                                StartCoroutine(ShowHealNeedle(targetAlly.transform));
                                 allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
                                 lastHealTime = Time.time;
-                                Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                                //Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                                 allyTroop.UpdateHUD();
                                 troopEnergy.GainPower();
-                                StartCoroutine(ShowHealTracer(targetAlly.transform));
+                                //StartCoroutine(ShowHealTracer(targetAlly.transform))
+
+                                if (allyTroop.currentHealth == allyTroop.maxHealth)
+                                {
+                                    targetAlly = null; //stops healing once target ally is at full health
+                                }
                             }
                         }
                     }
@@ -263,7 +276,8 @@ public class HealerAutoHeal : MonoBehaviour
         }
     }
 
-    IEnumerator ShowHealTracer(Transform target)
+    /*
+    IEnumerator ShowHealTracer(Transform target) //weapon 1
     {
         if (lineRenderer != null)
         {
@@ -283,8 +297,52 @@ public class HealerAutoHeal : MonoBehaviour
             lineRenderer.enabled = false;
         }
     }
+    */
 
-    private IEnumerator ShowHealAOE(Transform target)
+    IEnumerator ShowHealNeedle(Transform target)
+    {
+        // Add a delay before the first shot
+        yield return new WaitForSeconds(0.25f);
+
+        GameObject healSprite = Instantiate(healSpritePrefab, shootingPoint.transform.position, Quaternion.identity);
+        Vector3 startPosition = shootingPoint.transform.position;
+
+        if (target == null || target.gameObject.activeInHierarchy == false)
+        {
+            Destroy(healSprite);
+            yield return null;
+        }
+
+        Vector3 targetPosition = new Vector2(target.position.x, target.position.y + 0.8f);
+
+        // Calculate the direction and angle
+        Vector3 direction = (targetPosition - startPosition).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Rotate the sprite to face the target
+        healSprite.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        float elapsedTime = 0f;
+        float tracerDuration = 0.2f; // Duration for which the tracer is visible
+
+        while (elapsedTime < tracerDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            healSprite.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / tracerDuration);
+
+            if(target == null || target.gameObject.activeInHierarchy == false)
+            {
+                Destroy(healSprite);
+                yield return null;
+            }
+
+            yield return null;
+        }
+
+        Destroy(healSprite);
+    }
+
+    private IEnumerator ShowHealAOE(Transform target) //weapon 2
     {
         if (lineRenderer != null)
         {

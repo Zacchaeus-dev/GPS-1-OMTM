@@ -69,6 +69,8 @@ public class Troop : MonoBehaviour
     public int currentShield;
     public bool shieldOn = false;
     public bool reducingShield = false;
+    public GameObject shieldOverlay;
+    public GameObject troopShield;
 
     private Image iconBorder;
     private Color originalColor;
@@ -84,7 +86,13 @@ public class Troop : MonoBehaviour
 
     public TutorialPhase tutorialPhase;
     public GameObject instruction5;
-    public GameObject instruction6;
+    //public GameObject instruction6;
+    public GameObject tutorialPanel;
+
+    public GameObject tpObject;
+    public Animator animator;
+    public GameObject model;
+    public GameObject damageIndicator;
 
     [Header(" Art / Animations ")]
     // Animation
@@ -162,6 +170,14 @@ public class Troop : MonoBehaviour
         if (currentShield <= 0)
         {
             shieldOn = false;
+            if (troopShield.activeInHierarchy == true)
+            {
+                troopShield.SetActive(false);
+            }
+            if (shieldOverlay.activeInHierarchy == true) 
+            {
+                shieldOverlay.SetActive(false);
+            }
         }
 
         reducingShield = true;
@@ -463,9 +479,21 @@ public class Troop : MonoBehaviour
             if (instruction5.activeInHierarchy == true)
             {
                 instruction5.SetActive(false);
-                instruction6.SetActive(true);
+                //instruction6.SetActive(true);
+
+                StartCoroutine(TutorialDelay());
             }
         }
+    }
+
+    IEnumerator TutorialDelay()
+    {
+        yield return new WaitForSeconds(3f);
+
+        //instruction6.SetActive(false);
+        tutorialPanel.SetActive(true);
+        Debug.Log("Tutorial Panel On");
+        Time.timeScale = 0.0f;
     }
 
     void Ultimate_Tank()
@@ -522,6 +550,8 @@ public class Troop : MonoBehaviour
         GainShield(troopController2D.troop3);
         GainShield(gameObject);
 
+        shieldOverlay.SetActive(true);
+
         yield return new WaitForSeconds(ultimateDuration);
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -534,6 +564,7 @@ public class Troop : MonoBehaviour
         troop.currentShield = 500;
         troop.shieldOn = true;
         troop.reducingShield = true;
+        troop.troopShield.SetActive(true);
 
         troop.UpdateHUD();
     }
@@ -567,6 +598,8 @@ public class Troop : MonoBehaviour
             currentHealth -= damage;
         }
 
+        damageIndicator.SetActive(true);
+        StartCoroutine(DisableDamageIndicator());
         troopHUD.SetHUD(this);
 
         if (currentHealth <= 0)
@@ -581,6 +614,13 @@ public class Troop : MonoBehaviour
                 troopEnergy.GainPower();
             }
         }
+    }
+
+    IEnumerator DisableDamageIndicator()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        damageIndicator.SetActive(false);
     }
 
     public void FullHeal()
@@ -614,12 +654,20 @@ public class Troop : MonoBehaviour
             gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = false; // stops healing
         }
 
+        yield return new WaitForSeconds(1f);
 
-        yield return new WaitForSeconds(2f);
+        tpObject.SetActive(true);
+        animator.SetTrigger("Death");
+
+        yield return new WaitForSeconds(0.8f);
+
+        model.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
 
         // Notify troopController2D to respawn this troop
         troopController2D.HandleRespawn(this);
-
+        tpObject.SetActive(false);
         // Deactivate the troop
         gameObject.SetActive(false);
     }

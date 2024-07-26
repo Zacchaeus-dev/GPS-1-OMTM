@@ -10,11 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8468022038235354094}
   - component: {fileID: 5046507996064068071}
+  - component: {fileID: 8900177317616875359}
   - component: {fileID: 8475185859563095194}
   - component: {fileID: 4281265616103429381}
   - component: {fileID: 3341859186735632908}
   - component: {fileID: 4336702711243277692}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Energy Orb
   m_TagString: EnergyOrb
   m_Icon: {fileID: 0}
@@ -89,6 +90,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8900177317616875359
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2952589855345581881}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 2147485686
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!61 &8475185859563095194
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -149,7 +195,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -160,7 +206,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 5
 --- !u!114 &3341859186735632908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1941859406289199795}
   - component: {fileID: 597455484672695493}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: EnergyOrb
   m_Icon: {fileID: 0}

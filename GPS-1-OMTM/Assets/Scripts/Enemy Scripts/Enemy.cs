@@ -35,7 +35,7 @@ public class Enemy: MonoBehaviour
     public float killdozerStoppingDistance = 5.0f;
 
     //visual effect from damaged
-    public SpriteRenderer enemySprite;
+    public SpriteRenderer[] enemySprite;
     public Color DamagedColor;
     public Color NormalColor;
     float timer;
@@ -52,6 +52,8 @@ public class Enemy: MonoBehaviour
     private bool isStunned = false;
     private bool facingRight = false;
     public event Action onDeath;
+
+    public GameObject damageIndicator;
 
     public DropEnergyOrbOnDeath energyOrb;
     public int energyOrbDropNum = 1;
@@ -98,13 +100,21 @@ public class Enemy: MonoBehaviour
 
         if (tookdamage == true)
         {
-            enemySprite.color = DamagedColor;
+            foreach (SpriteRenderer sprite in enemySprite)
+            {
+                sprite.color = DamagedColor;
+            }
+           
             timer = timer + Time.deltaTime;
             transform.localScale += transform.localScale / 1000;
 
             if (timer >= 0.3)
             {
-                enemySprite.color = NormalColor;
+                foreach (SpriteRenderer sprite in enemySprite)
+                {
+                    sprite.color = NormalColor;
+                }
+
                 transform.localScale = normalScale;
                 timer = 0;
                 tookdamage = false;
@@ -314,11 +324,21 @@ public class Enemy: MonoBehaviour
         currentHealth -= damage;
         //Debug.Log("Enemy took " + damage + " damage.");
 
+        damageIndicator.SetActive(true);
+        StartCoroutine(DisableDamageIndicator());
+
         if (currentHealth <= 0)
         {
             tookdamage = false;
             Death();
         }
+    }
+
+    IEnumerator DisableDamageIndicator()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        damageIndicator.SetActive(false);
     }
 
     public void Death()

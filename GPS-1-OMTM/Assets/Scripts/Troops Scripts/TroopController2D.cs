@@ -114,6 +114,7 @@ public class TroopController2D : MonoBehaviour
                     
                     SelectTroop(hit.collider.gameObject);
                 }
+                /*
                 else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50 && teleporting == false) //clicking when zoomed out
                 {
                     Debug.Log("Teleport");
@@ -123,6 +124,7 @@ public class TroopController2D : MonoBehaviour
                         StartCoroutine(Teleportation());
                     }
                 }
+                */
                 else if (selectedTroop != null && !EventSystem.current.IsPointerOverGameObject()) // clicking elsewhere besides ui to deselect troop
                 {
                     DeselectTroop();
@@ -218,19 +220,31 @@ public class TroopController2D : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            HandleKeyPress(KeyCode.Alpha1, troop1);
+            if (troop1.activeInHierarchy == true)
+            {
+                HandleKeyPress(KeyCode.Alpha1, troop1);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            HandleKeyPress(KeyCode.Alpha2, troop2);
+            if (troop2.activeInHierarchy == true)
+            {
+                HandleKeyPress(KeyCode.Alpha2, troop2);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            HandleKeyPress(KeyCode.Alpha3, troop3);
+            if (troop3.activeInHierarchy == true)
+            {
+                HandleKeyPress(KeyCode.Alpha3, troop3);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            HandleKeyPress(KeyCode.Alpha4, troop4);
+            if (troop4.activeInHierarchy == true)
+            {
+                HandleKeyPress(KeyCode.Alpha4, troop4);
+            }
         }
     }
 
@@ -319,14 +333,32 @@ public class TroopController2D : MonoBehaviour
         troop.UpdateHUD();
 
         // Reactivate the troop
+        troop.model.SetActive(false);
         troop.gameObject.SetActive(true);
         troop.GetComponent<TroopClass>().SetTargetPositionHere();
         Debug.Log(troop.gameObject.name + " has respawned.");
 
+        troop.tpObject.SetActive(true);
+        troop.animator.SetTrigger("Death");
+
+        yield return new WaitForSeconds(0.5f);
+
+        troop.model.SetActive(true);
+
         //reset mouse position
         troop.GetComponent<TroopClass>().mousePosition = killdozer.position;
+
+        StartCoroutine(DisableDeathAnimation(troop));    
     }
 
+    IEnumerator DisableDeathAnimation(Troop troop)
+    {
+        yield return new WaitForSeconds(3f);
+
+        troop.tpObject.SetActive(false);
+    }
+
+    /*
     IEnumerator Teleportation()
     {
         Vector3 newPosition = selectedTroop.transform.position;
@@ -523,6 +555,7 @@ public class TroopController2D : MonoBehaviour
             StartCoroutine(TutorialDelay());
         }
     }
+   
 
     IEnumerator TutorialDelay()
     {
@@ -533,5 +566,6 @@ public class TroopController2D : MonoBehaviour
         Debug.Log("Tutorial Panel On");
         Time.timeScale = 0.0f;
     }
+  */
 }
 

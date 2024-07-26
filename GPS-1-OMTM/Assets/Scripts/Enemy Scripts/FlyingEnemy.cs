@@ -31,7 +31,9 @@ public class FlyingEnemy : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    public SpriteRenderer enemySprite;
+    public GameObject damageIndicator;
+
+    public SpriteRenderer[] enemySprite;
     public Color DamagedColor;
     public Color NormalColor;
     float timer;
@@ -69,13 +71,21 @@ public class FlyingEnemy : MonoBehaviour
 
         if (tookdamage == true)
         {
-            enemySprite.color = DamagedColor;
+            foreach (SpriteRenderer sprite in enemySprite)
+            {
+                sprite.color = DamagedColor;
+            }
+
             timer = timer + Time.deltaTime;
             transform.localScale += transform.localScale / 1000;
 
             if (timer >= 0.3)
             {
-                enemySprite.color = NormalColor;
+                foreach (SpriteRenderer sprite in enemySprite)
+                {
+                    sprite.color = NormalColor;
+                }
+
                 transform.localScale = normalScale;
                 timer = 0;
                 tookdamage = false;
@@ -266,11 +276,21 @@ public class FlyingEnemy : MonoBehaviour
         currentHealth -= damage;
         //Debug.Log(name + " took " + damage + " damage, remaining health: " + currentHealth);
 
+        damageIndicator.SetActive(true);
+        StartCoroutine(DisableDamageIndicator());
+
         if (currentHealth <= 0)
         {
             tookdamage = false;
             Die();
         }
+    }
+
+    IEnumerator DisableDamageIndicator()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        damageIndicator.SetActive(false);
     }
 
     void Die()
@@ -286,6 +306,12 @@ public class FlyingEnemy : MonoBehaviour
             lineRendererDestroyed = true;
         }
         */
+
+        if (lineRenderer.gameObject != null)
+        {
+            Destroy(lineRenderer.gameObject);
+        }
+
         onDeath.Invoke();
 
         Destroy(gameObject);

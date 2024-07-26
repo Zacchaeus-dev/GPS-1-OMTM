@@ -46,7 +46,7 @@ public class CameraSystem : MonoBehaviour
         var brain = (camera == null) ? null : camera.GetComponent<CinemachineBrain>();
         originalCameraSize = vcam.m_Lens.OrthographicSize;
 
-        UpdateZoomPosition();
+        //UpdateZoomPosition();
 
         zoomOutPosition = new Vector3((leftBorder.x + rightBorder.x) / 2, transform.position.y, transform.position.z);
 
@@ -57,6 +57,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (Killdozer.gameOver)
         {
+            /*
             if (isZoomedOut)
             {
                 StartCoroutine(ZoomCamera(originalCameraSize, 1f, 0.3f)); // Zoom in
@@ -64,11 +65,12 @@ public class CameraSystem : MonoBehaviour
                 Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
                 isZoomedOut = !isZoomedOut;
             }
+            */
 
             return;
         }
 
-        HandleZoomInput();
+        //HandleZoomInput();
 
         if (cameraMovement && focusedTroop == null) // Disable manual movement when focusing on a troop
         {
@@ -81,6 +83,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (tutorialPhase.tutorialOn || !cameraMovement)
         {
+            //transform.position = new Vector3(2f, 0, 0);
             return;
         }
 

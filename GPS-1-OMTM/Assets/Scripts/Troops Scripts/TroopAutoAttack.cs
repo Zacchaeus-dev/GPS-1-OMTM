@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TroopAutoAttack : MonoBehaviour
@@ -15,7 +16,6 @@ public class TroopAutoAttack : MonoBehaviour
     public GameObject targetEnemy;
     private Rigidbody2D rb;
 
-
     public Troop troop;
     public TroopCharacter troopCharacter;
     public TroopClass troopClass;
@@ -24,6 +24,12 @@ public class TroopAutoAttack : MonoBehaviour
     private int tankAttackCounter = 0;
     private int dpsWeapon2Range = 10;
     private int dpsWeapon2Width = 3;
+    public Transform screenLeftShootingPoint;
+    public Transform screenRightShootingPoint;
+    public Transform cannonLeftShootingPoint;
+    public Transform cannonRightShootingPoint;
+    public GameObject screenProjectilePrefab;
+    public GameObject cannonProjectilePrefab;
 
     float AnimationDelay;
     
@@ -519,44 +525,27 @@ public class TroopAutoAttack : MonoBehaviour
 
     void CC_Weapon1Attack(GameObject _enemy)
     {
-        Enemy enemy = _enemy.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.TakeDamage(attackDamage);
-            enemy.slowArea = true;
-            enemy.MarkForDeathStart();
-        }
-        else
-        {
-            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
-            flyingEnemy.TakeDamage(attackDamage);
-        }
+        StartCoroutine(ShowScreenProjectile(_enemy.transform));
+
+        StartCoroutine(CC_Weapon1Damage(_enemy));
 
         troopEnergy.GainPower();
-        DrawBulletTracer(shootingPoint1.transform.position, _enemy.transform.position);
-
-        //visual effect here
-        //projectile
-
+        //DrawBulletTracer(shootingPoint1.transform.position, _enemy.transform.position);
     }
 
-    void CC_Weapon2Attack(GameObject _enemy)
+    IEnumerator CC_Weapon1Damage(GameObject _enemy)
     {
-        Enemy enemy = _enemy.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.MarkForDeathStart();
-        }
+        yield return new WaitForSeconds(0.3f);
 
-        Vector2 attackCenter = _enemy.transform.position; // Center of the attack
-        Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 4f, LayerMask.GetMask("Enemy")); // AOE detection
-
-        foreach (Collider2D enemyCollider in enemiesHit)
+        if (_enemy != null)
         {
-            enemy = enemyCollider.GetComponent<Enemy>();
+            Enemy enemy = _enemy.GetComponent<Enemy>();
+
             if (enemy != null)
             {
                 enemy.TakeDamage(attackDamage);
+                enemy.slowArea = true;
+                enemy.MarkForDeathStart();
             }
             else
             {
@@ -564,13 +553,194 @@ public class TroopAutoAttack : MonoBehaviour
                 flyingEnemy.TakeDamage(attackDamage);
             }
         }
+    }
 
-        DrawBulletTracer(shootingPoint2.transform.position, attackCenter);
+    IEnumerator ShowScreenProjectile(Transform target)
+    {
+        // Add a delay before the first shot
+        yield return new WaitForSeconds(0.2f);
+
+        GameObject projectile;
+        Vector3 startPosition;
+
+        //if (target.position.x < gameObject.transform.position.x)
+        //{
+            //projectile = Instantiate(screenProjectilePrefab, screenLeftShootingPoint.position, Quaternion.identity);
+            //startPosition = screenLeftShootingPoint.position;
+        //}
+        //else
+        //{
+            projectile = Instantiate(screenProjectilePrefab, screenRightShootingPoint.position, Quaternion.identity);
+            startPosition = screenRightShootingPoint.position;
+        //}
+        
+        if (target == null)
+        {
+            Destroy(projectile);
+            yield break;
+        }
+
+        Vector3 targetPosition = new Vector2(target.position.x, target.position.y + 0.8f);
+
+        // Calculate the direction and angle
+        Vector3 direction = (targetPosition - startPosition).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Rotate the sprite to face the target
+        projectile.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        float elapsedTime = 0f;
+        float tracerDuration = 0.1f; // Duration for which the tracer is visible
+
+        while (elapsedTime < tracerDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (targetPosition == null)
+            {
+                Destroy(projectile);
+                yield return null;
+            }
+
+            projectile.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / tracerDuration);
+
+            if(target == null)
+            {
+                Destroy(projectile);
+                yield return null;
+            }
+
+            yield return null;
+        }
+
+        Destroy(projectile);
+    }
+
+
+    void CC_Weapon2Attack(GameObject _enemy)
+    {
+        StartCoroutine(ShowCannonProjectile(_enemy.transform));
+
+        StartCoroutine(CC_Weapon2Damage(_enemy));
+
+        //DrawBulletTracer(shootingPoint2.transform.position, attackCenter);
         troopEnergy.GainPower();
 
         //visual effect here
         // 1. muzzle
         // 2. hit effect
+    }
+
+    
+    IEnumerator CC_Weapon2Damage(GameObject _enemy)
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        if (_enemy != null)
+        {
+            Enemy enemy = _enemy.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.MarkForDeathStart();
+            }
+
+            Vector2 attackCenter = _enemy.transform.position; // Center of the attack
+            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 4f, LayerMask.GetMask("Enemy")); // AOE detection
+
+            foreach (Collider2D enemyCollider in enemiesHit)
+            {
+                enemy = enemyCollider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(attackDamage);
+                }
+                else
+                {
+                    FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+                    flyingEnemy.TakeDamage(attackDamage);
+                }
+            }
+        }
+    }
+    
+
+    IEnumerator ShowCannonProjectile(Transform target)
+    {
+        // Add a delay before the first shot
+        yield return new WaitForSeconds(0.2f);
+
+        GameObject projectile;
+        Vector3 startPosition;
+
+        if (target == null)
+        {
+            yield break;
+        }
+
+        //if (target.position.x < gameObject.transform.position.x)
+        //{
+            //projectile = Instantiate(cannonProjectilePrefab, cannonLeftShootingPoint.position, Quaternion.identity);
+            //startPosition = cannonLeftShootingPoint.position;
+        //}
+        //else
+        //{
+            projectile = Instantiate(cannonProjectilePrefab, cannonRightShootingPoint.position, Quaternion.identity);
+            startPosition = cannonRightShootingPoint.position;
+        //}
+
+        if (target == null)
+        {
+            Destroy(projectile);
+            yield break;
+        }
+
+        Vector3 targetPosition = new Vector2(target.position.x, target.position.y + 0.8f);
+
+        // Calculate the direction and angle
+        Vector3 direction = (targetPosition - startPosition).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        if (targetPosition!= null && targetPosition.y < transform.position.y)
+        {
+            angle = Mathf.Atan2(direction.y - 5f, direction.x) * Mathf.Rad2Deg;
+        }
+
+        // Rotate the sprite to face the target
+        projectile.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        float elapsedTime = 0f;
+        float tracerDuration = 0.15f; // Duration for which the tracer is visible
+
+        while (elapsedTime < tracerDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (targetPosition == null)
+            {
+                Destroy(projectile);
+                yield return null;
+            }
+
+            if(targetPosition != null && target != null)
+            {
+                projectile.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / tracerDuration);
+            }
+            else
+            {
+                Destroy(projectile);
+                yield return null;
+            }
+
+            if (target == null)
+            {
+                Destroy(projectile);
+                yield return null;
+            }
+
+            yield return null;
+        }
+
+        Destroy(projectile);
     }
 
     void DrawBulletTracer(Vector3 start, Vector3 end)
