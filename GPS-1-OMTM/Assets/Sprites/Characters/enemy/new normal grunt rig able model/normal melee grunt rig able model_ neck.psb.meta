@@ -1,0 +1,1835 @@
+fileFormatVersion: 2
+guid: 61e1aa5dab73cfb4fb908ae9d651aae6
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 1
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 1
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  mosaicSpriteImportData: []
+  rigSpriteImportData:
+  - name: normal grunt neck
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 206
+      height: 103
+    spriteID: 3cfe707cf5c7ebf4baf5751a494aa7b2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 867, y: 626}
+  - name: Layer 1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 218
+      y: 4
+      width: 0
+      height: 0
+    spriteID: fbb24697e199f36408c151dd5cd43666
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 218, y: 4}
+    spritePosition: {x: 0, y: 1080}
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  sharedRigSpriteImportData: []
+  sharedRigCharacterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    pivot: {x: 0, y: 0}
+    boneReadOnly: 0
+  platformSettings: []
+  mosaicLayers: 1
+  characterMode: 1
+  documentPivot: {x: 0, y: 0}
+  documentAlignment: 7
+  importHiddenLayers: 0
+  layerMappingOption: 2
+  generatePhysicsShape: 0
+  paperDollMode: 0
+  keepDupilcateSpriteName: 1
+  skeletonAssetReferenceID: 
+  pipeline: {instanceID: 0}
+  pipelineVersion: 
+  padding: 4
+  spriteSizeExpand: 0
+  spriteCategoryList:
+    categories: []
+  spritePackingTag: 
+  resliceFromLayer: 0
+  mosaicPSDLayers: []
+  rigPSDLayers:
+  - name: ver 1
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: ebecf4f42b4a07844adce98addd8594d
+    layerID: 706
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: new minotaur rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: 0
+    spriteID: 2196f69ded0d37643bfc296e4c73c04c
+    layerID: 637
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Group 5
+    spriteName: 
+    isGroup: 1
+    parentIndex: 1
+    spriteID: 6437b8726e91e0a428417bc4c59b3618
+    layerID: 636
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 137
+    spriteName: 
+    isGroup: 0
+    parentIndex: 2
+    spriteID: e8aa57860a92fce469f504c1a613186d
+    layerID: 635
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 136
+    spriteName: 
+    isGroup: 0
+    parentIndex: 2
+    spriteID: ce0fc52804fad654aa82ab719de1a860
+    layerID: 634
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 135
+    spriteName: 
+    isGroup: 0
+    parentIndex: 2
+    spriteID: 1f5bec3291c3cd44484fcc609103fcff
+    layerID: 633
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 134
+    spriteName: 
+    isGroup: 0
+    parentIndex: 2
+    spriteID: ad7a3cdb0605db74c854aeb4a2b7c003
+    layerID: 632
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 133
+    spriteName: 
+    isGroup: 0
+    parentIndex: 1
+    spriteID: 54caace78df570948ac157c35c202601
+    layerID: 630
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 132
+    spriteName: 
+    isGroup: 0
+    parentIndex: 1
+    spriteID: 6987466bf0701a04cbaf7d921e589b88
+    layerID: 629
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: minotaur right leg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 1
+    spriteID: 4d59dc69ea10a064694b6c63cbd0317d
+    layerID: 628
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 131
+    spriteName: 
+    isGroup: 0
+    parentIndex: 9
+    spriteID: ad27686d7c176d742bbf3b14bb879419
+    layerID: 627
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 130
+    spriteName: 
+    isGroup: 0
+    parentIndex: 9
+    spriteID: cfac843fb0866574984017773618dc5a
+    layerID: 626
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 129
+    spriteName: 
+    isGroup: 0
+    parentIndex: 9
+    spriteID: fb0e8ba2e1c89b04c9312bd6d0a2d56d
+    layerID: 625
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 128
+    spriteName: 
+    isGroup: 0
+    parentIndex: 9
+    spriteID: 578601e6613d7c9429f5ed0bac7cff6d
+    layerID: 624
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 127
+    spriteName: 
+    isGroup: 0
+    parentIndex: 1
+    spriteID: 0150ffa442cdb7e45afcb7783e90e0cf
+    layerID: 622
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 126
+    spriteName: 
+    isGroup: 0
+    parentIndex: 1
+    spriteID: 895f60dcc3f57004fb400fe259fd0554
+    layerID: 621
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: minotaur right leg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 1
+    spriteID: 9f4e43dab81df50428aef0a8c948245f
+    layerID: 620
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 125
+    spriteName: 
+    isGroup: 0
+    parentIndex: 16
+    spriteID: 2f61507afc9310747b058eca7f72dbbe
+    layerID: 619
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 124
+    spriteName: 
+    isGroup: 0
+    parentIndex: 16
+    spriteID: 839601d4dfc5af348a541f8265d9a546
+    layerID: 618
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 123
+    spriteName: 
+    isGroup: 0
+    parentIndex: 16
+    spriteID: 6b48e52522a8db04e93bd0986aff60f2
+    layerID: 617
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 122
+    spriteName: 
+    isGroup: 0
+    parentIndex: 16
+    spriteID: 17ab8b4a85441f64898ced943ff555cd
+    layerID: 616
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Group 5
+    spriteName: 
+    isGroup: 1
+    parentIndex: 1
+    spriteID: 818fa124d8f7ae54cb088241a1772748
+    layerID: 614
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 121
+    spriteName: 
+    isGroup: 0
+    parentIndex: 21
+    spriteID: ebe0051a1bc9f324cb21d31705f096e0
+    layerID: 613
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 120
+    spriteName: 
+    isGroup: 0
+    parentIndex: 21
+    spriteID: 3db6126df5d19654ea32d3f93b15f69d
+    layerID: 612
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 119
+    spriteName: 
+    isGroup: 0
+    parentIndex: 21
+    spriteID: 7549e0282be2c5b4cb08192f5b20ad4e
+    layerID: 611
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 118
+    spriteName: 
+    isGroup: 0
+    parentIndex: 21
+    spriteID: a8279826b0a93fb40b231e19fa6b1780
+    layerID: 610
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: new normal grunt rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: 0
+    spriteID: 024e7861026267444bc5c98b3beff48e
+    layerID: 653
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt left hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 26
+    spriteID: cb4ba1862179b2f47a169cb7501d7c45
+    layerID: 652
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 27
+    spriteID: fdf53297e67462546be1d73dd776cf1d
+    layerID: 651
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 27
+    spriteID: 45ad934066e4f834c9bcc5cdd3099bd2
+    layerID: 650
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 27
+    spriteID: 23519b75bcb36404aa7eacf15d93e2ae
+    layerID: 649
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 27
+    spriteID: 0d5f6df12c81d5f42a45687e4572d938
+    layerID: 648
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt head
+    spriteName: 
+    isGroup: 0
+    parentIndex: 26
+    spriteID: eb0f13602a2d0cd438a87c1e77767d1c
+    layerID: 646
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: melle grunt leg
+    spriteName: 
+    isGroup: 0
+    parentIndex: 26
+    spriteID: dec200ab3edfe1a429a0b54d5af015d9
+    layerID: 645
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt right hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 26
+    spriteID: 2b7f5c709973a8b45a4aea86992bc15b
+    layerID: 644
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt r hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 34
+    spriteID: f9f3b74c422a5554cb95ec025e6e99db
+    layerID: 643
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt r hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 34
+    spriteID: 38a653d3a76f968458c1d8478aa71e3e
+    layerID: 642
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt r hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 34
+    spriteID: e32affcd1ede55c44908488edaccf27e
+    layerID: 641
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt r hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 34
+    spriteID: d584f0593833a894d910998361bca05b
+    layerID: 640
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: 'new heavy grunt rig able model '
+    spriteName: 
+    isGroup: 1
+    parentIndex: 0
+    spriteID: 0200c8223b6e5e04493ed8d7c0d52f4c
+    layerID: 705
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt left hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 39
+    spriteID: 23905364e3c2c834abe40491f1842c77
+    layerID: 704
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l hand props
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: 086d66b3715518a4aa8f9da7cef07b5e
+    layerID: 703
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l hand
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: 5e3af97b2ae2e624e8ef7a0bfedfa125
+    layerID: 702
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l punch
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: 3071f6062ce4d7c4784dd9b2ec526bf0
+    layerID: 701
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l shoulder 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: 70b1daad7eea77147b135f3dd8ebaf21
+    layerID: 700
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l shoulder 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: a411ca77dc9ff7c4fb165a24c5091ce4
+    layerID: 699
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l arm
+    spriteName: 
+    isGroup: 0
+    parentIndex: 40
+    spriteID: 028980f4ab536394391b01f1fe6dde16
+    layerID: 698
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt head
+    spriteName: 
+    isGroup: 0
+    parentIndex: 39
+    spriteID: b11f354ef0d4675479414280709d189e
+    layerID: 696
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt left leg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 39
+    spriteID: 86c6276d9512be243b35f5d072e22088
+    layerID: 695
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: 24ec7b85dc03d6540af6c7876bf171c8
+    layerID: 694
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: 503d048c5ef545d43be6ba1c8b9082c7
+    layerID: 693
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: 96fa60bd19acb9f44b6f5b552e12379d
+    layerID: 692
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg foot
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: 259582563b8945f4f8d12927d599e77f
+    layerID: 691
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: f30be058eb969a144a899f84b70db58d
+    layerID: 690
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg bone
+    spriteName: 
+    isGroup: 0
+    parentIndex: 48
+    spriteID: c34bd3017651cda4195f913f174b0d05
+    layerID: 689
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt right leg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 39
+    spriteID: 4fac2edc91a79ec47a7f1b22d2a30f8b
+    layerID: 687
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: 07fe5d9a36243dc4b9657acb07f712ae
+    layerID: 686
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: fd30bbb1894099a438ae93a586472e25
+    layerID: 685
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: fbb14f455db42c04f9c65ed7f3e21a82
+    layerID: 684
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg foot
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: 089f724597c40914c9b158b7f21c51d6
+    layerID: 683
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r lleg part 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: ca9bfbd8f8488634fba075430d050021
+    layerID: 682
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg bone
+    spriteName: 
+    isGroup: 0
+    parentIndex: 55
+    spriteID: e5c137e44ba3ee743bf03e3913e017ae
+    layerID: 681
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt body
+    spriteName: 
+    isGroup: 0
+    parentIndex: 39
+    spriteID: 8ab745213ad1aac4786cbf55d8776e4a
+    layerID: 679
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt right hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 39
+    spriteID: 9e241311cea8fe44eb83fa1c6572599e
+    layerID: 678
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r prop
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: e409bde728cda4345b023e8bb3c9bd7d
+    layerID: 677
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r shoulder 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: a049f151f1fd67844a56a18edbdff906
+    layerID: 676
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r shoulder 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: e63b492f699cdb6409334c3bad13cccc
+    layerID: 675
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r hand
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: a187b620f2fadf34d81eee211022764d
+    layerID: 674
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r punch
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: f390ed87d83a1ae45b3aef149bc67d91
+    layerID: 673
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r arm
+    spriteName: 
+    isGroup: 0
+    parentIndex: 63
+    spriteID: a8d03fbef88900b4fa5e0459ea5991ad
+    layerID: 672
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: new minotaur rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: c93953d61d6446e48aeabbcaf64892af
+    layerID: 565
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: Layer 73
+    spriteName: 
+    isGroup: 0
+    parentIndex: 70
+    spriteID: 3375fa72e9d1051438e1869da5191a12
+    layerID: 516
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 92
+    spriteName: 
+    isGroup: 0
+    parentIndex: 70
+    spriteID: 619bf507e98369e41bf38c10b1230b3a
+    layerID: 563
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 141
+    spriteName: 
+    isGroup: 0
+    parentIndex: 70
+    spriteID: 998d77990597e184a9bc9323143bf841
+    layerID: 742
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: ' minitour left leg'
+    spriteName: 
+    isGroup: 1
+    parentIndex: 70
+    spriteID: 0c76bbd82574e45419fa151031d5dd30
+    layerID: 751
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 148
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: 6597422bd3e09b24eb19c49345c29f2a
+    layerID: 750
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 143
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: e3e456cdee0ecfd4d83aeb11522ddc6d
+    layerID: 745
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 144
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: 6624802b0401954429626c20c956fcc9
+    layerID: 746
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 145
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: b1636cde39d1ff94fb38a39428170dc0
+    layerID: 747
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 157
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: df506ef4a986eae439041c2ba248687d
+    layerID: 778
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 146
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: 6eea0f44ade4ba147848ec0e36f6ea26
+    layerID: 748
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 142
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: 6f9aef86cb0336a4ebb6dce51637d703
+    layerID: 744
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 158
+    spriteName: 
+    isGroup: 0
+    parentIndex: 74
+    spriteID: 51fa418f5530a8c4fa7854537a0ca117
+    layerID: 779
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 89
+    spriteName: 
+    isGroup: 0
+    parentIndex: 70
+    spriteID: e68afd138eaa6a0499d5b1173757cb07
+    layerID: 557
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 156
+    spriteName: 
+    isGroup: 0
+    parentIndex: 70
+    spriteID: 6373ebed17a29ea41b5f997069e7e122
+    layerID: 773
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: ' minitour right leg'
+    spriteName: 
+    isGroup: 1
+    parentIndex: 70
+    spriteID: 5e5cf3909a0c2144ea8ae874235c3757
+    layerID: 799
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 166
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 17ad632ea9af21a4eb19bcb9cb506e78
+    layerID: 798
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 165
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 6dada62619aec3b46a1fd40ecb07b881
+    layerID: 797
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 164
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 39795a7178158ac4da6df99a03b4f2d1
+    layerID: 796
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 163
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: bb448c8576d91524ab68f4b4bb42cfe0
+    layerID: 795
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 162
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 14491fc6b22314645ab87ff0acc2cfff
+    layerID: 794
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 161
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: a98766a577b38564896df65341c67241
+    layerID: 793
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 160
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 030b69a247ddcaf43bb8407d31895fb5
+    layerID: 792
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 159
+    spriteName: 
+    isGroup: 0
+    parentIndex: 85
+    spriteID: 797a5893f9f6c564e96879eb82a475d2
+    layerID: 791
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: new flying drone rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 9a4fb6fb562bd594f980b86c79b1a872
+    layerID: 124
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: float ring 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: f0cb869fc579c7b4cb9bddd7102a4cb7
+    layerID: 128
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: float ring
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: 35719fabf10b3bb469fc1a1de8dcc941
+    layerID: 118
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: muzzle
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: 357e0943e5b0ac543b4a8568f94ef958
+    layerID: 277
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: flying body part
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: 2db77519e3b850e4183bb78ad12d509e
+    layerID: 262
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: flying  body
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: 11f468f3ebe352842a4c5f7d3a67ea62
+    layerID: 117
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: float ring 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 94
+    spriteID: fe88777908f8a264193abe3313465542
+    layerID: 447
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: 'new heavy grunt rig able model '
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: e2c3e261fe3b966488597bf183ad5974
+    layerID: 512
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: heavy grunt left hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 101
+    spriteID: 83e3763649d5ae84487c38034fcee06d
+    layerID: 471
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l hand props
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: a5af63c2422f7c74087388ed959191a1
+    layerID: 468
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l hand
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: 1b6cc246df2a67a45af4efbcd2ab45fc
+    layerID: 465
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l punch
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: 2ce47cce924f8284da4916d10afd1b53
+    layerID: 470
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l shoulder 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: a7fdb93e049ac5a4f8c2a56a0feb302c
+    layerID: 463
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l arm
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: a70734bce6b10e748b2fdb8bd612ea47
+    layerID: 464
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l shoulder 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 102
+    spriteID: 5fa8fd7cead789f4bb6e527458a12b25
+    layerID: 462
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt head
+    spriteName: 
+    isGroup: 0
+    parentIndex: 101
+    spriteID: ac5229def1a5f9f409ddc3f6c3b4bceb
+    layerID: 457
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt left leg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 101
+    spriteID: 23bd6a1682befd84591e2f3c5473dce8
+    layerID: 497
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: 9fb52b2c5b9f36b4f92b4eba3dc9cd18
+    layerID: 488
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: 788b838b832ad17429d3d5eab6816b27
+    layerID: 493
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: f3f93eed5fcc55c478ab4d778a9c1a22
+    layerID: 490
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg foot
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: 9c623f964ed3c894087b181c55a69f5e
+    layerID: 492
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg part 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: 4771f1554d3b5a545931b2ce89239d2c
+    layerID: 494
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt l leg bone
+    spriteName: 
+    isGroup: 0
+    parentIndex: 110
+    spriteID: 7b7dbfd80b2d396428a8e8ff87705a9b
+    layerID: 491
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt rightleg
+    spriteName: 
+    isGroup: 1
+    parentIndex: 101
+    spriteID: 91219b5aa47354c44ace90ae38a74b07
+    layerID: 736
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: 86d38cbc89ff36c44adfe29ad0f1ad7e
+    layerID: 735
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: 8bdef7a4b525add438bc98cb11d00831
+    layerID: 734
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: a7462564d926d4449bdf6f332bb2548c
+    layerID: 733
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg foot
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: 5443504039fb59d478e5884bcf7efff4
+    layerID: 732
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg part 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: 7f0a991995d3ac94cbde12becdecf337
+    layerID: 731
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r leg bone
+    spriteName: 
+    isGroup: 0
+    parentIndex: 117
+    spriteID: 8311c33d5cdeb0741814a8cd768d2ae2
+    layerID: 730
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt body
+    spriteName: 
+    isGroup: 0
+    parentIndex: 101
+    spriteID: 098ad3ffeb9b94f4b8d63dfcd4c977fb
+    layerID: 459
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt right hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 101
+    spriteID: b9f6ee9945fdf494581576d66cc68f74
+    layerID: 480
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r prop
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: 90a5b5eb553a54546ba16d0a344ea3a2
+    layerID: 487
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r shoulder 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: 46ad1ea586332384796e7a1a4fa2e8d9
+    layerID: 481
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r shoulder 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: fc4d5ebdeb5e2064ab00a35e8ebbaab9
+    layerID: 726
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r hand
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: f508ac95fd063dc468a842adf26f1d7b
+    layerID: 478
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r punch
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: aad3e9c345851db42987acfc6821557b
+    layerID: 477
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: heavy grunt r arm
+    spriteName: 
+    isGroup: 0
+    parentIndex: 125
+    spriteID: f1e415028599ca84684ada0fa480f1bb
+    layerID: 474
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: new normal grunt rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: 92b68bb8852f7c546b95e40e7d9b36e1
+    layerID: 725
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt left hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 132
+    spriteID: ded319ad19ee3f04d839e23d3705f61e
+    layerID: 724
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 133
+    spriteID: 3e539acb72748e74d8c53bdbe87c7717
+    layerID: 723
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 133
+    spriteID: a5bc7b9e384bcfd42981930c9f476e23
+    layerID: 722
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 133
+    spriteID: 4e623de30a389d64494bd009c67f5350
+    layerID: 721
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 133
+    spriteID: 32d4439a374b2ab4190d15ce8368ed4c
+    layerID: 720
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt head
+    spriteName: 
+    isGroup: 0
+    parentIndex: 132
+    spriteID: f2df8615f1b01324b892c5fb3cf742c4
+    layerID: 718
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt neck
+    spriteName: 
+    isGroup: 0
+    parentIndex: 132
+    spriteID: 1bc0f6308e933ca4693802a0552cab45
+    layerID: 717
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt leg
+    spriteName: 
+    isGroup: 0
+    parentIndex: 132
+    spriteID: 1ce9c30f18008e74d9241093c0bda7fd
+    layerID: 716
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt body
+    spriteName: 
+    isGroup: 0
+    parentIndex: 132
+    spriteID: 5ac187365adc8a04da6507645fca7325
+    layerID: 715
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt right hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 132
+    spriteID: ddf3f98b470997e418a5f9c8109b3549
+    layerID: 714
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 142
+    spriteID: e3eadbd068e426f479ed2722e713b116
+    layerID: 713
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 142
+    spriteID: 65a25c158fd9ef446b6f70189a10cbc4
+    layerID: 712
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 142
+    spriteID: 7d430f4fe39493841aedab204db93a48
+    layerID: 711
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 142
+    spriteID: a87aaeaea55b85249909dc7365df872e
+    layerID: 710
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: new normal grunt rig able model
+    spriteName: 
+    isGroup: 1
+    parentIndex: -1
+    spriteID: c2dc8ff108114e74b96b6aac4a2ba068
+    layerID: 395
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt left hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 147
+    spriteID: b3755c0617c18774498ae19af3f19d08
+    layerID: 377
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt l hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 148
+    spriteID: 3edaf74b3d75b34408f12c87799e29ac
+    layerID: 381
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 148
+    spriteID: f41faf0bb5b969e40bb5792544257b66
+    layerID: 379
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 148
+    spriteID: f56eb2fa431a08142bb073e9bd42e47f
+    layerID: 380
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 148
+    spriteID: b1fa1776f3148f34abb08c4d8ba7c0c6
+    layerID: 392
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt head
+    spriteName: 
+    isGroup: 0
+    parentIndex: 147
+    spriteID: c2e295d6b6fcbbe4092e0d4457bb762b
+    layerID: 372
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt neck
+    spriteName: normal grunt neck
+    isGroup: 0
+    parentIndex: 147
+    spriteID: 3cfe707cf5c7ebf4baf5751a494aa7b2
+    layerID: 660
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: normal grunt body
+    spriteName: 
+    isGroup: 0
+    parentIndex: 147
+    spriteID: 976d52fbd6784384aaf1898de7437b29
+    layerID: 669
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt right hand
+    spriteName: 
+    isGroup: 1
+    parentIndex: 147
+    spriteID: ee84583a3cc1c914991144bc0f39a4cc
+    layerID: 667
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: normal grunt l hand prop 1
+    spriteName: 
+    isGroup: 0
+    parentIndex: 156
+    spriteID: 89e43df9277bc544e838c3dbc624b770
+    layerID: 666
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 2
+    spriteName: 
+    isGroup: 0
+    parentIndex: 156
+    spriteID: 37fd885aecb23214d84a51c1d6b2ab2b
+    layerID: 665
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 3
+    spriteName: 
+    isGroup: 0
+    parentIndex: 156
+    spriteID: c68881e4fa321dd4eb41f94e0a647259
+    layerID: 664
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: normal grunt l hand prop 4
+    spriteName: 
+    isGroup: 0
+    parentIndex: 156
+    spriteID: 0e1f6bda0d17e9644855b2b5bcd00c30
+    layerID: 663
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 1
+  - name: Layer 138
+    spriteName: 
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 84b85a2730a247c4bb7eaa6f7f43a123
+    layerID: 657
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: Layer 28
+    spriteName: 
+    isGroup: 0
+    parentIndex: -1
+    spriteID: b62932b62395cbf439df30be228fa348
+    layerID: 16
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: Layer 26
+    spriteName: 
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 8efcc8a0e88c9d747b42025ddbf7c697
+    layerID: 14
+    mosaicPosition: {x: 0, y: 0}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
+  - name: Layer 1
+    spriteName: Layer 1
+    isGroup: 0
+    parentIndex: -1
+    spriteID: fbb24697e199f36408c151dd5cd43666
+    layerID: 2
+    mosaicPosition: {x: 218, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  sharedRigPSDLayers: []
+  pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
+  generateGOHierarchy: 0
+  textureAssetName: 
+  prefabAssetName: 
+  spriteLibAssetName: 
+  skeletonAssetName: 
+  secondarySpriteTextures: []
