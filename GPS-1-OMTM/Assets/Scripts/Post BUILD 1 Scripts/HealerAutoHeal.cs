@@ -114,8 +114,15 @@ public class HealerAutoHeal : MonoBehaviour
                         if (allyTroop != null && allyTroop.currentHealth == allyTroop.maxHealth)
                         {
                             FindTarget(); // Change target if the current ally is fully healed
+                            TroopAnimator.TroopAttackOff();
+                            delay = 0;
                         }
                     }
+                }
+
+                if (targetAlly.gameObject.activeInHierarchy == false)
+                {
+                    targetAlly = null;
                 }
             }
         }
@@ -213,12 +220,12 @@ public class HealerAutoHeal : MonoBehaviour
                     if (delay > AnimationDelay)
                     {
                         TroopAnimator.TroopAttackOn();
-                        delay = 0;
+                        
                     }
 
                     if (delay >= ShootingDelay) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
                     {
-                        
+                        delay = 0;
 
                         if (Time.time >= lastHealTime + healCooldown)
                         {
@@ -302,7 +309,7 @@ public class HealerAutoHeal : MonoBehaviour
     IEnumerator ShowHealNeedle(Transform target)
     {
         // Add a delay before the first shot
-        yield return new WaitForSeconds(0.25f);
+        //yield return new WaitForSeconds(0.5f);
 
         GameObject healSprite = Instantiate(healSpritePrefab, shootingPoint.transform.position, Quaternion.identity);
         Vector3 startPosition = shootingPoint.transform.position;
@@ -313,7 +320,7 @@ public class HealerAutoHeal : MonoBehaviour
             yield return null;
         }
 
-        Vector3 targetPosition = new Vector2(target.position.x, target.position.y + 0.8f);
+        Vector3 targetPosition = new Vector2(target.position.x, target.position.y + 0.5f);
 
         // Calculate the direction and angle
         Vector3 direction = (targetPosition - startPosition).normalized;

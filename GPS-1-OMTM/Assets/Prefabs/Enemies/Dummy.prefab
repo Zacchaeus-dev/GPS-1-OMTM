@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 11452625637407468}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.392, y: 1.49, z: 5.2145634}
+  m_LocalPosition: {x: 0.306, y: 1.49, z: 5.2145634}
   m_LocalScale: {x: 0.16, y: 0.16, z: 0.16}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -217,7 +217,7 @@ Transform:
   m_GameObject: {fileID: 3072543160530933939}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.447, y: 1.4550002, z: 5.2145634}
+  m_LocalPosition: {x: -0.342, y: 1.4550002, z: 5.2145634}
   m_LocalScale: {x: 0.16070999, y: 0.13, z: 0.13}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -457,7 +457,8 @@ MonoBehaviour:
   killdozerTransform: {fileID: 0}
   killdozerCollider: {fileID: 0}
   killdozerStoppingDistance: 14.5
-  enemySprite: {fileID: 241055197134439526}
+  enemySprite:
+  - {fileID: 0}
   DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
   NormalColor: {r: 1, g: 1, b: 1, a: 1}
   markForDeathIcon: {fileID: 11452625637407468}
@@ -660,7 +661,7 @@ Transform:
   m_GameObject: {fileID: 7199231938702283271}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.7938526, y: -15.438462, z: 0}
+  m_LocalPosition: {x: 2.08, y: -15.438462, z: 0}
   m_LocalScale: {x: 2.0209322, y: 2.0209672, z: 2.0209672}
   m_ConstrainProportionsScale: 1
   m_Children: []
