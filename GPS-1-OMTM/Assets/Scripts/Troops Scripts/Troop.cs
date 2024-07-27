@@ -93,15 +93,16 @@ public class Troop : MonoBehaviour
     public Animator animator;
     public GameObject model;
     public GameObject damageIndicator;
+    public bool death;
 
     [Header(" Art / Animations ")]
     // Animation
     public GameObject TroopModel;
-    TroopAnimationsManager TroopAnimator;
+    TroopAnimationsManager TroopAnimatorTroopAnimator;
     public GameObject AttackModelGauntlets;
     public GameObject AttackModel2ndSniper;
     public float UltiDelay;
-
+    
     public enum Ultimate
     {
         None,
@@ -159,6 +160,15 @@ public class Troop : MonoBehaviour
                 timer = 0;
                 tookdamage = false;
             }
+        }
+
+        if (death == true)
+        {
+            gameObject.GetComponent<TroopClass>().enabled = false;
+        }
+        else
+        {
+            gameObject.GetComponent<TroopClass>().enabled = true;
         }
         
     }
@@ -397,14 +407,56 @@ public class Troop : MonoBehaviour
 
                 break;
             case Ultimate.Ultimate_Tank:
+                
+
+                // activate ult animation
+
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+                yield return new WaitForSeconds(UltiDelay);
+
                 Ultimate_Tank();
+
+                yield return new WaitForSeconds(UltiDelay);
+
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
                 break;
             case Ultimate.Ultimate_CC:
+
+                // activate ult animation
+
+                gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+
+                yield return new WaitForSeconds(UltiDelay);
+
                 Ultimate_CC();
+
+                yield return new WaitForSeconds(UltiDelay);
+
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
                 break;
             case Ultimate.Ultimate_Healer:
                 troopEnergy.UseAllPower();
+                // activate ult animation
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+                yield return new WaitForSeconds(UltiDelay);
+
                 yield return StartCoroutine(Ultimate_Healer());
+
+                yield return new WaitForSeconds(UltiDelay);
+
+                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
                 break;
         }
     }
@@ -605,6 +657,7 @@ public class Troop : MonoBehaviour
         if (currentHealth <= 0)
         {
             StartCoroutine(Death());
+            death = true;
         }
 
         if (troopEnergy != null)
@@ -670,6 +723,7 @@ public class Troop : MonoBehaviour
         tpObject.SetActive(false);
         // Deactivate the troop
         gameObject.SetActive(false);
+        death = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

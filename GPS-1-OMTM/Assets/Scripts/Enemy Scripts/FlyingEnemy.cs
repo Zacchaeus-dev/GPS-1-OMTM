@@ -40,8 +40,16 @@ public class FlyingEnemy : MonoBehaviour
     private bool tookdamage;
     Vector3 normalScale;
 
+    [Header(" Art / Animations ")]
+
+    public GameObject EnemyModel;
+    TroopAnimationsManager Animator;
+
+
     void Start()
     {
+        Animator = EnemyModel.GetComponent<TroopAnimationsManager>();
+
         // Initialize health
         currentHealth = maxHealth;
         lastAttackTime = Time.time;
@@ -59,10 +67,16 @@ public class FlyingEnemy : MonoBehaviour
         if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x  < transform.position.x) //move depending on killdozer's location
         {
             MoveLeft();
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
+            //Animator.TroopWalkOn();
+            Animator.TroopAttackOff();
         }
         else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x)
         {
             MoveRight();
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
+            //Animator.TroopWalkOn();
+            Animator.TroopAttackOff();
         }
 
         DetectTargets();
@@ -190,6 +204,7 @@ public class FlyingEnemy : MonoBehaviour
     {
         if (killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange) || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange)
         {
+            Animator.TroopAttackOn();
             if (Time.time >= lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
@@ -199,6 +214,7 @@ public class FlyingEnemy : MonoBehaviour
         }
         else if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
         {
+            Animator.TroopAttackOn();
             if (Time.time >= lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
@@ -282,7 +298,7 @@ public class FlyingEnemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             tookdamage = false;
-            Die();
+            StartCoroutine(Death());
         }
     }
 
@@ -293,19 +309,19 @@ public class FlyingEnemy : MonoBehaviour
         damageIndicator.SetActive(false);
     }
 
-    void Die()
+/*    void Die()
     {
         //Debug.Log(name + " died.");
         // Add death logic here (e.g., destroy the GameObject, play an animation, etc.)
 
-        /*
+        *//*
         if (lineRenderer.gameObject != null && lineRendererDestroyed == false)
         {
             //Destroy(lineRenderer.gameObject);
             lineRenderer.enabled = false;
             lineRendererDestroyed = true;
         }
-        */
+        *//*
 
         if (lineRenderer.gameObject != null)
         {
@@ -314,6 +330,28 @@ public class FlyingEnemy : MonoBehaviour
 
         onDeath.Invoke();
 
+        Destroy(gameObject);
+    }
+*/
+    IEnumerator Death()
+    {
+        Animator.TroopDies();
+
+/*        while (i < energyOrbDropNum)
+        {
+            energyOrb.DropEnergyOrb();
+            i++;
+        }*/
+
+        if (lineRenderer.gameObject != null)
+        {
+            Destroy(lineRenderer.gameObject);
+        }
+
+        onDeath.Invoke();
+
+
+        yield return new WaitForSeconds(0.75f);
         Destroy(gameObject);
     }
 

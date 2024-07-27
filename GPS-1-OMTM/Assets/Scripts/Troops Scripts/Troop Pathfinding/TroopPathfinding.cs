@@ -2403,7 +2403,7 @@ public class TroopClass : MonoBehaviour
 
             if (climbDelayTimer > fallDelay)
             {
-                transform.position = new Vector2(transform.position.x, transform.position.y - ((8) * Time.deltaTime)); // same climbing speed even if diff weapon
+                transform.position = new Vector2(transform.position.x, transform.position.y - ((10) * Time.deltaTime)); // same climbing speed even if diff weapon
             }
         }
     }

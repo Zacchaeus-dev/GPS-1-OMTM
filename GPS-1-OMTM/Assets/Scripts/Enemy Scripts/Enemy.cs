@@ -65,8 +65,14 @@ public class Enemy: MonoBehaviour
     public bool isDummy;
     public bool dummyDead;
 
+    [Header(" Art / Animations ")]
+
+    public GameObject EnemyModel;
+    TroopAnimationsManager Animator;
+
     private void Start()
     {
+        Animator = EnemyModel.GetComponent<TroopAnimationsManager>();
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
 
@@ -120,6 +126,15 @@ public class Enemy: MonoBehaviour
                 tookdamage = false;
             }
         }
+
+            if (moveRight == true)
+            {
+                EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else if (moveRight == false)
+            {
+                EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
     }
 
     void FindClosestTarget()
@@ -183,11 +198,13 @@ public class Enemy: MonoBehaviour
                 if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
                 {
                     Vector3 direction = (closestTarget.position - transform.position).normalized;
+                    Animator.TroopWalkOn();
                     direction.y = 0; //only move horizontally
                     transform.position += direction * moveSpeed * Time.deltaTime;
                 }
                 else if (!isAttacking) // otherwise stop and attack
                 {
+                    Animator.TroopWalkOff();
                     isAttacking = true;
                     //Debug.Log(closestTarget);
                     StartCoroutine(AttackTarget());
@@ -248,6 +265,10 @@ public class Enemy: MonoBehaviour
     {
         while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance) && !isStunned)
         {
+            Animator.TroopAttackOn();
+
+            yield return new WaitForSeconds(attackSpeed);
+
             if (closestTarget == killdozerTransform)
             {
                 Killdozer killdozerScript = closestTarget.GetComponent<Killdozer>();
@@ -280,11 +301,10 @@ public class Enemy: MonoBehaviour
                     //Debug.Log("Attacking troop: " + closestTarget.name);
                 }
             }
-
-            yield return new WaitForSeconds(attackSpeed);
         }
         closestTarget = null; // deselect target
         isAttacking = false;
+        Animator.TroopAttackOff();
     }
 
     void OnDrawGizmosSelected()
@@ -330,7 +350,7 @@ public class Enemy: MonoBehaviour
         if (currentHealth <= 0)
         {
             tookdamage = false;
-            Death();
+            StartCoroutine(Death());
         }
     }
 
@@ -341,8 +361,10 @@ public class Enemy: MonoBehaviour
         damageIndicator.SetActive(false);
     }
 
-    public void Death()
+    IEnumerator Death()
     {
+        Animator.TroopDies();
+
         while (i < energyOrbDropNum)
         {
             energyOrb.DropEnergyOrb();
@@ -354,11 +376,13 @@ public class Enemy: MonoBehaviour
             dummyDead = true;
             i = 0; //reset energy dropped amount
             gameObject.SetActive(false);
-            return;
+            yield break;
         }
 
         onDeath.Invoke();
 
+
+        yield return new WaitForSeconds(0.75f);
         Destroy(gameObject);
     }
 
@@ -437,6 +461,7 @@ public class Enemy: MonoBehaviour
         }
     }
 
+    [Header(" knockback ")]
     public float knockbackForce;
     private IEnumerator KnockbackCoroutine(Vector3 attackerPosition)
     {

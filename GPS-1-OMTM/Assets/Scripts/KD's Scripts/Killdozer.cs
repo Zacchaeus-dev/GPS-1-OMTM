@@ -87,6 +87,15 @@ public class Killdozer : MonoBehaviour
         if (uiHealth != null)
         {
             uiHealth.text = currentHealth.ToString();
+
+            if (currentHealth < 100)
+            {
+                uiHealth.text = "0"+currentHealth.ToString();
+            }
+            else if (currentHealth < 10)
+            {
+                uiHealth.text = "00" + currentHealth.ToString();
+            }
         }
     }
 
@@ -149,7 +158,7 @@ public class Killdozer : MonoBehaviour
 
     //FOR PATHFINDING FROM KILLDOZER MIDDLE-GROUND TO A UPPERGROUND
 
-    private void OnTriggerEnter2D(Collider2D collision)
+/*    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "[PF] Upper-Ground 1")
         {
@@ -183,7 +192,7 @@ public class Killdozer : MonoBehaviour
             directPathfinding = 0;
             //Debug.Log("EXITING DIRECT PATHING MODE " + directPathfinding);
         }
-    }
+    }*/
 
     public GameObject settingsPanel;
 

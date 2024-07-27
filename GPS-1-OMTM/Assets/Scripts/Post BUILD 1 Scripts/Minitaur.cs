@@ -23,8 +23,14 @@ public class Minitaur : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    [Header(" Art / Animations ")]
+
+    public GameObject EnemyModel;
+    TroopAnimationsManager Animator;
+
     void Start()
     {
+        Animator = EnemyModel.GetComponent<TroopAnimationsManager>();
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
     }
@@ -33,6 +39,15 @@ public class Minitaur : MonoBehaviour
     {
         DetectTroops();
         HandleMovementAndAttack();
+
+/*        if (moveRight == true)
+        {
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (moveRight == false)
+        {
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }*/
     }
 
     void DetectTroops()
@@ -103,6 +118,7 @@ public class Minitaur : MonoBehaviour
 
     void AttackTroop()
     {
+        Animator.TroopAttackOn();
         if (targetTroop != null)
         {
             Troop troop = targetTroop.GetComponent<Troop>();
@@ -112,7 +128,7 @@ public class Minitaur : MonoBehaviour
                 Debug.Log("Minitaur attacked troop: " + troop.name + " for " + attackDamage + " damage.");
             }
         }
-        Die();
+        StartCoroutine(Death());
     }
   
     public void TakeDamage(int damage)
@@ -128,16 +144,40 @@ public class Minitaur : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Die();
+            StartCoroutine(Death());
         }
     }
 
-    void Die()
+/*    void Die()
     {
         Debug.Log(name + " died.");
         Destroy(gameObject);
-    }
+    }*/
 
+    IEnumerator Death()
+    {
+        Animator.TroopDies();
+
+/*        while (i < energyOrbDropNum)
+        {
+            energyOrb.DropEnergyOrb();
+            i++;
+        }
+
+        if (isDummy)
+        {
+            dummyDead = true;
+            i = 0; //reset energy dropped amount
+            gameObject.SetActive(false);
+            yield break;
+        }
+
+        onDeath.Invoke();*/
+
+
+        yield return new WaitForSeconds(0.75f);
+        Destroy(gameObject);
+    }
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

@@ -395,6 +395,7 @@ MonoBehaviour:
   energyOrbDropNum: 1
   isDummy: 0
   dummyDead: 0
+  EnemyModel: {fileID: 3504893200330722094}
   knockbackForce: 3
 --- !u!212 &6599155213906096576
 SpriteRenderer:
@@ -792,6 +793,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1866512992414426741, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8455952417954824817}
+    - targetCorrespondingSourceObject: {fileID: 1866512992414426741, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3681459464676268289}
   m_SourcePrefab: {fileID: 100100000, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
 --- !u!212 &118593664577782236 stripped
 SpriteRenderer:
@@ -850,6 +854,19 @@ SortingGroup:
   m_SortingLayer: 6
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &3681459464676268289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3504893200330722094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506997e120c394ca527b0cf1007960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TroopAnimator: {fileID: 8238275487878961560}
 --- !u!212 &4438560357762471653 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1503112961549827006, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
@@ -868,6 +885,11 @@ SpriteRenderer:
 --- !u!212 &8084011247127829368 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6446026570136516131, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
+  m_PrefabInstance: {fileID: 2973728594354138459}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8238275487878961560 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6562014651007317187, guid: 1f8a949e91e39774591163ebb074855c, type: 3}
   m_PrefabInstance: {fileID: 2973728594354138459}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8530833575167963448

@@ -470,7 +470,7 @@ public class TroopAutoAttack : MonoBehaviour
     void Tank_Weapon1Attack()
     {
         //aoe
-        tankAttackCounter++;
+/*        tankAttackCounter++;
         if (tankAttackCounter < 3)
         {
             // No damage for the first two attacks (only knockback)
@@ -480,14 +480,14 @@ public class TroopAutoAttack : MonoBehaviour
                 Enemy enemy = enemyCollider.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemy.ApplyKnockback(transform.position);
+                    //enemy.ApplyKnockback(transform.position);
                     //Debug.Log("Knockback");
                 }
             }
         }
         else
-        {
-            // Third attack deals AoE damage and applies knockback
+        {*/
+            // Third attack deals AoE damage and applies knockback --> chg to just once big attack with knockback
             Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(transform.position, attackRange, LayerMask.GetMask("Enemy"));
             foreach (Collider2D enemyCollider in enemiesHit)
             {
@@ -505,7 +505,7 @@ public class TroopAutoAttack : MonoBehaviour
                 }
             }
             tankAttackCounter = 0; // Reset the counter
-        }
+       // }
     }
 
     void Tank_Weapon2Attack(GameObject _enemy)
