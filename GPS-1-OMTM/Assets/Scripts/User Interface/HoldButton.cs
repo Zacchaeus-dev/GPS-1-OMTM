@@ -28,7 +28,7 @@ public class HoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if (holdCounter >= holdTime)
             {
                 onHoldComplete.Invoke(); // Trigger the event
-                Debug.Log("Activated");
+                //Debug.Log("Activated");
                 ResetHold();
             }
         }

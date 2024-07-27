@@ -101,4 +101,9 @@ public class TroopAnimationsManager : MonoBehaviour
     {
         TroopAnimator.SetBool("death", true);
     }
+
+    public void TroopRespawn()
+    {
+        TroopAnimator.SetBool("death", false);
+    }
 }

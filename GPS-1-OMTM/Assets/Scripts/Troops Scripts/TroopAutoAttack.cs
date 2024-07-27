@@ -22,14 +22,16 @@ public class TroopAutoAttack : MonoBehaviour
     public TroopEnergy troopEnergy;
     public TroopWeapon troopWeapon;
     private int tankAttackCounter = 0;
-    private int dpsWeapon2Range = 10;
-    private int dpsWeapon2Width = 3;
+    private float dpsWeapon2Range = 10;
+    private float dpsWeapon2Width = 1.5f;
+    public Transform dpsWeapon2ShootPoint;
     public Transform screenLeftShootingPoint;
     public Transform screenRightShootingPoint;
     public Transform cannonLeftShootingPoint;
     public Transform cannonRightShootingPoint;
     public GameObject screenProjectilePrefab;
     public GameObject cannonProjectilePrefab;
+    public GameObject rectanglePrefab;
 
     float AnimationDelay;
     
@@ -42,6 +44,7 @@ public class TroopAutoAttack : MonoBehaviour
     public GameObject AttackModelWeapon2;
     public GameObject shootingPoint1; // Shooting point of troop's Weapon 1
     public GameObject shootingPoint2; // Shooting point of troop's Weapon 2
+    public GameObject shootingPointUlt;
     public Vector3 startOffset; // Offset for the start point of the bullet tracer
     public LineRenderer lineRendererPrefab; // Prefab for the line renderer
     public float tracerFadeDuration = 0.5f; // Duration of the fade-out
@@ -372,15 +375,25 @@ public class TroopAutoAttack : MonoBehaviour
         {
             enemy.TakeDamage(attackDamage);
             DrawBulletTracer(shootingPoint1.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
+
+            if (troop.dpsUltiOn == true)
+            {
+                DrawBulletTracer(shootingPointUlt.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f));
+            }
         }
         else
         {
             FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
             flyingEnemy.TakeDamage(attackDamage);
             DrawBulletTracer(shootingPoint1.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f)); //height offset so gun shoots straight
+
+            if (troop.dpsUltiOn == true)
+            {
+                DrawBulletTracer(shootingPointUlt.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f));
+            }
+
+            troopEnergy.GainPower();
         }
-        
-        troopEnergy.GainPower();
     }
 
     void DPS_Weapon2Attack(GameObject _enemy)
@@ -428,8 +441,108 @@ public class TroopAutoAttack : MonoBehaviour
             DrawBulletTracer(shootingPoint2.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f));
         }
 
-        DrawAttackRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        //DrawFilledRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        //DrawAttackRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        DrawRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range, _enemy.transform);
         troopEnergy.GainPower();
+    }
+
+    void DrawRectangle(Vector3 start, Vector2 direction, float width, float length, Transform target)
+    {
+        width = width / 2;
+        length = length / 1.4f;
+        Vector3 offset = new Vector3(7 ,0, 0);
+        if(target.position.x > transform.position.x && target.position.y > transform.position.y)
+        {
+            offset = new Vector3(4, 5, 0);
+            Debug.Log("a");
+        }
+        else if (target.position.x < transform.position.x && target.position.y < transform.position.y)
+        {
+            offset = new Vector3(-6, 0.5f, 0);
+            Debug.Log("b");
+        }
+        else if (target.position.x > transform.position.x && target.position.y < transform.position.y)
+        {
+            offset = new Vector3(6, 0.5f, 0);
+            Debug.Log("c");
+        }
+        else if (target.position.x < transform.position.x && target.position.y > transform.position.y)
+        {
+            offset = new Vector3(-4, 5, 0);
+            Debug.Log("d");
+        }
+
+        GameObject rectangle = Instantiate(rectanglePrefab, start + offset, Quaternion.identity);
+        rectangle.transform.localScale = new Vector3(length, width, 1);
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        rectangle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        StartCoroutine(FadeRectangle(rectangle));
+    }
+
+    IEnumerator FadeRectangle(GameObject rectangle)
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 0.2f; // Duration for which the rectangle is visible
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(rectangle);
+    }
+
+    void DrawFilledRectangle(Vector3 start, Vector3 direction, float width, float length)
+    {
+        GameObject rectangle = new GameObject("FilledRectangle");
+        MeshFilter meshFilter = rectangle.AddComponent<MeshFilter>();
+        MeshRenderer meshRenderer = rectangle.AddComponent<MeshRenderer>();
+
+        // Create a new mesh
+        Mesh mesh = new Mesh();
+
+        // Define the vertices of the rectangle
+        Vector3 perpendicular = Vector3.Cross(direction, Vector3.forward).normalized * (width / 2);
+        Vector3[] vertices = new Vector3[4];
+        vertices[0] = start + perpendicular;
+        vertices[1] = start - perpendicular;
+        vertices[2] = vertices[0] + (direction.normalized * length);
+        vertices[3] = vertices[1] + (direction.normalized * length);
+
+        // Define the triangles that make up the rectangle
+        int[] triangles = new int[6] { 0, 1, 2, 2, 1, 3 };
+
+        // Assign the vertices and triangles to the mesh
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+
+        // Assign the mesh to the mesh filter
+        meshFilter.mesh = mesh;
+
+        // Optionally set a material to the mesh renderer
+        meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
+
+        StartCoroutine(FadeOutFilledRectangle(rectangle));
+    }
+
+    IEnumerator FadeOutFilledRectangle(GameObject rectangle)
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 0.2f; // Duration for which the rectangle is visible
+
+        MeshRenderer meshRenderer = rectangle.GetComponent<MeshRenderer>();
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(rectangle);
     }
 
     void DrawAttackRectangle(Vector3 start, Vector3 direction, float width, float length)

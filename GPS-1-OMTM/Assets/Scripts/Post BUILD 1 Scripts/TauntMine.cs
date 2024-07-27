@@ -89,6 +89,7 @@ public class TauntMine : MonoBehaviour
         Vector3 spawnPosition = gameObject.transform.position; //reset the radius
         enemies = Physics2D.OverlapCircleAll(spawnPosition, tauntMineRadius);
 
+        Debug.Log("Explode");
         foreach (var enemy in enemies)
         {
             if (enemy != null)
@@ -96,7 +97,6 @@ public class TauntMine : MonoBehaviour
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
                 if (enemyScript != null)
                 {
-                    Debug.Log("Explode");
                     if (enemyScript.markedForDeath)
                     {
                         //take more damage if already marked

@@ -72,7 +72,8 @@ public class CameraSystem : MonoBehaviour
 
         //HandleZoomInput();
 
-        if (cameraMovement && focusedTroop == null) // Disable manual movement when focusing on a troop
+        //if (cameraMovement && focusedTroop == null) // Disable manual movement when focusing on a troop
+        if (cameraMovement)
         {
             HandleCameraMovement();
             LimitCameraMovement();
@@ -271,11 +272,30 @@ public class CameraSystem : MonoBehaviour
 
     private IEnumerator FocusCameraOnTroop()
     {
+        /*
         while (focusedTroop != null)
         {
             Vector3 targetPosition = new Vector3(focusedTroop.transform.position.x, transform.position.y, transform.position.z);
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, moveTime);
             yield return null;
+        }
+        */
+
+        if (focusedTroop != null)
+        {
+            Vector3 targetPosition = new Vector3(focusedTroop.transform.position.x, transform.position.y, transform.position.z);
+            Vector3 currentVelocity = Vector3.zero;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < moveTime)
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, moveTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // Ensure the camera is exactly at the target position after the smooth movement
+            transform.position = targetPosition;
         }
     }
 

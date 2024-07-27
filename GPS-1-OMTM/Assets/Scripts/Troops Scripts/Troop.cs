@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 //using UnityEditor.EditorTools;
 using UnityEngine;
@@ -94,6 +95,10 @@ public class Troop : MonoBehaviour
     public GameObject model;
     public GameObject damageIndicator;
     public bool death;
+
+    public bool dpsUltiOn;
+    public GameObject castingRangePrefab; 
+    private GameObject castingRangeIndicator;
 
     [Header(" Art / Animations ")]
     // Animation
@@ -243,19 +248,23 @@ public class Troop : MonoBehaviour
 
         foreach (var Hit in hits)
         {
-            if (Hit.collider != null && (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1")))
+            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground") || Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2")
+                || Hit.collider.CompareTag("[PF] Upper-Ground 3") || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+                || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)"))
             {
-                if (Hit.collider.CompareTag("[TP] Ground"))
+                if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = -3;
                 }
-                else if (Hit.collider.CompareTag("[TP] Platform"))
+                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
+                        || Hit.collider.CompareTag("[PF] Upper-Ground 4"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = 3;
                 }
-                else if (Hit.collider.CompareTag("[TP] Platform 1"))
+                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (3)")
+                        || Hit.collider.CompareTag("[PF] Upper-Ground 1 (4)"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = 8;
@@ -279,8 +288,8 @@ public class Troop : MonoBehaviour
     void HandleTankUltimateTargeting()
     {
         Vector3 newPosition = transform.position;
-        Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero);
 
         string currentTroopTag = GetCurrentTroopTag();
         if (string.IsNullOrEmpty(currentTroopTag))
@@ -289,35 +298,46 @@ public class Troop : MonoBehaviour
             tankClickingOnLocation = false;
             return;
         }
+
         bool validTarget = false;
 
-        foreach (var Hit in hits)
+        foreach (var hit in hits)
         {
-            if (Hit.collider != null && (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[TP] Platform") || Hit.collider.CompareTag("[TP] Platform 1")))
+            if (hit.collider != null)
             {
-                if (Hit.collider.CompareTag("[TP] Ground") && Hit.collider.CompareTag(currentTroopTag))
+                string hitTag = hit.collider.tag;
+
+                if ((hitTag == "[TP] Ground" && currentTroopTag == "[TP] Ground") ||
+                    (hitTag == "[PF] Ground" && currentTroopTag == "[PF] Ground") ||
+                    (hitTag == "[PF] Upper-Ground 1" && currentTroopTag == "[PF] Upper-Ground 1") ||
+                    (hitTag == "[PF] Upper-Ground 2" && currentTroopTag == "[PF] Upper-Ground 2") ||
+                    (hitTag == "[PF] Upper-Ground 3" && currentTroopTag == "[PF] Upper-Ground 3") ||
+                    (hitTag == "[PF] Upper-Ground 4" && currentTroopTag == "[PF] Upper-Ground 4") ||
+                    (hitTag == "[PF] Upper-Ground 1 (2)" && currentTroopTag == "[PF] Upper-Ground 1 (2)") ||
+                    (hitTag == "[PF] Upper-Ground 2 (2)" && currentTroopTag == "[PF] Upper-Ground 2 (2)") ||
+                    (hitTag == "[PF] Upper-Ground 3 (2)" && currentTroopTag == "[PF] Upper-Ground 3 (2)") ||
+                    (hitTag == "[PF] Upper-Ground 4 (2)" && currentTroopTag == "[PF] Upper-Ground 4 (2)"))
                 {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = -1;
+                    newPosition.x = mousePosition.x;
+                    newPosition.y = hitTag == "Ground" ? -1 :
+                                    hitTag.Contains("Upper-Ground 1") ? 5 :
+                                    hitTag.Contains("Upper-Ground 2") ? 5 :
+                                    hitTag.Contains("Upper-Ground 3") ? 5 :
+                                    hitTag.Contains("Upper-Ground 4") ? 5 :
+                                    hitTag.Contains("Upper-Ground 1 (2)") ? 8 :
+                                    hitTag.Contains("Upper-Ground 2 (2)") ? 8 :
+                                    hitTag.Contains("Upper-Ground 3 (2)") ? 8 :
+                                    hitTag.Contains("Upper-Ground 4 (2)") ? 8 : newPosition.y;
                     validTarget = true;
-                }
-                else if (Hit.collider.CompareTag("[TP] Platform") && Hit.collider.CompareTag(currentTroopTag))
-                {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = 5;
-                    validTarget = true;
-                }
-                else if (Hit.collider.CompareTag("[TP] Platform 1") && Hit.collider.CompareTag(currentTroopTag))
-                {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = 8;
-                    validTarget = true;
+                    break;
                 }
                 else
                 {
-                    validTarget = false;
+                    newPosition.x = mousePosition.x;
+                    tankClickingOnLocation = false;
+                    Debug.Log("Tank Ultimate targeting cancelled.");
+                    return;
                 }
-                break;
             }
         }
 
@@ -328,31 +348,45 @@ public class Troop : MonoBehaviour
             return;
         }
 
-        GameObject TankShield = Instantiate(tankShield, newPosition, Quaternion.identity);
-        tankClickingOnLocation = false;
+        GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
+        TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
 
+        tankClickingOnLocation = false;
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
-        Debug.Log("Tank Ultimate Activated");
 
-        Vector3 shieldPosition = TankShield.transform.position;
+        StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
+    }
+
+    IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
+    {
+        float speed = 40f; 
+        while ((targetPosition - shield.transform.position).magnitude > 0.1f)
+        {
+            shield.transform.position = Vector3.MoveTowards(shield.transform.position, targetPosition, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        shield.transform.position = targetPosition;
+        shield.GetComponent<BoxCollider2D>().enabled = true; // Enable collider
+
+        Vector3 shieldPosition = shield.transform.position;
         Vector3 tankPosition = transform.position;
 
         Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
-
         foreach (var enemyCollider in enemiesInRange)
         {
             Enemy enemy = enemyCollider.GetComponent<Enemy>();
             if (enemy != null)
             {
                 enemy.TakeDamage(50);
-                StartCoroutine(StunEnemy(enemy, 2f)); //stun duration
+                StartCoroutine(StunEnemy(enemy, 2f)); // Stun duration
             }
         }
 
-        StartCoroutine(DestroyTankShield(TankShield));
+        StartCoroutine(DestroyTankShield(shield));
     }
 
     string GetCurrentTroopTag()
@@ -360,8 +394,11 @@ public class Troop : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(new Vector2(transform.position.x, transform.position.y), Vector2.zero);
         foreach (var hit in hits)
         {
-            if (hit.collider != null && (hit.collider.CompareTag("[TP] Ground") || hit.collider.CompareTag("[TP] Platform") || hit.collider.CompareTag("[TP] Platform 1")))
+            if (hit.collider != null && hit.collider.CompareTag("[TP] Ground") || hit.collider.CompareTag("[PF] Ground") || hit.collider.CompareTag("[PF] Upper-Ground 1") || hit.collider.CompareTag("[PF] Upper-Ground 2")
+            || hit.collider.CompareTag("[PF] Upper-Ground 3") || hit.collider.CompareTag("[PF] Upper-Ground 4") || hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+            || hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || hit.collider.CompareTag("[PF] Upper-Ground 4 (2)"))
             {
+                //Debug.Log(hit.collider.tag);
                 return hit.collider.tag;
             }
         }
@@ -380,6 +417,7 @@ public class Troop : MonoBehaviour
         switch (_ultimate)
         {
             case Ultimate.Ultimate_DPS:
+                dpsUltiOn = true;
                 troopEnergy.UseAllPower();
                 StartCoroutine(Ultimate_DPS());
 
@@ -421,6 +459,7 @@ public class Troop : MonoBehaviour
 
                 yield return new WaitForSeconds(UltiDelay);
 
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
@@ -439,6 +478,7 @@ public class Troop : MonoBehaviour
 
                 yield return new WaitForSeconds(UltiDelay);
 
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
@@ -455,6 +495,7 @@ public class Troop : MonoBehaviour
 
                 yield return new WaitForSeconds(UltiDelay);
 
+                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
@@ -520,6 +561,8 @@ public class Troop : MonoBehaviour
                 AttackModel2ndSniper.SetActive(false);// SetActive Floating Snipers
                 break;
         }
+
+        dpsUltiOn = false;
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -694,7 +737,7 @@ public class Troop : MonoBehaviour
         gameObject.GetComponent<TroopClass>().arrow.SetActive(false);
 
         // Death Animation
-        TroopModel.GetComponent<TroopAnimationsManager>().TroopDies();
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopDies(); //causes model to tilt
 
         if (healer == false)
         {

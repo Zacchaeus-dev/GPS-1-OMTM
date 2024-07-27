@@ -30,7 +30,7 @@ public class HealerAutoHeal : MonoBehaviour
     public TroopWeapon troopWeapon;
 
     public GameObject healSpritePrefab;
-    //public Transform shootingPoint;
+    public Transform shootingPointTransform;
 
     // Public references for LineRenderer and start position offset
     public LineRenderer lineRenderer;
@@ -120,7 +120,7 @@ public class HealerAutoHeal : MonoBehaviour
                     }
                 }
 
-                if (targetAlly.gameObject.activeInHierarchy == false)
+                if (targetAlly != null && targetAlly.gameObject.activeInHierarchy == false) //change target if target is dead
                 {
                     targetAlly = null;
                 }
@@ -311,8 +311,8 @@ public class HealerAutoHeal : MonoBehaviour
         // Add a delay before the first shot
         //yield return new WaitForSeconds(0.5f);
 
-        GameObject healSprite = Instantiate(healSpritePrefab, shootingPoint.transform.position, Quaternion.identity);
-        Vector3 startPosition = shootingPoint.transform.position;
+        GameObject healSprite = Instantiate(healSpritePrefab, shootingPointTransform.position, Quaternion.identity);
+        Vector3 startPosition = shootingPointTransform.position;
 
         if (target == null || target.gameObject.activeInHierarchy == false)
         {

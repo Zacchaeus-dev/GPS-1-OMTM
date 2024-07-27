@@ -17,7 +17,7 @@ public class Enemy: MonoBehaviour
     public bool markedForDeath = false;
     public bool slowed = false;
 
-    public float detectionRange = 10f; // enemy detection range
+    //public float detectionRange = 10f; // enemy detection range
 
     public float detectionRangeX1 = 10f;
     public float detectionRangeY1 = 10f;
@@ -88,7 +88,7 @@ public class Enemy: MonoBehaviour
         {
             potentialTargets.Add(killdozer.transform);
             killdozerTransform = killdozer.transform;
-            killdozerCollider = killdozer.GetComponent<BoxCollider2D>();
+            //killdozerCollider = killdozer.GetComponent<BoxCollider2D>();
         }
 
         normalScale = transform.localScale;
@@ -148,36 +148,28 @@ public class Enemy: MonoBehaviour
         {
             if (!target.gameObject.activeSelf) continue; // Skip inactive (dead) targets
 
-            float distanceSqr = (target.position - transform.position).sqrMagnitude; // Calculate distance between enemy position and target position
+            Vector3 offset = target.position - transform.position;
+            float distanceSqr = offset.sqrMagnitude; // Calculate distance between enemy position and target position
 
             // Check if the target is in the initial move direction
-            bool isTargetInInitialDirection = (moveRight && target.position.x > transform.position.x) || (!moveRight && target.position.x < transform.position.x);
+            bool isTargetInInitialDirection = (moveRight && offset.x > 0) || (!moveRight && offset.x < 0);
 
-            if (distanceSqr < closestDistanceSqr && distanceSqr <= Mathf.Max(detectionRangeX1, detectionRangeY1) * Mathf.Max(detectionRangeX1, detectionRangeY1) && isTargetInInitialDirection) // If current target is closer than other targets and if target is within detection range and in the initial direction
+            // Check if the target is within the horizontal detection range
+            bool isTargetInHorizontalRange = Mathf.Abs(offset.x) <= detectionRangeX1 && Mathf.Abs(offset.y) <= detectionRangeY1;
+
+            if (distanceSqr < closestDistanceSqr && isTargetInHorizontalRange && isTargetInInitialDirection) // If current target is closer than other targets and within detection range and in the initial direction
             {
-                if (target != null)
+                if (target == killdozerTransform || (target != killdozerTransform && (IsInsideKilldozer(target) || attackingKilldozer)))
                 {
-                    if (target != killdozerTransform && (IsInsideKilldozer(target) || attackingKilldozer))
-                    {
-                        // Prioritize the Killdozer if the target is inside it or if enemy is already attacking killdozer
-                        closestTarget = killdozerTransform;
-                        closestDistanceSqr = distanceSqr;
-                        //Debug.Log("Found KD with Troops On it");
-                    }
-                    else
-                    {
-                        // Update closest target to current target
-                        closestDistanceSqr = distanceSqr;
-                        closestTarget = target;
-                        //Debug.Log("Found Troop");
-                    }
+                    // Prioritize the Killdozer if the target is the Killdozer itself, or if it is inside it, or if enemy is already attacking the Killdozer
+                    closestTarget = killdozerTransform;
+                    closestDistanceSqr = distanceSqr;
                 }
                 else
                 {
                     // Update closest target to current target
                     closestDistanceSqr = distanceSqr;
                     closestTarget = target;
-                    //Debug.Log("Found Troop");
                 }
             }
         }
@@ -206,7 +198,6 @@ public class Enemy: MonoBehaviour
                 {
                     Animator.TroopWalkOff();
                     isAttacking = true;
-                    //Debug.Log(closestTarget);
                     StartCoroutine(AttackTarget());
                 }
             }
@@ -252,12 +243,13 @@ public class Enemy: MonoBehaviour
             return false;
         }
 
-        if (killdozerCollider == null)
-        {
-            Debug.Log("Killdozer Collider is null in IsInsideKilldozer");
-            return false;
-        }
+        //if (killdozerCollider == null)
+        //{
+        //Debug.Log("Killdozer Collider is null in IsInsideKilldozer");
+        //return false;
+        // }
 
+        //Debug.Log(troopComponent.troopOnKilldozer);
         return troopComponent.troopOnKilldozer;
     }
 

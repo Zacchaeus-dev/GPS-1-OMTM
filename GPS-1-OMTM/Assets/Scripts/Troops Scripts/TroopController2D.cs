@@ -321,7 +321,7 @@ public class TroopController2D : MonoBehaviour
 
     IEnumerator RespawnTroop(Troop troop)
     {
-        yield return new WaitForSeconds(respawnTime);
+        yield return new WaitForSeconds(3f);
 
         Vector2 respawnPosition = (Vector2)killdozer.position + respawnOffset;
 
@@ -333,7 +333,6 @@ public class TroopController2D : MonoBehaviour
         troop.UpdateHUD();
 
         // Reactivate the troop
-        troop.model.SetActive(false);
         troop.gameObject.SetActive(true);
         troop.GetComponent<TroopClass>().SetTargetPositionHere();
         Debug.Log(troop.gameObject.name + " has respawned.");
@@ -341,17 +340,38 @@ public class TroopController2D : MonoBehaviour
         troop.tpObject.SetActive(true);
         troop.animator.SetTrigger("Death");
 
+        DeselectTroop();
+
         yield return new WaitForSeconds(0.5f);
+
+        TroopAutoAttack autoAttack = troop.gameObject.GetComponent<TroopAutoAttack>();
+        if (autoAttack != null)
+        {
+            autoAttack.autoAttackEnabled = true;
+        }
+        else
+        {
+            troop.gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true; 
+        }
+
+        foreach (SpriteRenderer sprite in troop.troopSprite)
+        {
+            sprite.color = troop.NormalColor;
+        }
+
+        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
+        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopIdle();
+        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOn();
 
         troop.model.SetActive(true);
 
         //reset mouse position
         troop.GetComponent<TroopClass>().mousePosition = killdozer.position;
 
-        StartCoroutine(DisableDeathAnimation(troop));    
+        StartCoroutine(DisableTPObject(troop));
     }
 
-    IEnumerator DisableDeathAnimation(Troop troop)
+    IEnumerator DisableTPObject(Troop troop)
     {
         yield return new WaitForSeconds(3f);
 
