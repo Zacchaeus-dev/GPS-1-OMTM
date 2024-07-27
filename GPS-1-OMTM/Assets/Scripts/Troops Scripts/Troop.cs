@@ -710,6 +710,7 @@ public class Troop : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         tpObject.SetActive(true);
+        FindObjectOfType<AudioManager>().Play("Teleport");
         animator.SetTrigger("Death");
 
         yield return new WaitForSeconds(0.8f);

@@ -101,6 +101,8 @@ public class Killdozer : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        FindObjectOfType<AudioManager>().Play("MetalHit");
+
         if (invincible)
         {
             return;
