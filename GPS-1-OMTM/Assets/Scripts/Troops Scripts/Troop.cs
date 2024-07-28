@@ -219,11 +219,11 @@ public class Troop : MonoBehaviour
         }
         if (ccClickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
         {
-            HandleCCUltimateTargeting();
+            StartCoroutine(HandleCCUltimateTargeting());
         }
         if (tankClickingOnLocation && Input.GetMouseButtonDown(0)) // Tank's ultimate
         {
-            HandleTankUltimateTargeting();
+            StartCoroutine(HandleTankUltimateTargeting());
         }
     }
 
@@ -242,8 +242,18 @@ public class Troop : MonoBehaviour
         }
     }
 
-    void HandleCCUltimateTargeting()
+    IEnumerator HandleCCUltimateTargeting()
     {
+        // activate ult animation
+
+        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+
+        yield return new WaitForSeconds(UltiDelay);
+
+
         Vector3 newPosition = transform.position;
         Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
@@ -285,10 +295,23 @@ public class Troop : MonoBehaviour
         Debug.Log("CC Ultimate Activated");
 
         StartCoroutine(Ultimate_CC_End());
+
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
     }
 
-    void HandleTankUltimateTargeting()
+
+    IEnumerator HandleTankUltimateTargeting()
     {
+        // activate ult animation
+
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+        yield return new WaitForSeconds(UltiDelay);
+
         Vector3 newPosition = transform.position;
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero);
@@ -298,7 +321,10 @@ public class Troop : MonoBehaviour
         {
             Debug.Log("Trigger Tag is null or empty");
             tankClickingOnLocation = false;
-            return;
+
+            gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+            TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+            yield break;
         }
 
         bool validTarget = false;
@@ -331,6 +357,9 @@ public class Troop : MonoBehaviour
                                     hitTag.Contains("Upper-Ground 3 (2)") ? 8 :
                                     hitTag.Contains("Upper-Ground 4 (2)") ? 8 : newPosition.y;
                     validTarget = true;
+
+                    gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+                    TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
                     break;
                 }
                 else
@@ -338,7 +367,10 @@ public class Troop : MonoBehaviour
                     newPosition.x = mousePosition.x;
                     tankClickingOnLocation = false;
                     Debug.Log("Tank Ultimate targeting cancelled.");
-                    return;
+
+                    gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+                    TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+                    yield break;
                 }
             }
         }
@@ -347,7 +379,10 @@ public class Troop : MonoBehaviour
         {
             Debug.Log("Invalid target for Shield's Position. Must click on the same elevation.");
             tankClickingOnLocation = false;
-            return;
+
+            gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+            TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+            yield break;
         }
 
         GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
@@ -360,6 +395,11 @@ public class Troop : MonoBehaviour
         ultimateDurationTimeRemaining = ultimateDuration;
 
         StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
+
+        //yield return new WaitForSeconds(UltiDelay);
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
     }
 
     IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
@@ -447,41 +487,15 @@ public class Troop : MonoBehaviour
 
                 break;
             case Ultimate.Ultimate_Tank:
-                
-
-                // activate ult animation
-
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
-
-                yield return new WaitForSeconds(UltiDelay);
-
                 Ultimate_Tank();
 
-                yield return new WaitForSeconds(UltiDelay);
-
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
             case Ultimate.Ultimate_CC:
 
-                // activate ult animation
-
-                gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
-
-
-                yield return new WaitForSeconds(UltiDelay);
 
                 Ultimate_CC();
 
-                yield return new WaitForSeconds(UltiDelay);
-
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
             case Ultimate.Ultimate_Healer:
@@ -495,7 +509,6 @@ public class Troop : MonoBehaviour
 
                 yield return StartCoroutine(Ultimate_Healer());
 
-                yield return new WaitForSeconds(UltiDelay);
 
                 gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
