@@ -263,6 +263,8 @@ public class WaveSystem : MonoBehaviour
 
         StartCoroutine(WaveAnimation());
 
+        // bgm
+        FindObjectOfType<AudioManager>().Play("BGM");
         startButton.SetActive(false);
         startBorder.SetActive(false);
     }
@@ -386,7 +388,7 @@ public class WaveSystem : MonoBehaviour
     void HandleBreak()
     {
         waveStateText.text = "Break";
-
+        FindObjectOfType<AudioManager>().Dim("BGM");
         if (breakTimer > 0)
         {
             breakTimer -= Time.deltaTime;
@@ -518,8 +520,11 @@ public class WaveSystem : MonoBehaviour
 
     void StartMiniWave()
     {
+        FindObjectOfType<AudioManager>().Undim("BGM");
+
         startButton.SetActive(false);
         startBorder.SetActive(false);
+
 
         if (currentMiniWaveIndex >= waves[currentWaveIndex].miniWaves.Count)
         {

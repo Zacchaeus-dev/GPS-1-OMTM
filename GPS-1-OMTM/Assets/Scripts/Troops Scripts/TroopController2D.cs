@@ -317,6 +317,7 @@ public class TroopController2D : MonoBehaviour
     public void HandleRespawn(Troop troop)
     {
         StartCoroutine(RespawnTroop(troop));
+        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
     }
 
     IEnumerator RespawnTroop(Troop troop)

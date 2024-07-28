@@ -113,27 +113,33 @@ public class TroopAutoAttack : MonoBehaviour
                 ShootingDelay = 0.5f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-                attackDamage = 30;
+                attackDamage = 60;
                 attackCooldown = 1f;
                 AnimationDelay = 0.4f;
                 ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
-                attackDamage = 10;
+                attackDamage = 20;
                 attackCooldown = 1f;
+                AnimationDelay = 0f;
+                ShootingDelay = 2f;
                 break;
             case TroopWeapon.Weapon.Weapon2_Tank:
                 attackDamage = 75;
                 attackCooldown = 1.5f;
+                AnimationDelay = 0f;
+                ShootingDelay = 0.4f;
+                gameObject.GetComponent<Troop>().maxHealth = 750;
+                //gameObject.GetComponent<Troop>().currentHealth = 750;
                 break;
             case TroopWeapon.Weapon.Weapon1_CC:
-                attackDamage = 10;
+                attackDamage = 30;
                 attackCooldown = 1f;
                 AnimationDelay = 0f;
                 ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
-                attackDamage = 15;
+                attackDamage = 20;
                 attackCooldown = 2f;
                 AnimationDelay = 0.8f;
                 ShootingDelay = 1f;
@@ -611,7 +617,7 @@ public class TroopAutoAttack : MonoBehaviour
         else
         {*/
             // Third attack deals AoE damage and applies knockback --> chg to just once big attack with knockback
-            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(transform.position, attackRange, LayerMask.GetMask("Enemy"));
+            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(transform.position, (attackRange - 1), LayerMask.GetMask("Enemy"));
             foreach (Collider2D enemyCollider in enemiesHit)
             {
                 Enemy enemy = enemyCollider.GetComponent<Enemy>();

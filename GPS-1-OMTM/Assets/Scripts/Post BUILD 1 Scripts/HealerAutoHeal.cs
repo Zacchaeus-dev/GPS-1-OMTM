@@ -64,12 +64,16 @@ public class HealerAutoHeal : MonoBehaviour
             case TroopWeapon.Weapon.Weapon1_Healer:
                 healAmount = 50;
                 healCooldown = 1.5f;
+                AnimationDelay = 0f;
+                ShootingDelay = 0.1f;
 
                 TroopAnimator.TroopOnWeapon1();
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 healAmount = 20;
-                healCooldown = 5f;
+                healCooldown = 1.3f;
+                AnimationDelay = 0f;
+                ShootingDelay = 0f;
 
                 lineRenderer.positionCount = segments + 1;
                 lineRenderer.loop = true;
@@ -130,6 +134,7 @@ public class HealerAutoHeal : MonoBehaviour
 
     void FindTarget()
     {
+        TroopAnimator.TroopAttackOff();
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRange);
         float closestDistance = Mathf.Infinity;
         GameObject closestAlly = null;
@@ -263,25 +268,53 @@ public class HealerAutoHeal : MonoBehaviour
 
     void Healer_Weapon2Heal()
     {
-        if (Time.time >= lastHealTime + healCooldown)
+        if (troopClass.isMoving == false) //refering to the TroopClass on "(moving == false)" then this autoattack is activated......
         {
-            Collider2D[] alliesInRange = Physics2D.OverlapCircleAll(transform.position, healRange, LayerMask.GetMask("Troop"));
-
-            foreach (Collider2D allyCollider in alliesInRange)
+            float distanceToAlly = Vector2.Distance(transform.position, targetAlly.transform.position);
+            if (distanceToAlly <= healRange)
             {
-                Troop allyTroop = allyCollider.GetComponent<Troop>();
-
-                if (allyTroop != null && allyTroop.gameObject != gameObject) //heals everyone except herself
+                delay = delay + Time.deltaTime;
+                if (delay > AnimationDelay)
                 {
-                    StartCoroutine(ShowHealAOE(allyTroop.transform));
-                    allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
-                    Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
-                    allyTroop.UpdateHUD();
+                    TroopAnimator.TroopAttackOn();
+
                 }
+
+                if (delay >= ShootingDelay) //if no delay bfr shooting, troop will shoot bfr even setting their weapon in the right position
+                {
+                    delay = 0;
+
+                    if (Time.time >= lastHealTime + healCooldown)
+                    {
+                        Collider2D[] alliesInRange = Physics2D.OverlapCircleAll(transform.position, healRange, LayerMask.GetMask("Troop"));
+
+                        foreach (Collider2D allyCollider in alliesInRange)
+                        {
+                            Troop allyTroop = allyCollider.GetComponent<Troop>();
+
+                            if (allyTroop != null && allyTroop.gameObject != gameObject) //heals everyone except herself
+                            {
+                                StartCoroutine(ShowHealAOE(allyTroop.transform));
+                                allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                                Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
+                                allyTroop.UpdateHUD();
+                            }
+                        }
+                        lastHealTime = Time.time;
+                        troopEnergy.GainPower();
+                        //gameObject.GetComponent<Troop>().UpdateHUD();
+                    }
+                }
+
             }
-            lastHealTime = Time.time;
-            troopEnergy.GainPower();
-            //gameObject.GetComponent<Troop>().UpdateHUD();
+            else
+            {
+                targetAlly = null; // Lost range, find another target
+            }
+        }
+        else
+        {
+            delay = 0;
         }
     }
 

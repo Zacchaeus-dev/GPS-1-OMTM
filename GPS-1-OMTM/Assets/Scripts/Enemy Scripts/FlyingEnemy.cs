@@ -302,6 +302,8 @@ public class FlyingEnemy : MonoBehaviour
 
     IEnumerator Death()
     {
+        FindObjectOfType<AudioManager>().Play("MetalHit");
+
         Animator.TroopDies();
 
         if (lineRenderer != null)

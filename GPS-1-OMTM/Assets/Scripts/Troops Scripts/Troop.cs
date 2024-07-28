@@ -134,6 +134,8 @@ public class Troop : MonoBehaviour
 
     void Update()
     {
+        if (currentHealth > maxHealth) { currentHealth = maxHealth; }
+        
         HandleUltimateInput();
 
         if (targetEnemy != null)
@@ -752,13 +754,14 @@ public class Troop : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-
+        
         tpObject.SetActive(true);
         FindObjectOfType<AudioManager>().Play("Teleport");
         animator.SetTrigger("Death");
 
-        yield return new WaitForSeconds(0.8f);
-
+        yield return new WaitForSeconds(0.5f);
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
+        yield return new WaitForSeconds(0.3f);
         model.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);

@@ -88,7 +88,7 @@ public class TutorialPhase : MonoBehaviour
         //waveSystem.gameObject.SetActive(false);
     }
 
-    public void TutorialEnd()
+    IEnumerator TutorialEnd()
     {
         //waveSystem.gameObject.SetActive(true);
         tank.SetActive(true);
@@ -107,9 +107,21 @@ public class TutorialPhase : MonoBehaviour
         StartCoroutine(DefocusKilldozer());
         edgePanTutorial.SetActive(true);
         StartCoroutine(CloseEdgePanTutorial());
-        tutorialOn = false;    
+        tutorialOn = false;
+
+
+        yield return new WaitForSeconds(2);
+        DestroyObjectsWithTag("Enemy");
     }
 
+    void DestroyObjectsWithTag(string tag)
+    {
+        GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag(tag);
+        foreach (GameObject obj in objectsToDestroy)
+        {
+            Destroy(obj);
+        }
+    }
     IEnumerator RespawnDummy()
     {
         yield return new WaitForSeconds(5f);
@@ -134,7 +146,7 @@ public class TutorialPhase : MonoBehaviour
     public void CloseObjectivePanel()
     {
         objectivePanel.SetActive(false);
-        TutorialEnd();
+        StartCoroutine(TutorialEnd());
     }
 
     IEnumerator DefocusKilldozer()

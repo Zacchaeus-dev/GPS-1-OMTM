@@ -57,8 +57,8 @@ public class TroopAttackRange : MonoBehaviour
         float angle = 0f;
         for (int i = 0; i < (segments + 1); i++)
         {
-            float x = Mathf.Sin(Mathf.Deg2Rad * angle) * attackRange;
-            float y = Mathf.Cos(Mathf.Deg2Rad * angle) * attackRange;
+            float x = Mathf.Sin(Mathf.Deg2Rad * angle) * (attackRange - 1) ;
+            float y = Mathf.Cos(Mathf.Deg2Rad * angle) * (attackRange - 1) ;
 
             lineRenderer.SetPosition(i, new Vector3(x, y, 0));
             angle += (360f / segments);
