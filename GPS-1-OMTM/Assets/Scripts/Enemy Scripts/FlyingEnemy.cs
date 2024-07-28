@@ -21,8 +21,8 @@ public class FlyingEnemy : MonoBehaviour
     private GameObject killdozer;
     private GameObject killdozerLeftTarget;
     private GameObject killdozerRightTarget;
-    private Vector3 rightOffset = new Vector3 (30f,0,0);
-    private Vector3 leftOffset = new Vector3 (-30f,0,0);
+    private Vector3 rightOffset = new Vector3(30f, 0, 0);
+    private Vector3 leftOffset = new Vector3(-30f, 0, 0);
     private bool attackingKilldozer;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement
@@ -40,11 +40,9 @@ public class FlyingEnemy : MonoBehaviour
     private bool tookdamage;
     Vector3 normalScale;
 
-    [Header(" Art / Animations ")]
-
+    [Header("Art / Animations")]
     public GameObject EnemyModel;
     TroopAnimationsManager Animator;
-
 
     void Start()
     {
@@ -64,18 +62,16 @@ public class FlyingEnemy : MonoBehaviour
 
     void Update()
     {
-        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x  < transform.position.x) //move depending on killdozer's location
+        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x) //move depending on killdozer's location
         {
             MoveLeft();
             EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //Animator.TroopWalkOn();
             Animator.TroopAttackOff();
         }
         else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x)
         {
             MoveRight();
             EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
-            //Animator.TroopWalkOn();
             Animator.TroopAttackOff();
         }
 
@@ -83,14 +79,14 @@ public class FlyingEnemy : MonoBehaviour
         MoveTowardsTarget();
         HandleAttack();
 
-        if (tookdamage == true)
+        if (tookdamage)
         {
             foreach (SpriteRenderer sprite in enemySprite)
             {
                 sprite.color = DamagedColor;
             }
 
-            timer = timer + Time.deltaTime;
+            timer += Time.deltaTime;
             transform.localScale += transform.localScale / 1000;
 
             if (timer >= 0.3)
@@ -165,7 +161,7 @@ public class FlyingEnemy : MonoBehaviour
                 distanceToKilldozer = Vector2.Distance(transform.position, killdozerRightTarget.transform.position);
                 direction = (killdozerRightTarget.transform.position - transform.position + rightOffset).normalized;
             }
-            else if (killdozer.transform.position.x> transform.position.x)
+            else if (killdozer.transform.position.x > transform.position.x)
             {
                 // Calculate distance to the Killdozer
                 distanceToKilldozer = Vector2.Distance(transform.position, killdozerLeftTarget.transform.position);
@@ -175,7 +171,6 @@ public class FlyingEnemy : MonoBehaviour
             // Move towards the Killdozer if it's within detection range
             if (distanceToKilldozer > attackRange)
             {
-                //Vector3 direction = (killdozer.transform.position - transform.position).normalized;
                 direction.y = 0; // Ensure no movement in Y-axis
                 transform.position += direction * speed * Time.deltaTime;
             }
@@ -202,7 +197,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void HandleAttack()
     {
-        if (killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange) || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange)
+        if (killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange))
         {
             Animator.TroopAttackOn();
             if (Time.time >= lastAttackTime + attackInterval)
@@ -225,7 +220,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void AttackTroop()
     {
-        if (targetTroop != null && targetTroop.activeInHierarchy == true)
+        if (targetTroop != null && targetTroop.activeInHierarchy)
         {
             Troop troop = targetTroop.GetComponent<Troop>();
             if (troop != null)
@@ -257,8 +252,6 @@ public class FlyingEnemy : MonoBehaviour
                 {
                     StartCoroutine(DrawBulletTracer(killdozerRightTarget.transform.position));
                 }
-
-                //StartCoroutine(DrawBulletTracer(killdozer.transform.position));
             }
         }
     }
@@ -290,7 +283,6 @@ public class FlyingEnemy : MonoBehaviour
     {
         tookdamage = true;
         currentHealth -= damage;
-        //Debug.Log(name + " took " + damage + " damage, remaining health: " + currentHealth);
 
         damageIndicator.SetActive(true);
         StartCoroutine(DisableDamageIndicator());
@@ -305,51 +297,19 @@ public class FlyingEnemy : MonoBehaviour
     IEnumerator DisableDamageIndicator()
     {
         yield return new WaitForSeconds(0.2f);
-
         damageIndicator.SetActive(false);
     }
 
-/*    void Die()
-    {
-        //Debug.Log(name + " died.");
-        // Add death logic here (e.g., destroy the GameObject, play an animation, etc.)
-
-        *//*
-        if (lineRenderer.gameObject != null && lineRendererDestroyed == false)
-        {
-            //Destroy(lineRenderer.gameObject);
-            lineRenderer.enabled = false;
-            lineRendererDestroyed = true;
-        }
-        *//*
-
-        if (lineRenderer.gameObject != null)
-        {
-            Destroy(lineRenderer.gameObject);
-        }
-
-        onDeath.Invoke();
-
-        Destroy(gameObject);
-    }
-*/
     IEnumerator Death()
     {
         Animator.TroopDies();
 
-/*        while (i < energyOrbDropNum)
-        {
-            energyOrb.DropEnergyOrb();
-            i++;
-        }*/
-
-        if (lineRenderer.gameObject != null)
+        if (lineRenderer != null)
         {
             Destroy(lineRenderer.gameObject);
         }
 
         onDeath.Invoke();
-
 
         yield return new WaitForSeconds(0.75f);
         Destroy(gameObject);
