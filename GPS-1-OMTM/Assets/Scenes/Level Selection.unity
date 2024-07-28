@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 245959634}
   - component: {fileID: 245959633}
   - component: {fileID: 245959632}
+  - component: {fileID: 245959635}
   m_Layer: 5
   m_Name: Level 2
   m_TagString: Untagged
@@ -158,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 241, y: 185}
+  m_AnchoredPosition: {x: 420, y: 159}
   m_SizeDelta: {x: 99.0508, y: 78.5827}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245959632
@@ -243,6 +244,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245959630}
   m_CullTransparentMesh: 1
+--- !u!114 &245959635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245959630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d446a483871354ba0203e8eb6bbfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 245959632}
+  buttonText: {fileID: 0}
+  disabledColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  enabledColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &275098836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,7 +1283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1666506484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1285,7 +1302,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000019073, y: 0.000015259}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -919.0971, y: -133.4374}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1666506485
@@ -1339,6 +1356,7 @@ GameObject:
   - component: {fileID: 1728144169}
   - component: {fileID: 1728144168}
   - component: {fileID: 1728144171}
+  - component: {fileID: 1728144172}
   m_Layer: 5
   m_Name: Level 1
   m_TagString: Untagged
@@ -1363,7 +1381,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -161, y: -165}
+  m_AnchoredPosition: {x: -259.7, y: -336}
   m_SizeDelta: {x: 99.0508, y: 78.5827}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1728144168
@@ -1388,8 +1406,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1410,9 +1428,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1728144171}
-        m_TargetAssemblyTypeName: PanelController, Assembly-CSharp
-        m_MethodName: OpenSettingsPanel
+      - m_Target: {fileID: 1728144172}
+        m_TargetAssemblyTypeName: Level1, Assembly-CSharp
+        m_MethodName: EnterLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1475,6 +1493,18 @@ MonoBehaviour:
   settingsPanel: {fileID: 1666506483}
   volumeSlider: {fileID: 0}
   testAudioSource: {fileID: 0}
+--- !u!114 &1728144172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728144166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c984d7b0b9b885d4e9f51c4d4d22b2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1953361326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,7 +1639,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953361326}
   m_CullTransparentMesh: 1
---- !u!1 &1976507153
+--- !u!1 &2035064780
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1617,22 +1647,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1976507155}
-  - component: {fileID: 1976507154}
+  - component: {fileID: 2035064782}
+  - component: {fileID: 2035064781}
   m_Layer: 0
-  m_Name: ui13
+  m_Name: "ui13\uFF08new"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!212 &1976507154
+--- !u!212 &2035064781
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976507153}
+  m_GameObject: {fileID: 2035064780}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -1667,7 +1697,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4b5b9e1b96008bd428d5e73517064a39, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2469c96dcf43dff4ab1f01bcc6e7536e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1678,18 +1708,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!4 &1976507155
+--- !u!4 &2035064782
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976507153}
+  m_GameObject: {fileID: 2035064780}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: -0.03, z: 0}
-  m_LocalScale: {x: 0.5111527, y: 0.40536597, z: 0.39}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0.02, y: 0.02789259, z: 0}
+  m_LocalScale: {x: 0.51, y: 0.51, z: 0.51}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1700,4 +1730,4 @@ SceneRoots:
   - {fileID: 1337177385}
   - {fileID: 536660925}
   - {fileID: 682039543}
-  - {fileID: 1976507155}
+  - {fileID: 2035064782}
