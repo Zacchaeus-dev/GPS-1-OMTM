@@ -139,6 +139,7 @@ public class WaveSystem : MonoBehaviour
     public GameObject wave3Screen;
     public GameObject wave4Screen;
     public bool wave1Started;
+    public TutorialPhase tutorialPhase;
 
     void Start()
     {
@@ -1359,8 +1360,20 @@ public class WaveSystem : MonoBehaviour
 
     void UpdateButtonState()
     {
+        bool isActive;
+
+        if(tutorialPhase.tutorialOn)
+        {
+            isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;
+        }
+        else
+        {
+            isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
+        }
+
         //bool isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
-        bool isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;
+        //isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;
+
         commandCentreButton.SetActive(isActive);
 
         if (!isActive)

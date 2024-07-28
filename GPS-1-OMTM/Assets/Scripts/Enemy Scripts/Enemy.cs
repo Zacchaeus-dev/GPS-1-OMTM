@@ -72,7 +72,16 @@ public class Enemy: MonoBehaviour
 
     private void Start()
     {
-        Animator = EnemyModel.GetComponent<TroopAnimationsManager>();
+        if(isDummy)
+        {
+            damageIndicator.SetActive(false);
+        }
+
+        if (EnemyModel != null)
+        {
+            Animator = EnemyModel.GetComponent<TroopAnimationsManager>();
+        }
+
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
 
@@ -101,16 +110,13 @@ public class Enemy: MonoBehaviour
 
     void Update()
     {
-        FindClosestTarget();
-        MoveTowardsTarget();
-
         if (tookdamage == true)
         {
             foreach (SpriteRenderer sprite in enemySprite)
             {
                 sprite.color = DamagedColor;
             }
-           
+
             timer = timer + Time.deltaTime;
             transform.localScale += transform.localScale / 1000;
 
@@ -126,6 +132,14 @@ public class Enemy: MonoBehaviour
                 tookdamage = false;
             }
         }
+
+        if (isDummy)
+        {
+            return;
+        }
+
+        FindClosestTarget();
+        MoveTowardsTarget();
 
             if (moveRight == true)
             {
@@ -190,13 +204,19 @@ public class Enemy: MonoBehaviour
                 if (distanceToTarget > stoppingDistanceToUse) // Move if distance to the target is greater than stopping distance
                 {
                     Vector3 direction = (closestTarget.position - transform.position).normalized;
-                    Animator.TroopWalkOn();
+                    if (Animator != null)
+                    {
+                        Animator.TroopWalkOn();
+                    }
                     direction.y = 0; //only move horizontally
                     transform.position += direction * moveSpeed * Time.deltaTime;
                 }
                 else if (!isAttacking) // otherwise stop and attack
                 {
-                    Animator.TroopWalkOff();
+                    if (Animator != null)
+                    {
+                        Animator.TroopWalkOff();
+                    }
                     isAttacking = true;
                     StartCoroutine(AttackTarget());
                 }
@@ -312,12 +332,6 @@ public class Enemy: MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX1, detectionRangeY1));
-
-        Gizmos.color = Color.red;
-        //Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX2, detectionRangeY2));
-
-        Gizmos.color = Color.blue;
-        //Gizmos.DrawWireCube(transform.position, new Vector2(detectionRangeX3, detectionRangeY3));
     }
 
     public void TakeDamage(int damage)
@@ -357,7 +371,10 @@ public class Enemy: MonoBehaviour
 
     IEnumerator Death()
     {
-        Animator.TroopDies();
+        if (!isDummy)
+        {
+            Animator.TroopDies();
+        }
 
         while (i < energyOrbDropNum)
         {
@@ -369,12 +386,12 @@ public class Enemy: MonoBehaviour
         {
             dummyDead = true;
             i = 0; //reset energy dropped amount
+            damageIndicator.SetActive(false);
             gameObject.SetActive(false);
             yield break;
         }
 
         onDeath.Invoke();
-
 
         yield return new WaitForSeconds(0.75f);
         Destroy(gameObject);

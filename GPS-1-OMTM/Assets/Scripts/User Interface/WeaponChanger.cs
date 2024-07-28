@@ -9,7 +9,15 @@ public class WeaponChanger : MonoBehaviour
     public TroopUnit troopUnit;
     private TroopWeapon troopWeapon;
     private TroopWeapon.Weapon selectedWeapon;
-    public TextMeshProUGUI buttonText;
+    //public TextMeshProUGUI buttonText;
+    public TextMeshProUGUI button1Text;
+    public TextMeshProUGUI button2Text;
+    //public TextMeshProUGUI weaponName;
+    //public TextMeshProUGUI weaponDescription;
+    public GameObject weapon1Name;
+    public GameObject weapon2Name;
+    public GameObject weapon1Description;
+    public GameObject weapon2Description;
 
     public enum TroopUnit
     {
@@ -19,7 +27,6 @@ public class WeaponChanger : MonoBehaviour
         Healer,
     }
 
-
     void Start()
     {
         troopWeapon = troop.GetComponent<TroopWeapon>();
@@ -28,33 +35,74 @@ public class WeaponChanger : MonoBehaviour
         switch (selectedWeapon)
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
-                buttonText.text = "Weapon 1";
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
+
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-                buttonText.text = "Weapon 2";
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
-                buttonText.text = "Weapon 1";
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
                 break;
             case TroopWeapon.Weapon.Weapon2_Tank:
-                buttonText.text = "Weapon 2";
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_CC:
-                buttonText.text = "Weapon 1";
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
-                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_CC;
-                buttonText.text = "Weapon 2";
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_Healer:
-                buttonText.text = "Weapon 1";
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
-                buttonText.text = "Weapon 2";
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
                 break;
         }
     }
 
+    /*
     public void ChangeWeapon()
     {
         switch(troopUnit)
@@ -110,6 +158,94 @@ public class WeaponChanger : MonoBehaviour
                         buttonText.text = "Weapon 1";
                         break;
                 }
+                break;
+        }
+    }
+    */
+
+    public void ChangeToWeapon1()
+    {
+        switch (troopUnit)
+        {
+            case TroopUnit.DPS:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_DPS;
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
+                break;
+            case TroopUnit.Tank:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_Tank;
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
+                break;
+            case TroopUnit.CC:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_CC;
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
+                break;
+            case TroopUnit.Healer:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_Healer;
+                button1Text.text = "Selected";
+                button2Text.text = "";
+                weapon1Name.SetActive(true);
+                weapon2Name.SetActive(false);
+                weapon1Description.SetActive(true);
+                weapon2Description.SetActive(false);
+                break;
+        }
+    }
+
+    public void ChangeToWeapon2()
+    {
+        switch (troopUnit)
+        {
+            case TroopUnit.DPS:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_DPS;
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
+                break;
+            case TroopUnit.Tank:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_Tank;
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
+
+                break;
+            case TroopUnit.CC:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_CC;
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
+                break;
+            case TroopUnit.Healer:
+                troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_Healer;
+                button1Text.text = "";
+                button2Text.text = "Selected";
+                weapon1Name.SetActive(false);
+                weapon2Name.SetActive(true);
+                weapon1Description.SetActive(false);
+                weapon2Description.SetActive(true);
                 break;
         }
     }

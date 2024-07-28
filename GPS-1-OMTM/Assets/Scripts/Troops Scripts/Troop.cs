@@ -486,7 +486,7 @@ public class Troop : MonoBehaviour
                 troopEnergy.UseAllPower();
                 // activate ult animation
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+                gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = false;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
 
                 yield return new WaitForSeconds(UltiDelay);
@@ -495,7 +495,7 @@ public class Troop : MonoBehaviour
 
                 yield return new WaitForSeconds(UltiDelay);
 
-                gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+                gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
                 break;
@@ -708,6 +708,7 @@ public class Troop : MonoBehaviour
             if (troopEnergy.powerMethod == TroopEnergy.PowerMethod.Tank)
             {
                 troopEnergy.GainPower();
+                //UpdateHUD();
             }
         }
     }

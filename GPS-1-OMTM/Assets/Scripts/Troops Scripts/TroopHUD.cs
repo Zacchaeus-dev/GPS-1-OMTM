@@ -12,7 +12,9 @@ public class TroopHUD : MonoBehaviour
     public GameObject powerFill;
     public Slider shieldSlider;
     public GameObject shieldFill;
-    public TextMeshProUGUI currentHealth;
+    public TextMeshProUGUI currentHealthText;
+    public TextMeshProUGUI currentPowerText;
+    public TextMeshProUGUI currentShieldText;
     public Image ultimatePowerOverlay;
     public TextMeshProUGUI powerPercentage;
     public GameObject dimOverlay;
@@ -65,7 +67,9 @@ public class TroopHUD : MonoBehaviour
             shieldFill.SetActive(true);
         }
 
-        currentHealth.text = _troop.currentHealth.ToString();
+        currentHealthText.text = _troop.currentHealth.ToString();
+        currentPowerText.text = troopEnergy.currentPower.ToString();
+        currentShieldText.text = _troop.currentShield.ToString();
 
         // Calculate the percentage
         float percentage = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower) * 100f;

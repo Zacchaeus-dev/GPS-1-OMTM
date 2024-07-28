@@ -238,6 +238,7 @@ public class HealerAutoHeal : MonoBehaviour
                                 //Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                                 allyTroop.UpdateHUD();
                                 troopEnergy.GainPower();
+                                //gameObject.GetComponent<Troop>().UpdateHUD();
                                 //StartCoroutine(ShowHealTracer(targetAlly.transform))
 
                                 if (allyTroop.currentHealth == allyTroop.maxHealth)
@@ -280,6 +281,7 @@ public class HealerAutoHeal : MonoBehaviour
             }
             lastHealTime = Time.time;
             troopEnergy.GainPower();
+            //gameObject.GetComponent<Troop>().UpdateHUD();
         }
     }
 

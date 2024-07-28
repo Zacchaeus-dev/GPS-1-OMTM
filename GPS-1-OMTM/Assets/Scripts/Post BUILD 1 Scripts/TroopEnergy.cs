@@ -40,6 +40,7 @@ public class TroopEnergy : MonoBehaviour
         if (currentPower + powerGainAmount <= maxPower)
         {
             currentPower = currentPower + powerGainAmount;
+            Debug.Log("Gained Power");
         }
 
         Instruction5();

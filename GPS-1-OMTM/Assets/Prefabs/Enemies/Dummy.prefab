@@ -176,8 +176,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1310919259
-  m_SortingLayer: 5
+  m_SortingLayerID: -48262111
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -391,7 +391,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2150308239752509703}
   - component: {fileID: 3267627570627783171}
-  - component: {fileID: 6599155213906096576}
   - component: {fileID: 7797885612375523985}
   - component: {fileID: 5121045749212052956}
   - component: {fileID: 4530887168777485784}
@@ -446,9 +445,8 @@ MonoBehaviour:
   moveSpeed: 0
   markedForDeath: 0
   slowed: 0
-  detectionRange: 100
-  detectionRangeX1: 179.51
-  detectionRangeY1: 3.5
+  detectionRangeX1: 0
+  detectionRangeY1: 0
   troopStoppingDistance: 2
   potentialTargets:
   - {fileID: 0}
@@ -458,7 +456,7 @@ MonoBehaviour:
   killdozerCollider: {fileID: 0}
   killdozerStoppingDistance: 14.5
   enemySprite:
-  - {fileID: 0}
+  - {fileID: 241055197134439526}
   DamagedColor: {r: 0.9622642, g: 0.31318974, b: 0.31318974, a: 0.64705884}
   NormalColor: {r: 1, g: 1, b: 1, a: 1}
   markForDeathIcon: {fileID: 11452625637407468}
@@ -472,58 +470,6 @@ MonoBehaviour:
   dummyDead: 0
   EnemyModel: {fileID: 0}
   knockbackForce: 3
---- !u!212 &6599155213906096576
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5254630746095803410}
-  m_Enabled: 0
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1310919259
-  m_SortingLayer: 5
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: b43f223f7389f2b4f8fb4dd824e88908, type: 3}
-  m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!50 &7797885612375523985
 Rigidbody2D:
   serializedVersion: 4
@@ -550,7 +496,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!61 &5121045749212052956
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -839,7 +785,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1556584317971746284, guid: 5d944902bf455bb418cb42d61a1c4365, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7149814223787465195, guid: 5d944902bf455bb418cb42d61a1c4365, type: 3}
       propertyPath: m_LocalPosition.x
