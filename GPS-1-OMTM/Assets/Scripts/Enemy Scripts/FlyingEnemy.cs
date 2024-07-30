@@ -58,6 +58,12 @@ public class FlyingEnemy : MonoBehaviour
         killdozer = GameObject.FindWithTag("Killdozer");
         killdozerLeftTarget = killdozer.GetComponent<Killdozer>().leftTarget;
         killdozerRightTarget = killdozer.GetComponent<Killdozer>().rightTarget;
+
+        if (lineRenderer != null)
+        {
+            Destroy(lineRenderer.gameObject);
+            lineRenderer = null;
+        }
     }
 
     void Update()
@@ -67,10 +73,24 @@ public class FlyingEnemy : MonoBehaviour
             MoveLeft();
             EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
             Animator.TroopAttackOff();
+            //Debug.Log("Drone move left " + EnemyModel.transform.rotation.y);
+
         }
         else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x)
         {
             MoveRight();
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
+            Animator.TroopAttackOff();
+            //Debug.Log("Drone move right " + EnemyModel.transform.rotation.y);
+        }
+
+        if (killdozerRightTarget.transform.position.x < transform.position.x)
+        {
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
+            Animator.TroopAttackOff();
+        }
+        else if (killdozerLeftTarget.transform.position.x > transform.position.x)
+        {
             EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
             Animator.TroopAttackOff();
         }
@@ -226,7 +246,7 @@ public class FlyingEnemy : MonoBehaviour
             if (troop != null)
             {
                 troop.TakeDamage(attackDamage);
-                Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
+                //Debug.Log("Attacked troop: " + troop.name + " for " + attackDamage + " damage.");
 
                 // Draw bullet tracer
                 StartCoroutine(DrawBulletTracer(targetTroop.transform.position));
@@ -242,7 +262,7 @@ public class FlyingEnemy : MonoBehaviour
             if (kd != null)
             {
                 kd.TakeDamage(attackDamage);
-                Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
+                //Debug.Log("Attacked Killdozer for " + attackDamage + " damage.");
 
                 if (killdozer.transform.position.x < transform.position.x)
                 {
@@ -258,7 +278,7 @@ public class FlyingEnemy : MonoBehaviour
 
     IEnumerator DrawBulletTracer(Vector3 targetPosition)
     {
-        lineRenderer = Instantiate(lineRendererPrefab);
+        lineRenderer = Instantiate(lineRendererPrefab).GetComponent<LineRenderer>(); 
         lineRenderer.SetPosition(0, transform.position + startOffset);
         lineRenderer.SetPosition(1, targetPosition);
 
@@ -269,6 +289,12 @@ public class FlyingEnemy : MonoBehaviour
         float progress = 0f;
         while (progress < 1f)
         {
+            if (currentHealth <= 0) // Exit coroutine if enemy is dead
+            {
+                Destroy(lineRenderer.gameObject);
+                yield break;
+            }
+
             progress += Time.deltaTime * fadeSpeed;
             Color color = Color.Lerp(startColor, Color.clear, progress);
             lineRenderer.startColor = color;
@@ -277,6 +303,7 @@ public class FlyingEnemy : MonoBehaviour
         }
 
         Destroy(lineRenderer.gameObject);
+        lineRenderer = null; 
     }
 
     public void TakeDamage(int damage)
@@ -309,6 +336,7 @@ public class FlyingEnemy : MonoBehaviour
         if (lineRenderer != null)
         {
             Destroy(lineRenderer.gameObject);
+            lineRenderer = null;
         }
 
         onDeath.Invoke();

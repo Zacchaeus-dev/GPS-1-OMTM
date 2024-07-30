@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy: MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public bool invincible = false;
 
@@ -18,11 +18,8 @@ public class Enemy: MonoBehaviour
     public bool slowed = false;
 
     //public float detectionRange = 10f; // enemy detection range
-
     public float detectionRangeX1 = 10f;
     public float detectionRangeY1 = 10f;
-    //public float detectionRangeX2 = 5f;
-    //public float detectionRangeY2 = 5f;
 
     public float troopStoppingDistance = 1f; // distance which the enemy stops moving towards the target 
     public List<Transform> potentialTargets; // list of potential targets (players, killdozer)
@@ -72,7 +69,8 @@ public class Enemy: MonoBehaviour
 
     private void Start()
     {
-        if(isDummy)
+        Debug.Log("Enemy Spawned");
+        if (isDummy)
         {
             damageIndicator.SetActive(false);
         }
@@ -141,21 +139,21 @@ public class Enemy: MonoBehaviour
         FindClosestTarget();
         MoveTowardsTarget();
 
-            if (moveRight == true)
-            {
-                EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else if (moveRight == false)
-            {
-                EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
+        if (moveRight == true)
+        {
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (moveRight == false)
+        {
+            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
     void FindClosestTarget()
     {
         potentialTargets.RemoveAll(target => target == null); // Removes null transforms in potential target list, so that enemy can always find a real transform
 
-        closestTarget = null; 
+        closestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
 
         foreach (Transform target in potentialTargets) // For each target in the list
@@ -234,21 +232,6 @@ public class Enemy: MonoBehaviour
 
     bool IsInsideKilldozer(Transform target)
     {
-        /*
-        radius = 0.1f;
-
-        // Check if any point within the radius around the target's position is inside the Killdozer's collider bounds
-        Vector2 targetPosition = target.position;
-        return killdozerCollider.OverlapPoint(targetPosition) ||
-               killdozerCollider.OverlapPoint(targetPosition + new Vector2(radius, 0)) ||
-               killdozerCollider.OverlapPoint(targetPosition + new Vector2(-radius, 0)) ||
-               killdozerCollider.OverlapPoint(targetPosition + new Vector2(0, radius)) ||
-               killdozerCollider.OverlapPoint(targetPosition + new Vector2(0, -radius));
-
-        */
-        //return killdozerCollider.bounds.Contains(target.position);
-        //Debug.Log(target);
-
         if (target == null)
         {
             return false;

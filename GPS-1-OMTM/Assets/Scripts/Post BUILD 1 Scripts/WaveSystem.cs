@@ -140,6 +140,7 @@ public class WaveSystem : MonoBehaviour
     public GameObject wave4Screen;
     public bool wave1Started;
     public TutorialPhase tutorialPhase;
+    int maxEnemies = 100;
 
     void Start()
     {
@@ -158,6 +159,7 @@ public class WaveSystem : MonoBehaviour
             if (obj != null)
             {
                 obj.SetActive(false);
+                Debug.Log("Disabled " + obj.name);
             }
         }
 
@@ -395,6 +397,7 @@ public class WaveSystem : MonoBehaviour
         }
         else
         {
+            /*
             foreach (GameObject obj in waves[currentWaveIndex].objectsToDisableDuringWave) //re enable objects
             {
                 if (obj != null)
@@ -410,6 +413,7 @@ public class WaveSystem : MonoBehaviour
                     obj.SetActive(false);
                 }
             }
+            */
 
             StartMiniWave();
         }
@@ -537,82 +541,6 @@ public class WaveSystem : MonoBehaviour
             miniWaveNumText.text = (currentMiniWaveIndex + 1).ToString();
             MiniWave currentMiniWave = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
 
-            /*
-            if (currentMiniWave.enemiesToSpawn1.Count > 0 && currentMiniWave.spawnLocations1.Count > 0)
-            {
-                inwaveTimer1 = currentMiniWave.timeUntilSpawningEnds1;
-                StartCoroutine(SpawnEnemies1(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn2.Count > 0 && currentMiniWave.spawnLocations2.Count > 0)
-            {
-                inwaveTimer2 = currentMiniWave.timeUntilSpawningEnds2;
-                StartCoroutine(SpawnEnemies2(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn3.Count > 0 && currentMiniWave.spawnLocations3.Count > 0)
-            {
-                inwaveTimer3 = currentMiniWave.timeUntilSpawningEnds3;
-                StartCoroutine(SpawnEnemies3(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn4.Count > 0 && currentMiniWave.spawnLocations4.Count > 0)
-            {
-                inwaveTimer4 = currentMiniWave.timeUntilSpawningEnds4;
-                StartCoroutine(SpawnEnemies4(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn5.Count > 0 && currentMiniWave.spawnLocations5.Count > 0)
-            {
-                inwaveTimer5 = currentMiniWave.timeUntilSpawningEnds5;
-                StartCoroutine(SpawnEnemies5(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn6.Count > 0 && currentMiniWave.spawnLocations6.Count > 0)
-            {
-                inwaveTimer6 = currentMiniWave.timeUntilSpawningEnds6;
-                StartCoroutine(SpawnEnemies6(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn7.Count > 0 && currentMiniWave.spawnLocations7.Count > 0)
-            {
-                inwaveTimer7 = currentMiniWave.timeUntilSpawningEnds7;
-                StartCoroutine(SpawnEnemies7(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn8.Count > 0 && currentMiniWave.spawnLocations8.Count > 0)
-            {
-                inwaveTimer8 = currentMiniWave.timeUntilSpawningEnds8;
-                StartCoroutine(SpawnEnemies8(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn9.Count > 0 && currentMiniWave.spawnLocations9.Count > 0)
-            {
-                inwaveTimer9 = currentMiniWave.timeUntilSpawningEnds9;
-                StartCoroutine(SpawnEnemies9(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn10.Count > 0 && currentMiniWave.spawnLocations10.Count > 0)
-            {
-                inwaveTimer10 = currentMiniWave.timeUntilSpawningEnds10;
-                StartCoroutine(SpawnEnemies10(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn11.Count > 0 && currentMiniWave.spawnLocations11.Count > 0)
-            {
-                inwaveTimer11 = currentMiniWave.timeUntilSpawningEnds11;
-                StartCoroutine(SpawnEnemies11(currentMiniWave));
-            }
-
-            if (currentMiniWave.enemiesToSpawn12.Count > 0 && currentMiniWave.spawnLocations12.Count > 0)
-            {
-                inwaveTimer12 = currentMiniWave.timeUntilSpawningEnds12;
-                StartCoroutine(SpawnEnemies12(currentMiniWave));
-            }
-
-            currentState = WaveState.InWave;
-            */
-
             inwaveTimer1 = currentMiniWave.timeUntilSpawningEnds1;
             inwaveTimer2 = currentMiniWave.timeUntilSpawningEnds2;
             inwaveTimer3 = currentMiniWave.timeUntilSpawningEnds3;
@@ -646,6 +574,22 @@ public class WaveSystem : MonoBehaviour
 
     void NextWave()
     {
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToDisableDuringWave) //re enable objects
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
+
+        foreach (GameObject obj in waves[currentWaveIndex].objectsToEnableDuringWave) //re disable objects
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+
         currentMiniWaveIndex = 0;
         currentWaveIndex++;
 
@@ -664,6 +608,12 @@ public class WaveSystem : MonoBehaviour
     //========================================SPAWN ENEMIES======================================
     IEnumerator SpawnEnemies1(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -719,10 +669,14 @@ public class WaveSystem : MonoBehaviour
         }
     }
 
-    // Repeat similar methods for SpawnEnemies2 to SpawnEnemies12
-
     IEnumerator SpawnEnemies2(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -780,6 +734,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies3(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -837,6 +797,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies4(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -894,6 +860,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies5(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -951,6 +923,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies6(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1008,6 +986,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies7(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1065,6 +1049,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies8(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1122,6 +1112,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies9(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1179,6 +1175,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies10(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1236,6 +1238,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies11(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");
@@ -1293,6 +1301,12 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator SpawnEnemies12(MiniWave currentMiniWave)
     {
+        if (aliveEnemies.Count >= maxEnemies)
+        {
+            Debug.Log("Reached maximum enemy limit.");
+            yield break;
+        }
+
         if (currentMiniWave == null)
         {
             Debug.Log("currentMiniWave is null.");

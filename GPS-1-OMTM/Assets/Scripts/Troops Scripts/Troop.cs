@@ -130,6 +130,11 @@ public class Troop : MonoBehaviour
         iconBorder = troopHUD.gameObject.GetComponent<Image>();
         originalColor = iconBorder.color;
         StartCoroutine(InitializeHUD());
+
+        if (damageIndicator.activeInHierarchy == true)
+        {
+            damageIndicator.SetActive(false);
+        }
     }
 
     void Update()
@@ -147,7 +152,6 @@ public class Troop : MonoBehaviour
         UpdateUltimateUI();
         DrainShield();
 
-        
         if (tookdamage == true)
         {
             foreach(SpriteRenderer sprite in troopSprite)
@@ -738,7 +742,7 @@ public class Troop : MonoBehaviour
     public void FullHeal()
     {
         currentHealth = maxHealth;
-        Debug.Log(gameObject.name + " is fully healed");
+        //Debug.Log(gameObject.name + " is fully healed");
         UpdateHUD();
     }
 

@@ -726,7 +726,7 @@ public class TroopAutoAttack : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            if (targetPosition == null)
+            if (targetPosition == null || projectile == null)
             {
                 Destroy(projectile);
                 yield return null;

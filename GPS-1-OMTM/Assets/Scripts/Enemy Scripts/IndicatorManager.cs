@@ -20,6 +20,11 @@ public class IndicatorManager : MonoBehaviour
         //canvas = FindObjectOfType<Canvas>();
     }
 
+    private void Update()
+    {
+        CheckAndRemoveIndicators();
+    }
+
     public void AddIndicator(EnemyIndicator enemy, float cameraX)
     {
         if (enemy.transform.position.x < cameraX)
@@ -64,7 +69,7 @@ public class IndicatorManager : MonoBehaviour
         {
             case EnemyIndicator.Tier.Tier1:
                 arrowPrefab = arrowPrefabTier1;
-                yOffset = 150f +50;
+                yOffset = 150f + 50;
                 break;
             case EnemyIndicator.Tier.Tier2:
                 arrowPrefab = arrowPrefabTier2;
@@ -72,7 +77,7 @@ public class IndicatorManager : MonoBehaviour
                 break;
             case EnemyIndicator.Tier.Tier3:
                 arrowPrefab = arrowPrefabTier3;
-                yOffset = 330f; 
+                yOffset = 330f;
                 break;
         }
 
@@ -95,7 +100,8 @@ public class IndicatorManager : MonoBehaviour
     private bool IsAllEnemiesOnScreen(EnemyIndicator.Tier tier, bool left)
     {
         Vector3 cameraPosition = Camera.main.transform.position;
-        float screenBoundX = left ? cameraPosition.x : cameraPosition.x + Camera.main.aspect * Camera.main.orthographicSize * 2;
+        float screenHalfWidth = Camera.main.aspect * Camera.main.orthographicSize;
+        float screenBoundX = left ? cameraPosition.x - screenHalfWidth : cameraPosition.x + screenHalfWidth;
 
         foreach (var enemy in FindObjectsOfType<EnemyIndicator>())
         {
@@ -104,7 +110,7 @@ public class IndicatorManager : MonoBehaviour
                 Vector3 screenPos = Camera.main.WorldToViewportPoint(enemy.transform.position);
                 bool onScreen = screenPos.x > 0 && screenPos.x < 1 && screenPos.y > 0 && screenPos.y < 1;
 
-                if (!onScreen && (left ? enemy.transform.position.x < cameraPosition.x : enemy.transform.position.x > screenBoundX))
+                if (!onScreen && (left ? enemy.transform.position.x < screenBoundX : enemy.transform.position.x > screenBoundX))
                 {
                     return false;
                 }
@@ -112,5 +118,40 @@ public class IndicatorManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void CheckAndRemoveIndicators()
+    {
+        List<EnemyIndicator.Tier> tiersToRemove = new List<EnemyIndicator.Tier>();
+
+        foreach (var kvp in leftIndicators)
+        {
+            if (IsAllEnemiesOnScreen(kvp.Key, true))
+            {
+                Destroy(kvp.Value);
+                tiersToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (var tier in tiersToRemove)
+        {
+            leftIndicators.Remove(tier);
+        }
+
+        tiersToRemove.Clear();
+
+        foreach (var kvp in rightIndicators)
+        {
+            if (IsAllEnemiesOnScreen(kvp.Key, false))
+            {
+                Destroy(kvp.Value);
+                tiersToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (var tier in tiersToRemove)
+        {
+            rightIndicators.Remove(tier);
+        }
     }
 }

@@ -5,6 +5,22 @@ using UnityEngine;
 public class EnergyOrb : MonoBehaviour
 {
     public int energyAmount = 10; // Amount of energy to add to the EnergySystem
+    public int timeUntilDestroy = 30;
+
+    private void Start()
+    {
+        StartCoroutine(DestroySelf());
+    }
+
+    IEnumerator DestroySelf()
+    {
+        yield return new WaitForSeconds(timeUntilDestroy);
+
+        if (gameObject != null)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
