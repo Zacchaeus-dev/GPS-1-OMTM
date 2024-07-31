@@ -322,6 +322,8 @@ public class TroopController2D : MonoBehaviour
 
     IEnumerator RespawnTroop(Troop troop)
     {
+        troop.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+
         yield return new WaitForSeconds(3f);
 
         Vector2 respawnPosition = (Vector2)killdozer.position + respawnOffset;

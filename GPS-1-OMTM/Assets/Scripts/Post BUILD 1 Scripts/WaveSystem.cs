@@ -450,6 +450,11 @@ public class WaveSystem : MonoBehaviour
         //troop3.GetComponent<TroopClass>().SetTargetPositionHere();
         //troop4.GetComponent<TroopClass>().SetTargetPositionHere();
 
+        troop1.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop2.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop3.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop4.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+
         troop1.GetComponent<BoxCollider2D>().enabled = false;
         troop2.GetComponent<BoxCollider2D>().enabled = false;
         troop3.GetComponent<BoxCollider2D>().enabled = false;

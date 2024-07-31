@@ -107,13 +107,13 @@ public class TroopAutoAttack : MonoBehaviour
         switch (troopWeapon.selectedWeapon) //determine attack based on selected weapon
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
-                attackDamage = 20;
+                attackDamage = 40;
                 attackCooldown = 0.25f;
                 AnimationDelay = 0.4f;
                 ShootingDelay = 0.5f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-                attackDamage = 60;
+                attackDamage = 35;
                 attackCooldown = 1f;
                 AnimationDelay = 0.4f;
                 ShootingDelay = 1f;
@@ -624,7 +624,7 @@ public class TroopAutoAttack : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.TakeDamage(attackDamage);
-                    enemy.ApplyKnockback(transform.position);
+                    //enemy.ApplyKnockback(transform.position);
                     //Debug.Log("Knockback and Damage");
                 }
                 else
