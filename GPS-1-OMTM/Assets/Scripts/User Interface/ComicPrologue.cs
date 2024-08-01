@@ -1,60 +1,106 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ComicPrologue : MonoBehaviour
 {
-    [Header("Comic Images")]
-    public Image[] comicImages; // Array of comic images
+    [Header("Comic Panels")]
+    public GameObject[] comicPanels; // Array of comic panel GameObjects
 
     [Header("Next Scene")]
     public string sceneToLoad; // Name of the scene to load after the comic prologue
 
-    private int currentImageIndex = 0; // Current image index
+    [Header("UI Elements")]
+    public GameObject mainMenu; // Reference to the main menu GameObject
+    public Button nextButton; // Reference to the next button
+    public Button backButton; // Reference to the back button
+    public float delayBeforeButton = 2f; // Delay before showing the next button
+
+    private int currentPanelIndex = 0; // Current panel index
 
     void Start()
     {
-        // Initially set all images to inactive
-        foreach (Image img in comicImages)
+        // Initially hide all comic panels and the buttons
+        foreach (var panel in comicPanels)
         {
-            img.gameObject.SetActive(false);
+            panel.SetActive(false);
         }
-    }
+        nextButton.gameObject.SetActive(false);
+        backButton.gameObject.SetActive(false);
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) // On left mouse click or tap
-        {
-            ShowNextImage();
-        }
+        // Add listeners for the buttons
+        nextButton.onClick.AddListener(ShowNextPanel);
+        backButton.onClick.AddListener(ShowPreviousPanel);
     }
 
     public void StartComicPrologue()
     {
-        if (comicImages.Length > 0)
+        if (comicPanels.Length > 0)
         {
-            comicImages[currentImageIndex].gameObject.SetActive(true);
+            currentPanelIndex = 0;
+            comicPanels[currentPanelIndex].SetActive(true);
+            mainMenu.SetActive(false); // Disable the main menu
+            StartCoroutine(ShowNextButtonWithDelay());
         }
     }
 
-    void ShowNextImage()
+    void ShowNextPanel()
     {
-        if (comicImages.Length == 0)
+        if (comicPanels.Length == 0)
             return;
 
-        // Deactivate current image
-        comicImages[currentImageIndex].gameObject.SetActive(false);
+        // Deactivate the current panel
+        comicPanels[currentPanelIndex].SetActive(false);
 
-        // Check if there are more images to show
-        if (currentImageIndex < comicImages.Length - 1)
+        // Check if there are more panels to show
+        if (currentPanelIndex < comicPanels.Length - 1)
         {
-            currentImageIndex++;
-            comicImages[currentImageIndex].gameObject.SetActive(true);
+            currentPanelIndex++;
+            comicPanels[currentPanelIndex].SetActive(true);
+            nextButton.gameObject.SetActive(false); // Hide the next button
+            backButton.gameObject.SetActive(false); // Hide the back button
+            StartCoroutine(ShowNextButtonWithDelay());
         }
         else
         {
-            // Load the next scene if no more images
+            // Load the next scene if no more panels
             SceneManager.LoadScene(sceneToLoad);
+        }
+    }
+
+    void ShowPreviousPanel()
+    {
+        if (comicPanels.Length == 0)
+            return;
+
+        // Deactivate the current panel
+        comicPanels[currentPanelIndex].SetActive(false);
+
+        // Check if there are previous panels to show
+        if (currentPanelIndex > 0)
+        {
+            currentPanelIndex--;
+            comicPanels[currentPanelIndex].SetActive(true);
+            nextButton.gameObject.SetActive(false); // Hide the next button
+            backButton.gameObject.SetActive(false); // Hide the back button
+            StartCoroutine(ShowNextButtonWithDelay());
+        }
+        else
+        {
+            // Go back to the main menu if at the first panel
+            mainMenu.SetActive(true);
+            gameObject.SetActive(false); // Hide the comic prologue
+        }
+    }
+
+    IEnumerator ShowNextButtonWithDelay()
+    {
+        yield return new WaitForSeconds(delayBeforeButton);
+        nextButton.gameObject.SetActive(true);
+        if (currentPanelIndex > 0) // Show the back button only if not on the first panel
+        {
+            backButton.gameObject.SetActive(true);
         }
     }
 }
