@@ -16,6 +16,7 @@ public class ComicPrologue : MonoBehaviour
     public Button nextButton; // Reference to the next button
     public Button backButton; // Reference to the back button
     public float delayBeforeButton = 2f; // Delay before showing the next button
+    public FadeManager fadeManager;
 
     private int currentPanelIndex = 0; // Current panel index
 
@@ -50,22 +51,20 @@ public class ComicPrologue : MonoBehaviour
         if (comicPanels.Length == 0)
             return;
 
-        // Deactivate the current panel
         comicPanels[currentPanelIndex].SetActive(false);
 
-        // Check if there are more panels to show
         if (currentPanelIndex < comicPanels.Length - 1)
         {
             currentPanelIndex++;
             comicPanels[currentPanelIndex].SetActive(true);
-            nextButton.gameObject.SetActive(false); // Hide the next button
-            backButton.gameObject.SetActive(false); // Hide the back button
+            nextButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(false);
             StartCoroutine(ShowNextButtonWithDelay());
         }
         else
         {
-            // Load the next scene if no more panels
-            SceneManager.LoadScene(sceneToLoad);
+            // Trigger fade out and scene load
+            fadeManager.FadeOutAndLoadScene();
         }
     }
 
