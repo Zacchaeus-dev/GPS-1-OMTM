@@ -1540,7 +1540,7 @@ public class TroopClass : MonoBehaviour
             // if pathfind blocked by an enemy
             if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
-                Debug.Log("STOPPIN");
+                //Debug.Log("STOPPIN");
                 targetPosition = transform.position;
                 vertPosition = Vector2.zero;
                 nearestVert = null;
@@ -1971,7 +1971,7 @@ public class TroopClass : MonoBehaviour
         }
         else if (onPlatform == "Ground" && collision.tag == "[PF] KD Middle-Ground")// || onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Middle-Ground")
         {
-            Debug.Log("KD Middle Ground");
+            //Debug.Log("KD Middle Ground");
             canClimb = false;
             isMoving = true;
 
@@ -2046,7 +2046,7 @@ public class TroopClass : MonoBehaviour
         }
         else if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Ground Check")
         {
-            Debug.Log("Ground Check");
+            //Debug.Log("Ground Check");
             canClimb = false;
             isMoving = true;
 
@@ -2283,10 +2283,12 @@ public class TroopClass : MonoBehaviour
         if (GoingLeft == true)
         {
             Model.transform.rotation = Quaternion.Euler(0, 180, 0);
+            gameObject.GetComponent<Troop>().movingRight = false;
         }
         else if (GoingLeft == false)
         {
             Model.transform.rotation = Quaternion.Euler(0, 0, 0);
+            gameObject.GetComponent<Troop>().movingRight = true;
         }
     }
 
@@ -2309,7 +2311,7 @@ public class TroopClass : MonoBehaviour
                 {
                     transform.position = vertPosition;
                     canClimb = true;
-                    Debug.Log("STARTING CLIMB NOW");
+                    //Debug.Log("STARTING CLIMB NOW");
                 }
             }
         }

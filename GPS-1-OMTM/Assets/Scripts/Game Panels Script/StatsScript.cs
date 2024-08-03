@@ -59,7 +59,7 @@ public class StatsScript : MonoBehaviour
             moveSpeedText.text = "Movement Speed: " + troopClassScript.moveSpeed.ToString();
         }
 
-        Debug.Log("Switch");       
+        //Debug.Log("Switch");       
     }
 
   

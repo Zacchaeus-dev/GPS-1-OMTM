@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Enemy Spawned");
+        //Debug.Log("Enemy Spawned");
         if (isDummy)
         {
             damageIndicator.SetActive(false);
@@ -184,6 +184,10 @@ public class Enemy : MonoBehaviour
                     closestTarget = target;
                 }
             }
+            else
+            {
+                //Debug.Log("No target in range");
+            }
         }
     }
 
@@ -219,6 +223,18 @@ public class Enemy : MonoBehaviour
                     StartCoroutine(AttackTarget());
                 }
             }
+        }
+        else if (!isStunned)
+        {
+            Debug.Log("Keep moving with no target");
+            Vector3 direction = (killdozerTransform.position - transform.position).normalized;
+            if (Animator != null)
+            {
+                Animator.TroopWalkOn();
+            }
+            direction.y = 0; //only move horizontally
+            transform.position += direction * moveSpeed * Time.deltaTime;
+            FindClosestTarget();
         }
     }
 
@@ -420,6 +436,14 @@ public class Enemy : MonoBehaviour
             if (enemy != null && enemy != this && !enemy.slowed)
             {
                 enemy.SlowedSpeedStart();
+            }
+            else if (enemy == null)
+            {
+                FlyingEnemy flyingEnemy = hitCollider.GetComponent<FlyingEnemy>();
+                if (flyingEnemy != null && flyingEnemy != this && !flyingEnemy.slowed)
+                {
+                    flyingEnemy.SlowedSpeedStart();
+                }
             }
         }
     }

@@ -40,6 +40,18 @@ public class FlyingEnemy : MonoBehaviour
     private bool tookdamage;
     Vector3 normalScale;
 
+    public bool markedForDeath = false;
+    public bool slowed = false;
+    public GameObject markForDeathIcon;
+    public GameObject slowedIcon;
+    public float slowEffectRadius = 5f;
+    private Rigidbody2D rb;
+    private bool facingRight = false;
+
+    public bool slowArea = false;
+    private bool isKnockedBack = false;
+    private bool isStunned = false;
+
     [Header("Art / Animations")]
     public GameObject EnemyModel;
     TroopAnimationsManager Animator;
@@ -68,19 +80,21 @@ public class FlyingEnemy : MonoBehaviour
 
     void Update()
     {
-        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x) //move depending on killdozer's location
+        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x && !isStunned) //move depending on killdozer's location
         {
             MoveLeft();
             EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
             Animator.TroopAttackOff();
+            facingRight = false;
             //Debug.Log("Drone move left " + EnemyModel.transform.rotation.y);
 
-        }
-        else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x)
+}
+        else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x && !isStunned)
         {
             MoveRight();
             EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
             Animator.TroopAttackOff();
+            facingRight = true;
             //Debug.Log("Drone move right " + EnemyModel.transform.rotation.y);
         }
 
@@ -170,7 +184,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void MoveTowardsTarget()
     {
-        if (killdozer != null)
+        if (killdozer != null && !isStunned)
         {
             float distanceToKilldozer = 0;
             Vector3 direction = (killdozer.transform.position - transform.position).normalized;
@@ -200,7 +214,7 @@ public class FlyingEnemy : MonoBehaviour
             }
         }
 
-        if (targetTroop != null)
+        if (targetTroop != null && !isStunned)
         {
             // Calculate distance to the target troop
             float distanceToTroop = Vector2.Distance(transform.position, targetTroop.transform.position);
@@ -217,7 +231,7 @@ public class FlyingEnemy : MonoBehaviour
 
     void HandleAttack()
     {
-        if (killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange))
+        if (!isStunned && killdozer != null && (Vector2.Distance(transform.position, killdozerRightTarget.transform.position) <= attackRange || Vector2.Distance(transform.position, killdozerLeftTarget.transform.position) <= attackRange))
         {
             Animator.TroopAttackOn();
             if (Time.time >= lastAttackTime + attackInterval)
@@ -227,7 +241,7 @@ public class FlyingEnemy : MonoBehaviour
                 attackingKilldozer = true;
             }
         }
-        else if (targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
+        else if (!isStunned && targetTroop != null && Vector2.Distance(transform.position, targetTroop.transform.position) <= attackRange)
         {
             Animator.TroopAttackOn();
             if (Time.time >= lastAttackTime + attackInterval)
@@ -343,6 +357,117 @@ public class FlyingEnemy : MonoBehaviour
 
         yield return new WaitForSeconds(0.75f);
         Destroy(gameObject);
+    }
+
+    public void MarkForDeathStart()
+    {
+        if (markedForDeath) //no effect if enemy is already marked for death
+        {
+            return;
+        }
+
+        markedForDeath = true;
+        markForDeathIcon.SetActive(true);
+
+        if (slowArea)
+        {
+            SlowNearbyEnemies();
+        }
+
+        StartCoroutine((MarkForDeathEnd()));
+    }
+
+    IEnumerator MarkForDeathEnd()
+    {
+        yield return new WaitForSeconds(10000f);
+
+        if (gameObject != null)
+        {
+            markedForDeath = false;
+            markForDeathIcon.SetActive(false);
+        }
+    }
+
+    void SlowNearbyEnemies()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, slowEffectRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            Enemy enemy = hitCollider.GetComponent<Enemy>();
+            if (enemy != null && enemy != this && !enemy.slowed)
+            {
+                enemy.SlowedSpeedStart();
+            }
+            else if (enemy == null)
+            {
+                FlyingEnemy flyingEnemy = hitCollider.GetComponent<FlyingEnemy>();
+                if (flyingEnemy != null && flyingEnemy != this && !flyingEnemy.slowed)
+                {
+                    flyingEnemy.SlowedSpeedStart();
+                }
+            }
+        }
+    }
+
+    public void SlowedSpeedStart()
+    {
+        if (slowed) //no effect if drone is already slowed
+        {
+            return;
+        }
+
+        slowed = true;
+        slowedIcon.SetActive(true);
+        speed = speed / 2;
+        StartCoroutine((SlowedSpeedEnd()));
+    }
+
+    IEnumerator SlowedSpeedEnd()
+    {
+        yield return new WaitForSeconds(10000f);
+
+        if (gameObject != null)
+        {
+            speed = speed * 2;
+            slowed = false;
+            slowedIcon.SetActive(false);
+        }
+    }
+
+    public void ApplyKnockback(Vector3 attackerPosition)
+    {
+        if (!isKnockedBack)
+        {
+            StartCoroutine(KnockbackCoroutine(attackerPosition));
+        }
+    }
+
+    [Header(" knockback ")]
+    public float knockbackForce;
+    private IEnumerator KnockbackCoroutine(Vector3 attackerPosition)
+    {
+        isKnockedBack = true;
+
+        if (facingRight)
+        {
+            rb.AddForce(Vector2.left * knockbackForce, ForceMode2D.Impulse);
+        }
+        else
+        {
+            rb.AddForce(Vector2.right * knockbackForce, ForceMode2D.Impulse);
+        }
+
+        yield return new WaitForSeconds(0.3f); // Knockback effect duration
+
+        // Stop the knockback by setting velocity to zero
+        rb.velocity = new Vector2(0, rb.velocity.y);
+
+        isKnockedBack = false;
+    }
+
+    public void Stun(bool stun)
+    {
+        isStunned = stun;
     }
 
     void OnDrawGizmosSelected()

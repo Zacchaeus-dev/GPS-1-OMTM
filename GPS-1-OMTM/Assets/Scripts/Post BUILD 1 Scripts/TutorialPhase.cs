@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class TutorialPhase : MonoBehaviour
@@ -27,9 +28,13 @@ public class TutorialPhase : MonoBehaviour
     public GameObject instruction1;
     public GameObject instruction3;
     public GameObject instruction4;
+    public GameObject instruction4A;
     public GameObject instruction5;
     public GameObject instruction7;
+    public GameObject instruction8;
+    public bool instruction8On;
     public GameObject labels;
+    public GameObject kddButton;
     public GameObject wavesObject;
 
     void Start()
@@ -42,6 +47,7 @@ public class TutorialPhase : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (waveSystem.wave1Started == true)
         {
             if (dummy != null)
@@ -51,9 +57,21 @@ public class TutorialPhase : MonoBehaviour
 
             return;
         }
+        */
+
+        if (waveSystem.currentState == WaveSystem.WaveState.Start && tutorialOn == false)
+        {
+            if (dummy != null)
+            {
+                Destroy(dummy);
+            }
+
+            return;
+        }
+
         if (dummyEnemy != null)
         {
-            if (dummyEnemy.dummyDead == true && !respawning)
+            if (dummyEnemy.dummyDead == true && !respawning && tutorialOn == true)
             {
                 if (!dummyDiedOnce)
                 {
@@ -61,12 +79,22 @@ public class TutorialPhase : MonoBehaviour
                     instruction3.SetActive(false);
                     instruction4.SetActive(true);
                     labels.SetActive(false);
+
+                    StartCoroutine(Instruction4ADelay());
                 }
 
                 respawning = true;
                 StartCoroutine(RespawnDummy());
             }
         }
+    }
+
+    IEnumerator Instruction4ADelay()
+    {
+        yield return new WaitForSeconds(3f);
+
+        instruction4A.SetActive(true);
+        kddButton.SetActive(true);
     }
 
     public void TutorialStart()
@@ -99,21 +127,29 @@ public class TutorialPhase : MonoBehaviour
         healerHUD.DimOff();
         kdd.SetActive(true);
         healerHUD.DimOff();
+        instruction4.SetActive(false); //prevent bug
         instruction5.SetActive(false);
-        instruction7.SetActive(true);
         wavesObject.SetActive(true);
         waveSystem.TeleportTroopsToKilldozer();
         cameraSystem.FocusOnKilldozer();
         StartCoroutine(DefocusKilldozer());
-        edgePanTutorial.SetActive(true);
-        StartCoroutine(CloseEdgePanTutorial());
+        instruction8.SetActive(true);
+        instruction8On = true;
         tutorialOn = false;
 
-
-        yield return new WaitForSeconds(2);
-        DestroyObjectsWithTag("Enemy");
+        yield return new WaitForSeconds(1f);
+        //DestroyObjectsWithTag("Enemy");
     }
 
+    public void EnableEdgePanTutorial()
+    {
+        instruction8On = false;
+        instruction7.SetActive(true);
+        edgePanTutorial.SetActive(true);
+        StartCoroutine(CloseEdgePanTutorial());
+    }
+
+    /*
     void DestroyObjectsWithTag(string tag)
     {
         GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag(tag);
@@ -122,6 +158,8 @@ public class TutorialPhase : MonoBehaviour
             Destroy(obj);
         }
     }
+    */
+
     IEnumerator RespawnDummy()
     {
         yield return new WaitForSeconds(5f);
@@ -136,17 +174,23 @@ public class TutorialPhase : MonoBehaviour
         respawning = false;
     }
 
+    public void CloseInstruction3()
+    {
+        Time.timeScale = 1.0f;
+        instruction3.SetActive(false);
+    }
+
     public void CloseTutorialPanel()
     {
         Time.timeScale = 1.0f;
         tutorialPanel.SetActive(false);
-        objectivePanel.SetActive(true);
+        StartCoroutine(TutorialEnd());
     }
 
     public void CloseObjectivePanel()
     {
         objectivePanel.SetActive(false);
-        StartCoroutine(TutorialEnd());
+        tutorialPanel.SetActive(true);
     }
 
     IEnumerator DefocusKilldozer()

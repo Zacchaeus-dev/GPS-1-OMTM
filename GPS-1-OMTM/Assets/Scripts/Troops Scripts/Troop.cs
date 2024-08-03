@@ -97,8 +97,12 @@ public class Troop : MonoBehaviour
     public bool death;
 
     public bool dpsUltiOn;
-    public GameObject castingRangePrefab; 
-    private GameObject castingRangeIndicator;
+    //public GameObject castingRangePrefab; 
+    //private GameObject castingRangeIndicator;
+
+    public bool movingRight;
+
+    public TroopWeapon troopWeapon;
 
     [Header(" Art / Animations ")]
     // Animation
@@ -206,6 +210,7 @@ public class Troop : MonoBehaviour
 
     void HandleUltimateInput()
     {
+        /*
         if (selected && Input.GetKeyDown(KeyCode.R) && ccClickingOnLocation) // Cancel clicking on location if it's already active
         {
             ccClickingOnLocation = false;
@@ -216,11 +221,15 @@ public class Troop : MonoBehaviour
             tankClickingOnLocation = false;
             Debug.Log("Tank Ultimate targeting cancelled.");
         }
-        else if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
+        */
+
+        if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
         {
             // Start the ultimate if not on cooldown
             StartCoroutine(UseUltimate(ultimate));
         }
+
+        /*
         if (ccClickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
         {
             StartCoroutine(HandleCCUltimateTargeting());
@@ -229,6 +238,7 @@ public class Troop : MonoBehaviour
         {
             StartCoroutine(HandleTankUltimateTargeting());
         }
+        */
     }
 
     IEnumerator InitializeHUD()
@@ -305,7 +315,7 @@ public class Troop : MonoBehaviour
 
     }
 
-
+    /*
     IEnumerator HandleTankUltimateTargeting()
     {
         // activate ult animation
@@ -406,35 +416,6 @@ public class Troop : MonoBehaviour
 
     }
 
-    IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
-    {
-        float speed = 40f; 
-        while ((targetPosition - shield.transform.position).magnitude > 0.1f)
-        {
-            shield.transform.position = Vector3.MoveTowards(shield.transform.position, targetPosition, speed * Time.deltaTime);
-            yield return null;
-        }
-
-        shield.transform.position = targetPosition;
-        shield.GetComponent<BoxCollider2D>().enabled = true; // Enable collider
-
-        Vector3 shieldPosition = shield.transform.position;
-        Vector3 tankPosition = transform.position;
-
-        Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
-        foreach (var enemyCollider in enemiesInRange)
-        {
-            Enemy enemy = enemyCollider.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(50);
-                StartCoroutine(StunEnemy(enemy, 2f)); // Stun duration
-            }
-        }
-
-        StartCoroutine(DestroyTankShield(shield));
-    }
-
     string GetCurrentTroopTag()
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(new Vector2(transform.position.x, transform.position.y), Vector2.zero);
@@ -450,8 +431,8 @@ public class Troop : MonoBehaviour
         }
         return null;
     }
+    */
 
-    public TroopWeapon troopWeapon;
     IEnumerator UseUltimate(Ultimate _ultimate)
     {
         if (troopEnergy.currentPower < troopEnergy.maxPower)
@@ -491,14 +472,12 @@ public class Troop : MonoBehaviour
 
                 break;
             case Ultimate.Ultimate_Tank:
-                Ultimate_Tank();
+                StartCoroutine(Ultimate_Tank());
 
 
                 break;
             case Ultimate.Ultimate_CC:
-
-
-                Ultimate_CC();
+                StartCoroutine(Ultimate_CC());
 
 
                 break;
@@ -595,11 +574,12 @@ public class Troop : MonoBehaviour
                 instruction5.SetActive(false);
                 //instruction6.SetActive(true);
 
-                StartCoroutine(TutorialDelay());
+                //StartCoroutine(TutorialDelay());
             }
         }
     }
 
+    /*
     IEnumerator TutorialDelay()
     {
         yield return new WaitForSeconds(3f);
@@ -609,11 +589,81 @@ public class Troop : MonoBehaviour
         Debug.Log("Tutorial Panel On");
         Time.timeScale = 0.0f;
     }
+    */
 
-    void Ultimate_Tank()
+    IEnumerator Ultimate_Tank()
     {
         GetComponent<TroopClass>().SetTargetPositionHere();
-        tankClickingOnLocation = true;
+        //tankClickingOnLocation = true;
+
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+        yield return new WaitForSeconds(UltiDelay);
+
+        Vector3 shieldOffset = new Vector3(20, 0, 0);
+
+        if (!movingRight)
+        {
+            shieldOffset = new Vector3(-20, 0, 0);
+        }
+
+        Vector3 newPosition = transform.position + shieldOffset;
+
+        GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
+        TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
+
+        tankClickingOnLocation = false;
+        troopEnergy.UseAllPower();
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+
+        StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
+
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+    }
+
+    IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
+    {
+        float speed = 40f;
+        while ((targetPosition - shield.transform.position).magnitude > 0.1f)
+        {
+            shield.transform.position = Vector3.MoveTowards(shield.transform.position, targetPosition, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        shield.transform.position = targetPosition;
+        shield.GetComponent<BoxCollider2D>().enabled = true; // Enable collider
+
+        Vector3 shieldPosition = shield.transform.position;
+        Vector3 tankPosition = transform.position;
+
+        Collider2D[] enemiesInRange = Physics2D.OverlapAreaAll(tankPosition, shieldPosition);
+        foreach (var enemyCollider in enemiesInRange)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                Debug.Log("Enemy took damage from Tank's Ulti");
+                enemy.TakeDamage(50);
+                StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, false)); // Stun duration
+            }
+            else
+            {
+                FlyingEnemy flyingEnemy = enemyCollider.GetComponent<FlyingEnemy>();
+                if (flyingEnemy != null)
+                {
+                    Debug.Log("Flying enemy took damage from Tank's Ulti");
+                    flyingEnemy.TakeDamage(50);
+                    StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, true));
+                }
+            }
+        }
+
+        StartCoroutine(DestroyTankShield(shield));
     }
 
     IEnumerator DestroyTankShield(GameObject TankShield)
@@ -622,22 +672,71 @@ public class Troop : MonoBehaviour
 
         Destroy(TankShield);
 
-
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
     }
 
-    private IEnumerator StunEnemy(Enemy enemy, float duration)
+    private IEnumerator StunEnemy(GameObject _enemy, float duration, bool isFlying)
     {
-        enemy.Stun(true);
+        if (!isFlying)
+        {
+            Enemy enemy = _enemy.GetComponent<Enemy>();
+            enemy.Stun(true);
+        }
+        else
+        {
+            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+            flyingEnemy.Stun(true);
+        }
+        
         yield return new WaitForSeconds(duration);
-        enemy.Stun(false);
+
+        if (!isFlying)
+        {
+            Enemy enemy = _enemy.GetComponent<Enemy>();
+            enemy.Stun(false);
+        }
+        else
+        {
+            FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+            flyingEnemy.Stun(false);
+        }
     }
 
-    void Ultimate_CC()
+    IEnumerator Ultimate_CC()
     {
         GetComponent<TroopClass>().SetTargetPositionHere();
-        ccClickingOnLocation = true;
+        //ccClickingOnLocation = true;
+
+        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+        yield return new WaitForSeconds(UltiDelay);
+
+        Vector3 mineOffset = new Vector3(20, -2, 0);
+
+
+        if (!movingRight)
+        {
+            mineOffset = new Vector3(-20, -2, 0);
+        }
+
+        Vector3 newPosition = transform.position + mineOffset;
+
+        Instantiate(tauntMine, newPosition, Quaternion.identity);
+        ccClickingOnLocation = false;
+
+        troopEnergy.UseAllPower();
+        ultimateOnCooldown = true;
+        ultimateCooldownTimeRemaining = ultimateCooldown;
+        ultimateDurationTimeRemaining = ultimateDuration;
+        Debug.Log("CC Ultimate Activated");
+
+        StartCoroutine(Ultimate_CC_End());
+
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
     }
 
     IEnumerator Ultimate_CC_End()

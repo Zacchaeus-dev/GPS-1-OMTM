@@ -159,7 +159,7 @@ public class WaveSystem : MonoBehaviour
             if (obj != null)
             {
                 obj.SetActive(false);
-                Debug.Log("Disabled " + obj.name);
+                //Debug.Log("Disabled " + obj.name);
             }
         }
 
@@ -199,7 +199,11 @@ public class WaveSystem : MonoBehaviour
                 break;
         }
 
-        UpdateButtonState();
+        if (tutorialPhase.tutorialOn == false)
+        {
+            UpdateButtonState();
+        }
+
         UpdateTimerUI();
     }
 
@@ -667,7 +671,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 1.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -730,7 +734,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 2.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -793,7 +797,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 3.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -856,7 +860,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 4.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -919,7 +923,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 5.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -982,7 +986,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 6.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1045,7 +1049,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 7.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1108,7 +1112,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 8.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1171,7 +1175,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 9.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1234,7 +1238,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 10.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1297,7 +1301,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 11.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1360,7 +1364,7 @@ public class WaveSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in this mini wave.");
+                Debug.Log("Not enough spawn locations or enemies to spawn for the number of enemies in Spawner 12.");
                 break;
             }
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -1386,14 +1390,9 @@ public class WaveSystem : MonoBehaviour
     {
         bool isActive;
 
-        if(tutorialPhase.tutorialOn)
-        {
-            isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;
-        }
-        else
-        {
+
             isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
-        }
+
 
         //bool isActive = currentState == WaveState.Start || currentState == WaveState.Prewave || currentState == WaveState.Break;
         //isActive = currentState == WaveState.Prewave || currentState == WaveState.Break;

@@ -158,16 +158,15 @@ public class TroopAutoAttack : MonoBehaviour
 
         if (autoAttackEnabled)
         {
-            if (targetEnemy == null)
+            if (targetEnemy == null || targetEnemy.activeInHierarchy == false)
             {
                 FindTarget();
                 DeactivateAttackVisuals();
-                delay = 0;
+                //delay = 0;
             }
             else
             {
                 AttackTarget();
-                
             }
         }  
     }
@@ -196,9 +195,7 @@ public class TroopAutoAttack : MonoBehaviour
         {
             targetEnemy = closestEnemy;     
         }
-
     }
-
   
     void AttackTarget()
     {
@@ -231,11 +228,9 @@ public class TroopAutoAttack : MonoBehaviour
                     {
                         delay = 0;
                         
-
                         if (Time.time >= lastAttackTime + attackCooldown)
                         {
                             //Enemy enemy = targetEnemy.GetComponent<Enemy>();
-
 
                             if (targetEnemy != null)
                             {
@@ -681,6 +676,8 @@ public class TroopAutoAttack : MonoBehaviour
             {
                 FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
                 flyingEnemy.TakeDamage(attackDamage);
+                flyingEnemy.slowArea = true;
+                flyingEnemy.MarkForDeathStart();
             }
         }
     }
@@ -773,6 +770,11 @@ public class TroopAutoAttack : MonoBehaviour
             if (enemy != null)
             {
                 enemy.MarkForDeathStart();
+            }
+            else
+            {
+                FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+                flyingEnemy.MarkForDeathStart();
             }
 
             Vector2 attackCenter = _enemy.transform.position; // Center of the attack

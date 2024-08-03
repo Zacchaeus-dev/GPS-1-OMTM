@@ -125,7 +125,14 @@ MonoBehaviour:
   - {fileID: 8003630704588206164}
   DamagedColor: {r: 0.9607843, g: 0.3137255, b: 0.3137255, a: 0.64705884}
   NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  markedForDeath: 0
+  slowed: 0
+  markForDeathIcon: {fileID: 2715790793983140121}
+  slowedIcon: {fileID: 8825761182206943497}
+  slowEffectRadius: 5
+  slowArea: 0
   EnemyModel: {fileID: 4499519239705694393}
+  knockbackForce: 0
 --- !u!114 &8791878752881137860
 MonoBehaviour:
   m_ObjectHideFlags: 0

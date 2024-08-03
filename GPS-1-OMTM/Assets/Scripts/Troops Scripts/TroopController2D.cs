@@ -56,9 +56,12 @@ public class TroopController2D : MonoBehaviour
     public TutorialPhase tutorialPhase;
     public GameObject instruction1;
     public GameObject instruction2;
+    public GameObject attackRangeLabel;
+    public GameObject rightClickPosition;
     public GameObject instruction3;
     public GameObject instruction6;
     public GameObject tutorialPanel;
+    public GameObject instruction8;
 
     void Start()
     {
@@ -106,12 +109,22 @@ public class TroopController2D : MonoBehaviour
                         DeselectTroop(); //deselect old troop
                     }
 
-                    if (tutorialPhase.tutorialOn == true && instruction1.activeInHierarchy == true) //tutorial selecting troop
+                    if (tutorialPhase.tutorialOn == true)
                     {
-                        instruction1.SetActive(false);
-                        instruction2.SetActive(true);
+                       if (instruction1.activeInHierarchy == true) //tutorial selecting troop
+                       {
+                          instruction1.SetActive(false);
+                          instruction2.SetActive(true);
+                          attackRangeLabel.SetActive(true);
+                       }
                     }
-                    
+                    else if (tutorialPhase.tutorialOn == false && tutorialPhase.instruction8On == true)
+                    {
+                        instruction8.SetActive(false);
+                        tutorialPhase.EnableEdgePanTutorial();
+                    }
+
+
                     SelectTroop(hit.collider.gameObject);
                 }
                 /*
@@ -142,8 +155,7 @@ public class TroopController2D : MonoBehaviour
 
             if (tutorialPhase.tutorialOn == true && instruction2.activeInHierarchy == true) //tutorial 
             {
-                instruction2.SetActive(false);
-                instruction3.SetActive(true);
+                //TutorialRightClick();
             }
 
             if (GoingLeft == true)
@@ -161,7 +173,6 @@ public class TroopController2D : MonoBehaviour
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit); // start moving
                         selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false); // Pathfind UI
-
 
                     }
                 }
@@ -183,6 +194,22 @@ public class TroopController2D : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void TutorialLeftClick()
+    {
+        instruction1.SetActive(false);
+        instruction2.SetActive(true);
+        attackRangeLabel.SetActive(true);
+        rightClickPosition.SetActive(true);
+    }
+
+    public void TutorialRightClick()
+    {
+        instruction2.SetActive(false);
+        attackRangeLabel.SetActive(false);
+        instruction3.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     void DetectDoubleClick() //focus camera on troop
