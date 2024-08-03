@@ -91,7 +91,7 @@ public class IndicatorManager : MonoBehaviour
         if (left)
         {
             // Flip the arrow horizontally
-            rectTransform.localScale = new Vector3(-0.5f, -0.5f, -0.5f);
+            rectTransform.localScale = new Vector3(-0.7f, -0.7f, -0.7f);
         }
 
         return arrow;
