@@ -876,6 +876,7 @@ public class Troop : MonoBehaviour
         animator.SetTrigger("Death");
 
         yield return new WaitForSeconds(0.5f);
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopIdle();
         TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
         yield return new WaitForSeconds(0.3f);
         model.SetActive(false);

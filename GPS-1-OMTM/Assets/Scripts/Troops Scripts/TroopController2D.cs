@@ -351,7 +351,7 @@ public class TroopController2D : MonoBehaviour
     {
         troop.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
 
         Vector2 respawnPosition = (Vector2)killdozer.position + respawnOffset;
 
