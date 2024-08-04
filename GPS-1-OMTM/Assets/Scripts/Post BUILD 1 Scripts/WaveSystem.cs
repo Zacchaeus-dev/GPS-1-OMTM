@@ -140,6 +140,9 @@ public class WaveSystem : MonoBehaviour
     public GameObject wave4Screen;
     public bool wave1Started;
     public TutorialPhase tutorialPhase;
+    public GameObject instruction7;
+    public GameObject instruction8;
+    public GameObject edgePanTutorial;
     int maxEnemies = 100;
 
     void Start()
@@ -230,6 +233,10 @@ public class WaveSystem : MonoBehaviour
 
     public void StartWave()
     {
+        instruction7.SetActive(false);
+        instruction8.SetActive(false);
+        edgePanTutorial.SetActive(false);
+
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
 

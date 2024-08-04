@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
+using static WaveSystem;
 
 public class TutorialPhase : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class TutorialPhase : MonoBehaviour
     public GameObject edgePanTutorial;
     public GameObject tutorialInstructions;
     public GameObject instruction1;
+    public GameObject instruction2;
     public GameObject instruction3;
     public GameObject instruction4;
     public GameObject instruction4A;
@@ -36,6 +38,10 @@ public class TutorialPhase : MonoBehaviour
     public GameObject labels;
     public GameObject kddButton;
     public GameObject wavesObject;
+    public GameObject rightClickPosition;
+    public GameObject wavePopUp;
+    public GameObject preWave1Screen;
+    public GameObject skipTutorialButton;
 
     void Start()
     {
@@ -113,6 +119,8 @@ public class TutorialPhase : MonoBehaviour
         instruction1.SetActive(true);
         labels.SetActive(true);
         wavesObject.SetActive(false);
+        rightClickPosition.SetActive(true);
+        skipTutorialButton.SetActive(true);
         //waveSystem.gameObject.SetActive(false);
     }
 
@@ -184,6 +192,24 @@ public class TutorialPhase : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         tutorialPanel.SetActive(false);
+        //show pre wave 1 pop up
+        preWave1Screen.SetActive(true);
+        wavePopUp.SetActive(true);
+
+        instruction5.SetActive(false); //prevent bug
+        StartCoroutine(WaveAnimation());
+        //StartCoroutine(TutorialEnd());
+    }
+
+    IEnumerator WaveAnimation()
+    {
+        skipTutorialButton.SetActive(false);
+
+        yield return new WaitForSeconds(3f); //animation duration
+
+        instruction5.SetActive(false); //prevent bug
+        wavePopUp.SetActive(false);
+        preWave1Screen.SetActive(false);
         StartCoroutine(TutorialEnd());
     }
 
@@ -206,5 +232,22 @@ public class TutorialPhase : MonoBehaviour
 
         edgePanTutorial.SetActive(false);
         instruction7.SetActive(false);
+    }
+
+    public void SkipTutorial()
+    {
+        instruction1.SetActive(false);
+        instruction2.SetActive(false);
+        instruction3.SetActive(false);
+        instruction4.SetActive(false);
+        instruction4A.SetActive(false);
+        instruction5.SetActive(false);
+        instruction7.SetActive(false);
+        instruction8.SetActive(false);
+        labels.SetActive(false);
+
+        preWave1Screen.SetActive(true);
+        wavePopUp.SetActive(true);
+        StartCoroutine(WaveAnimation());
     }
 }

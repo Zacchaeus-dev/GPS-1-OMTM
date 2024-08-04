@@ -71,14 +71,21 @@ public class TroopHUD : MonoBehaviour
         currentPowerText.text = troopEnergy.currentPower.ToString();
         currentShieldText.text = _troop.currentShield.ToString();
 
-        // Calculate the percentage
         float percentage = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower) * 100f;
         //Debug.Log("Calculated Percentage: " + percentage);
         percentage = (int)percentage;
-
         powerPercentage.text =  percentage.ToString() + "%";
 
-        ultimatePowerOverlay.fillAmount = 1 - ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
+        //ultimatePowerOverlay.fillAmount = 1 - ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
+
+        if (troopEnergy.currentPower == troopEnergy.maxPower)
+        {
+            ultimatePowerOverlay.gameObject.SetActive(false);
+        }
+        else
+        {
+            ultimatePowerOverlay.gameObject.SetActive(true);
+        }
     }
 
     public void ButtonClick()

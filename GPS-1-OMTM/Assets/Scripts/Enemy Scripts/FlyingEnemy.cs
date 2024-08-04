@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FlyingEnemy : MonoBehaviour
@@ -180,6 +181,11 @@ public class FlyingEnemy : MonoBehaviour
         {
             targetTroop = null;
         }
+    }
+
+    public void AddTargetToList(Transform objectTransform)
+    {
+        targetTroop = objectTransform.gameObject;
     }
 
     void MoveTowardsTarget()

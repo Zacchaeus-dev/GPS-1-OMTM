@@ -256,6 +256,7 @@ public class Troop : MonoBehaviour
         }
     }
 
+    /*
     IEnumerator HandleCCUltimateTargeting()
     {
         // activate ult animation
@@ -315,7 +316,7 @@ public class Troop : MonoBehaviour
 
     }
 
-    /*
+    
     IEnumerator HandleTankUltimateTargeting()
     {
         // activate ult animation
@@ -628,7 +629,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
     {
-        float speed = 40f;
+        float speed = 50f;
         while ((targetPosition - shield.transform.position).magnitude > 0.1f)
         {
             shield.transform.position = Vector3.MoveTowards(shield.transform.position, targetPosition, speed * Time.deltaTime);
@@ -636,6 +637,8 @@ public class Troop : MonoBehaviour
         }
 
         shield.transform.position = targetPosition;
+
+        
         shield.GetComponent<BoxCollider2D>().enabled = true; // Enable collider
 
         Vector3 shieldPosition = shield.transform.position;
@@ -663,14 +666,19 @@ public class Troop : MonoBehaviour
             }
         }
 
+
         StartCoroutine(DestroyTankShield(shield));
     }
 
-    IEnumerator DestroyTankShield(GameObject TankShield)
+    IEnumerator DestroyTankShield(GameObject shield)
     {
-        yield return new WaitForSeconds(ultimateDuration);
+        yield return new WaitForSeconds(0.2f);
 
-        Destroy(TankShield);
+        shield.GetComponent<Rigidbody2D>().gravityScale = 1f;
+
+        //yield return new WaitForSeconds(ultimateDuration);
+        //Destroy(TankShield);
+        //destroy shield is inside tank shield script
 
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
@@ -714,8 +722,8 @@ public class Troop : MonoBehaviour
 
         yield return new WaitForSeconds(UltiDelay);
 
+        /*
         Vector3 mineOffset = new Vector3(20, -2, 0);
-
 
         if (!movingRight)
         {
@@ -726,6 +734,41 @@ public class Troop : MonoBehaviour
 
         Instantiate(tauntMine, newPosition, Quaternion.identity);
         ccClickingOnLocation = false;
+        */
+
+        Vector3 newPosition = transform.position;
+        Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+
+        foreach (var Hit in hits)
+        {
+            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground") || Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2")
+                || Hit.collider.CompareTag("[PF] Upper-Ground 3") || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+                || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)"))
+            {
+                if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = -3;
+                }
+                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
+                        || Hit.collider.CompareTag("[PF] Upper-Ground 4"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 3;
+                }
+                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (3)")
+                        || Hit.collider.CompareTag("[PF] Upper-Ground 1 (4)"))
+                {
+                    newPosition.x = MousePosition.x;
+                    newPosition.y = 8;
+                }
+                break;
+            }
+        }
+
+        Instantiate(tauntMine, newPosition, Quaternion.identity);
+        //ccClickingOnLocation = false;
 
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;

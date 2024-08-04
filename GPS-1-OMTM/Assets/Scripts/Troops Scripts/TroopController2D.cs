@@ -156,6 +156,7 @@ public class TroopController2D : MonoBehaviour
             if (tutorialPhase.tutorialOn == true && instruction2.activeInHierarchy == true) //tutorial 
             {
                 //TutorialRightClick();
+                attackRangeLabel.SetActive(false);
             }
 
             if (GoingLeft == true)

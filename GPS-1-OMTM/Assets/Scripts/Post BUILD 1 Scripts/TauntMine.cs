@@ -42,6 +42,11 @@ public class TauntMine : MonoBehaviour
                 {
                     enemyScript.GetComponent<Enemy>().AddTargetToList(gameObject.transform);
                 }
+                else
+                {
+                    //FlyingEnemy flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                    //flyingEnemyScript.GetComponent<FlyingEnemy>().AddTargetToList(gameObject.transform);
+                }
             }
         }
 
@@ -109,6 +114,24 @@ public class TauntMine : MonoBehaviour
                         enemyScript.MarkForDeathStart();
                     }
                 }
+                else
+                {
+                    FlyingEnemy flyingEnemyScript = enemy.GetComponent<FlyingEnemy>();
+                    if (flyingEnemyScript != null)
+                    {
+                        if (flyingEnemyScript.markedForDeath)
+                        {
+                            //take more damage if already marked
+                            flyingEnemyScript.TakeDamage(tauntMineDamage * 2);
+                        }
+                        else
+                        {
+                            flyingEnemyScript.TakeDamage(tauntMineDamage);
+                            flyingEnemyScript.SlowedSpeedStart();
+                            flyingEnemyScript.MarkForDeathStart();
+                        }
+                    }
+                }
             }
         }
 
@@ -117,7 +140,6 @@ public class TauntMine : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, tauntMineRadius);
     }
