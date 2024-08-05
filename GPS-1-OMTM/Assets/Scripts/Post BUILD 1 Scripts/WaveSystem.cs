@@ -145,6 +145,11 @@ public class WaveSystem : MonoBehaviour
     public GameObject edgePanTutorial;
     int maxEnemies = 100;
 
+    public GameObject inWaveBarObject;
+    public Image inWaveProgressBar;
+    public GameObject breakWaveBarObject;
+    public Image breakProgressBar;
+
     void Start()
     {
         startButton.SetActive(true);
@@ -396,6 +401,8 @@ public class WaveSystem : MonoBehaviour
 
         if (inwaveTimer12 > 0)
             inwaveTimer12 -= Time.deltaTime;
+
+        UpdateInWaveProgressBar();
     }
 
     void HandleBreak()
@@ -405,6 +412,7 @@ public class WaveSystem : MonoBehaviour
         if (breakTimer > 0)
         {
             breakTimer -= Time.deltaTime;
+            UpdateBreakProgressBar();
         }
         else
         {
@@ -1439,4 +1447,60 @@ public class WaveSystem : MonoBehaviour
             timerFill.enabled = false;
         }
     }
+
+    void UpdateInWaveProgressBar()
+    {
+        if (currentState == WaveState.InWave)
+        {
+            inWaveBarObject.SetActive(true);
+            breakWaveBarObject.SetActive(false);
+        }
+        else
+        {
+            inWaveBarObject.SetActive(false);
+            return;
+        }
+
+        MiniWave currentMiniWave = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
+        // Find the maximum timeUntilSpawningEnds across all spawners
+        float maxDuration = Mathf.Max(
+            currentMiniWave.timeUntilSpawningEnds1, currentMiniWave.timeUntilSpawningEnds2, currentMiniWave.timeUntilSpawningEnds3,
+            currentMiniWave.timeUntilSpawningEnds4, currentMiniWave.timeUntilSpawningEnds5, currentMiniWave.timeUntilSpawningEnds6,
+            currentMiniWave.timeUntilSpawningEnds7, currentMiniWave.timeUntilSpawningEnds8, currentMiniWave.timeUntilSpawningEnds9,
+            currentMiniWave.timeUntilSpawningEnds10, currentMiniWave.timeUntilSpawningEnds11, currentMiniWave.timeUntilSpawningEnds12
+        );
+
+        //float remainingDuration = Mathf.Max(
+        //    inwaveTimer1, inwaveTimer2, inwaveTimer3, inwaveTimer4, inwaveTimer5, inwaveTimer6,
+        //    inwaveTimer7, inwaveTimer8, inwaveTimer9, inwaveTimer10, inwaveTimer11, inwaveTimer12
+        //);
+
+        float remainingDuration = inwaveTimer1;
+
+        inWaveProgressBar.fillAmount = remainingDuration / maxDuration;
+    }
+
+    void UpdateBreakProgressBar()
+    {
+        if (currentState == WaveState.Break)
+        {
+            breakWaveBarObject.SetActive(true);
+            inWaveBarObject.SetActive(false);
+        }
+        else
+        {
+            breakWaveBarObject.SetActive(false);
+            return;
+        }
+
+        float maxDuration = waves[currentWaveIndex].breakDuration;
+        breakProgressBar.fillAmount = breakTimer / maxDuration;
+    }
+
+    float GetMaxInWaveDuration()
+    {
+        MiniWave currentMiniWave = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
+        return Mathf.Max(currentMiniWave.timeUntilSpawningEnds1, currentMiniWave.timeUntilSpawningEnds2, currentMiniWave.timeUntilSpawningEnds3, currentMiniWave.timeUntilSpawningEnds4, currentMiniWave.timeUntilSpawningEnds5, currentMiniWave.timeUntilSpawningEnds6, currentMiniWave.timeUntilSpawningEnds7, currentMiniWave.timeUntilSpawningEnds8, currentMiniWave.timeUntilSpawningEnds9, currentMiniWave.timeUntilSpawningEnds10, currentMiniWave.timeUntilSpawningEnds11, currentMiniWave.timeUntilSpawningEnds12);
+    }
+
 }

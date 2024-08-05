@@ -131,6 +131,8 @@ MonoBehaviour:
   slowedIcon: {fileID: 8825761182206943497}
   slowEffectRadius: 5
   slowArea: 0
+  energyOrb: {fileID: 8791878752881137860}
+  energyOrbDropNum: 1
   EnemyModel: {fileID: 4499519239705694393}
   knockbackForce: 0
 --- !u!114 &8791878752881137860
@@ -140,7 +142,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123245629827382086}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a65b7e6be7f9c2a4babf20df7e86e887, type: 3}
   m_Name: 

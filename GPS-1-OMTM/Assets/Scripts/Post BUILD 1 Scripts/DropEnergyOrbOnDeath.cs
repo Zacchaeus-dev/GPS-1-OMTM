@@ -21,8 +21,6 @@ public class DropEnergyOrbOnDeath : MonoBehaviour
         {
             // Spawn the energy orb at the enemy's position
             GameObject energyOrb = Instantiate(energyOrbPrefab, transform.position, Quaternion.identity);
-
-            // Optionally add any other behavior or components to the energy orb GameObject here
         }
         else
         {

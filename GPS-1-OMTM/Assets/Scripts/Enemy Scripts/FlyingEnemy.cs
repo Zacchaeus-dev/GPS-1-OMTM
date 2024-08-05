@@ -53,6 +53,10 @@ public class FlyingEnemy : MonoBehaviour
     private bool isKnockedBack = false;
     private bool isStunned = false;
 
+    public DropEnergyOrbOnDeath energyOrb;
+    public int energyOrbDropNum = 1;
+    private int i = 0;
+
     [Header("Art / Animations")]
     public GameObject EnemyModel;
     TroopAnimationsManager Animator;
@@ -352,6 +356,12 @@ public class FlyingEnemy : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("MetalHit");
 
         Animator.TroopDies();
+
+        while (i < energyOrbDropNum)
+        {
+            energyOrb.DropEnergyOrb();
+            i++;
+        }
 
         if (lineRenderer != null)
         {

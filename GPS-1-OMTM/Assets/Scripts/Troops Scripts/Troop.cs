@@ -801,9 +801,18 @@ public class Troop : MonoBehaviour
         Debug.Log("Healer Ultimate Activated");
 
         //golden fleece
-        GainShield(troopController2D.troop1);
-        GainShield(troopController2D.troop2);
-        GainShield(troopController2D.troop3);
+        if (troopController2D.troop1.activeInHierarchy == true)
+        {
+            GainShield(troopController2D.troop1);
+        }
+        if (troopController2D.troop2.activeInHierarchy == true)
+        {
+            GainShield(troopController2D.troop2);
+        }
+        if (troopController2D.troop3.activeInHierarchy == true)
+        {
+            GainShield(troopController2D.troop3);
+        }
         GainShield(gameObject);
 
         shieldOverlay.SetActive(true);
@@ -892,6 +901,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator Death()
     {
+        damageIndicator.SetActive(false);
         tookdamage = false;
         //Debug.Log(gameObject.name + " is dead");
 

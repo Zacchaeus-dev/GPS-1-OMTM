@@ -298,6 +298,12 @@ public class HealerAutoHeal : MonoBehaviour
                                 allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
                                 Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                                 allyTroop.UpdateHUD();
+
+                                if (allyTroop.currentHealth >= allyTroop.maxHealth)
+                                {
+                                    Debug.Log(allyTroop.name + " is at full health.");
+                                    targetAlly = null; //stop healing if target's health is full
+                                }
                             }
                         }
                         lastHealTime = Time.time;

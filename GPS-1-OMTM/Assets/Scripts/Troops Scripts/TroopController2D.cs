@@ -390,10 +390,6 @@ public class TroopController2D : MonoBehaviour
             sprite.color = troop.NormalColor;
         }
 
-        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
-        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopIdle();
-        //troop.TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOn();
-
         troop.model.SetActive(true);
 
         //reset mouse position
