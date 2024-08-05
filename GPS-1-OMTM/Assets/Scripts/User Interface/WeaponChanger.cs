@@ -35,7 +35,7 @@ public class WeaponChanger : MonoBehaviour
         switch (selectedWeapon)
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -45,14 +45,14 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
                 weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -61,14 +61,14 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_Tank:
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
                 weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_CC:
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -77,14 +77,14 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
                 weapon2Description.SetActive(true);
                 break;
             case TroopWeapon.Weapon.Weapon1_Healer:
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -93,7 +93,7 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
@@ -169,7 +169,7 @@ public class WeaponChanger : MonoBehaviour
         {
             case TroopUnit.DPS:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_DPS;
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -178,7 +178,7 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopUnit.Tank:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_Tank;
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -187,7 +187,7 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopUnit.CC:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_CC;
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -196,7 +196,7 @@ public class WeaponChanger : MonoBehaviour
                 break;
             case TroopUnit.Healer:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon1_Healer;
-                button1Text.text = "Selected";
+                button1Text.text = "-SELECTED-";
                 button2Text.text = "";
                 weapon1Name.SetActive(true);
                 weapon2Name.SetActive(false);
@@ -213,7 +213,7 @@ public class WeaponChanger : MonoBehaviour
             case TroopUnit.DPS:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_DPS;
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
@@ -222,7 +222,7 @@ public class WeaponChanger : MonoBehaviour
             case TroopUnit.Tank:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_Tank;
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
@@ -232,7 +232,7 @@ public class WeaponChanger : MonoBehaviour
             case TroopUnit.CC:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_CC;
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
@@ -241,7 +241,7 @@ public class WeaponChanger : MonoBehaviour
             case TroopUnit.Healer:
                 troopWeapon.selectedWeapon = TroopWeapon.Weapon.Weapon2_Healer;
                 button1Text.text = "";
-                button2Text.text = "Selected";
+                button2Text.text = "-SELECTED-";
                 weapon1Name.SetActive(false);
                 weapon2Name.SetActive(true);
                 weapon1Description.SetActive(false);
