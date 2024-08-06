@@ -29,6 +29,16 @@ public class TroopEnergy : MonoBehaviour
         UpdateHUD();
     }
 
+    private void Update()
+    {
+        /*
+        if (Input.GetKeyDown(KeyCode.Z))  //testing
+        {
+            currentPower = maxPower;
+        }
+        */
+    }
+
     public void UpdateHUD()
     {
         powerText.text = currentPower.ToString();

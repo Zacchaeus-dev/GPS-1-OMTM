@@ -19,6 +19,11 @@ public class TroopHUD : MonoBehaviour
     public TextMeshProUGUI powerPercentage;
     public GameObject dimOverlay;
 
+    public GameObject hpBarObject;
+    public Image hpBar;
+    public GameObject powerBarObject;
+    public Image powerBar;
+
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
     public GameObject troop;
@@ -86,6 +91,10 @@ public class TroopHUD : MonoBehaviour
         {
             ultimatePowerOverlay.gameObject.SetActive(true);
         }
+
+        hpBar.fillAmount = ((float)_troop.currentHealth / (float)_troop.maxHealth);
+        powerBar.fillAmount = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
+
     }
 
     public void ButtonClick()
@@ -132,5 +141,17 @@ public class TroopHUD : MonoBehaviour
         {
             dimOverlay.SetActive(false);
         }
+    }
+
+    public void EnableTroopBars()
+    {
+        hpBarObject.SetActive(true);
+        powerBarObject.SetActive(true);
+    }
+
+    public void DisableTroopBars()
+    {
+        hpBarObject.SetActive(false);
+        powerBarObject.SetActive(false);
     }
 }

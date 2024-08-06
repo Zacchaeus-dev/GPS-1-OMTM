@@ -63,7 +63,10 @@ public class TauntMine : MonoBehaviour
                 if (enemyRb != null)
                 {
                     Vector2 direction = (transform.position - enemy.transform.position).normalized;
-                    enemyRb.AddForce(direction * pullForce, ForceMode2D.Impulse);
+                    if (enemy.GetComponent<Enemy>() != null || enemy.GetComponent<FlyingEnemy>() != null)
+                    {
+                        enemyRb.AddForce(direction * pullForce, ForceMode2D.Impulse);
+                    }
                 }
             }
         }

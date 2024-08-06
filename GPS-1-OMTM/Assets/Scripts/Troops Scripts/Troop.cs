@@ -666,7 +666,6 @@ public class Troop : MonoBehaviour
             }
         }
 
-
         StartCoroutine(DestroyTankShield(shield));
     }
 
@@ -720,7 +719,7 @@ public class Troop : MonoBehaviour
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
 
-        yield return new WaitForSeconds(UltiDelay);
+        //yield return new WaitForSeconds(UltiDelay);
 
         /*
         Vector3 mineOffset = new Vector3(20, -2, 0);
@@ -767,6 +766,8 @@ public class Troop : MonoBehaviour
             }
         }
 
+        yield return new WaitForSeconds(UltiDelay);
+
         Instantiate(tauntMine, newPosition, Quaternion.identity);
         //ccClickingOnLocation = false;
 
@@ -780,6 +781,8 @@ public class Troop : MonoBehaviour
 
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
+        ultimateOnCooldown = false;
     }
 
     IEnumerator Ultimate_CC_End()
@@ -788,8 +791,8 @@ public class Troop : MonoBehaviour
 
         //explosion is in taunt mine script
 
-        yield return new WaitForSeconds(ultimateCooldown);
-        ultimateOnCooldown = false;
+        //yield return new WaitForSeconds(ultimateCooldown);
+        //ultimateOnCooldown = false;
     }
 
     IEnumerator Ultimate_Healer()

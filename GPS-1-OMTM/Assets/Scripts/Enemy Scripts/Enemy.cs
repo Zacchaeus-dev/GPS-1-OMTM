@@ -226,7 +226,7 @@ public class Enemy : MonoBehaviour
         }
         else if (!isStunned)
         {
-            Debug.Log("Keep moving with no target");
+            //Debug.Log("Keep moving with no target");
             Vector3 direction = (killdozerTransform.position - transform.position).normalized;
             if (Animator != null)
             {
@@ -258,7 +258,7 @@ public class Enemy : MonoBehaviour
         Troop troopComponent = target.GetComponent<Troop>();
         if (troopComponent == null)
         {
-            Debug.Log("Target does not have a Troop component");
+            //Debug.Log("Target does not have a Troop component");
             return false;
         }
 

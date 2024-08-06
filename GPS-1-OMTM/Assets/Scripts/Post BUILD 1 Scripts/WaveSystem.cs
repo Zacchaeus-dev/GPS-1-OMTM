@@ -144,6 +144,11 @@ public class WaveSystem : MonoBehaviour
     public GameObject instruction8;
     public GameObject edgePanTutorial;
     int maxEnemies = 100;
+    private bool ending = false;
+    public TroopHUD troop1HUD;
+    public TroopHUD troop2HUD;
+    public TroopHUD troop3HUD;
+    public TroopHUD troop4HUD;
 
     public GameObject inWaveBarObject;
     public Image inWaveProgressBar;
@@ -440,8 +445,56 @@ public class WaveSystem : MonoBehaviour
 
     void HandleEnd()
     {
+        if (ending)
+        {
+            return;
+        }
+
         waveStateText.text = "End";
+        ending = true;
+        TeleportTroopsToKilldozer();
+        cameraSystem.FocusOnKilldozer();
+
+        troop1.transform.SetParent(killdozer.transform);
+        troop2.transform.SetParent(killdozer.transform);
+        troop3.transform.SetParent(killdozer.transform);
+        troop4.transform.SetParent(killdozer.transform);
+
+        troop1.transform.position = killdozerTransform1.position;
+        troop2.transform.position = killdozerTransform2.position;
+        troop3.transform.position = killdozerTransform3.position;
+        troop4.transform.position = killdozerTransform4.position;
+
+        troop1.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop2.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop3.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+        troop4.GetComponent<TroopClass>().onPlatform = "KD Middle-Ground";
+
+        troop1.GetComponent<BoxCollider2D>().enabled = false;
+        troop2.GetComponent<BoxCollider2D>().enabled = false;
+        troop3.GetComponent<BoxCollider2D>().enabled = false;
+        troop4.GetComponent<BoxCollider2D>().enabled = false;
+
+        troop1HUD.DisableTroopBars();
+        troop2HUD.DisableTroopBars();
+        troop3HUD.DisableTroopBars();
+        troop4HUD.DisableTroopBars();
+
+        killdozerAnimator.SetTrigger("Move Right");
+
+        StartCoroutine(EndDelay());
+    }
+
+    IEnumerator EndDelay()
+    {
+        yield return new WaitForSeconds(4f);
+
+        cameraSystem.DefocusKilldozer();
+
+        yield return new WaitForSeconds(1.5f);
+
         settingsPanel.SetActive(true);
+        //Debug.Log("Game Ended");
     }
 
     void HandleTransition()
@@ -478,6 +531,11 @@ public class WaveSystem : MonoBehaviour
         troop2.GetComponent<BoxCollider2D>().enabled = false;
         troop3.GetComponent<BoxCollider2D>().enabled = false;
         troop4.GetComponent<BoxCollider2D>().enabled = false;
+
+        troop1HUD.DisableTroopBars();
+        troop2HUD.DisableTroopBars();
+        troop3HUD.DisableTroopBars();
+        troop4HUD.DisableTroopBars();
 
         waveStateText.text = "Transition";
         transitioning = true;
@@ -528,6 +586,11 @@ public class WaveSystem : MonoBehaviour
         troop3.GetComponent<TroopClass>().SetTargetPositionHere();
         troop4.GetComponent<TroopClass>().SetTargetPositionHere();
 
+        troop1HUD.EnableTroopBars();
+        troop2HUD.EnableTroopBars();
+        troop3HUD.EnableTroopBars();
+        troop4HUD.EnableTroopBars();
+
         troop1.GetComponent<Troop>().FullHeal();
         troop2.GetComponent<Troop>().FullHeal();
         troop3.GetComponent<Troop>().FullHeal();
@@ -552,7 +615,6 @@ public class WaveSystem : MonoBehaviour
 
         startButton.SetActive(false);
         startBorder.SetActive(false);
-
 
         if (currentMiniWaveIndex >= waves[currentWaveIndex].miniWaves.Count)
         {
@@ -620,6 +682,7 @@ public class WaveSystem : MonoBehaviour
         if (currentWaveIndex >= waves.Count)
         {
             currentState = WaveState.End;
+            //Debug.Log("Transitioning to end");
         }
         else
         {

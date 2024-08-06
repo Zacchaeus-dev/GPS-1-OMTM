@@ -22,7 +22,7 @@ public class FlyingEnemy : MonoBehaviour
     private GameObject killdozer;
     private GameObject killdozerLeftTarget;
     private GameObject killdozerRightTarget;
-    private Vector3 rightOffset = new Vector3(30f, 0, 0);
+    private Vector3 rightOffset = new Vector3(32f, 0, 0);
     private Vector3 leftOffset = new Vector3(-30f, 0, 0);
     private bool attackingKilldozer;
     private float lastAttackTime = 0f;
@@ -88,30 +88,23 @@ public class FlyingEnemy : MonoBehaviour
         if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x && !isStunned) //move depending on killdozer's location
         {
             MoveLeft();
-            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
             Animator.TroopAttackOff();
             facingRight = false;
-            //Debug.Log("Drone move left " + EnemyModel.transform.rotation.y);
-
-}
+        }
         else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x && !isStunned)
         {
             MoveRight();
-            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
             Animator.TroopAttackOff();
             facingRight = true;
-            //Debug.Log("Drone move right " + EnemyModel.transform.rotation.y);
         }
 
-        if (killdozerRightTarget.transform.position.x < transform.position.x)
+        if (facingRight)
         {
-            EnemyModel.transform.rotation = Quaternion.Euler(0, 0, 0);
-            Animator.TroopAttackOff();
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
-        else if (killdozerLeftTarget.transform.position.x > transform.position.x)
+        else
         {
-            EnemyModel.transform.rotation = Quaternion.Euler(0, 180, 0);
-            Animator.TroopAttackOff();
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
         DetectTargets();
@@ -140,17 +133,23 @@ public class FlyingEnemy : MonoBehaviour
                 tookdamage = false;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            Debug.Log("Rotation: " + transform.eulerAngles.y);
+        }
     }
 
     void MoveLeft()
     {
         // Move towards the negative X-axis
-        transform.position -= Vector3.right * speed * Time.deltaTime;
+        transform.position += Vector3.left * speed * Time.deltaTime;
     }
 
     void MoveRight()
     {
-        transform.position -= Vector3.left * speed * Time.deltaTime;
+        transform.position += Vector3.right * speed * Time.deltaTime;
     }
 
     void DetectTargets()

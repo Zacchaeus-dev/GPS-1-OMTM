@@ -123,7 +123,7 @@ public class EnergyOrb : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Distance to troop: {distanceToTroop}, Magnet range: {magnetRange}");
+        //Debug.Log($"Distance to troop: {distanceToTroop}, Magnet range: {magnetRange}");
 
         float speed = baseSpeed * (magnetRange - distanceToTroop) / magnetRange;
 
