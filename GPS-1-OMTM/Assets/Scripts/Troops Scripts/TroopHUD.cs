@@ -19,6 +19,8 @@ public class TroopHUD : MonoBehaviour
     public TextMeshProUGUI powerPercentage;
     public GameObject dimOverlay;
 
+    public GameObject bgBarObject;
+    public Image bgBar;
     public GameObject hpBarObject;
     public Image hpBar;
     public GameObject powerBarObject;
@@ -145,12 +147,14 @@ public class TroopHUD : MonoBehaviour
 
     public void EnableTroopBars()
     {
+        bgBarObject.SetActive(true);
         hpBarObject.SetActive(true);
         powerBarObject.SetActive(true);
     }
 
     public void DisableTroopBars()
     {
+        bgBarObject.SetActive(false);
         hpBarObject.SetActive(false);
         powerBarObject.SetActive(false);
     }
