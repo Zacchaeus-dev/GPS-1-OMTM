@@ -624,6 +624,9 @@ public class Troop : MonoBehaviour
         StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
 
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
+
+        yield return new WaitForSeconds(UltiDelay);
+
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
     }
 
