@@ -494,8 +494,7 @@ public class Troop : MonoBehaviour
                 yield return StartCoroutine(Ultimate_Healer());
 
 
-                gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
 
                 break;
         }
@@ -832,6 +831,9 @@ public class Troop : MonoBehaviour
 
         shieldOverlay.SetActive(true);
 
+        yield return new WaitForSeconds(1.5f);
+        gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
         yield return new WaitForSeconds(ultimateDuration);
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
