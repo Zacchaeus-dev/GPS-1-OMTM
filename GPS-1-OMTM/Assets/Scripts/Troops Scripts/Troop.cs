@@ -591,17 +591,16 @@ public class Troop : MonoBehaviour
         Time.timeScale = 0.0f;
     }
     */
-
+    public GameObject UltCircle;
     IEnumerator Ultimate_Tank()
     {
         GetComponent<TroopClass>().SetTargetPositionHere();
         //tankClickingOnLocation = true;
+        
 
         TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
-
-        yield return new WaitForSeconds(UltiDelay);
 
         Vector3 shieldOffset = new Vector3(20, 0, 0);
 
@@ -611,6 +610,10 @@ public class Troop : MonoBehaviour
         }
 
         Vector3 newPosition = transform.position + shieldOffset;
+
+        Instantiate(UltCircle, newPosition, Quaternion.identity);
+
+        yield return new WaitForSeconds(UltiDelay);
 
         GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
         TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
@@ -622,6 +625,8 @@ public class Troop : MonoBehaviour
         ultimateDurationTimeRemaining = ultimateDuration;
 
         StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
+
+        
 
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
 
@@ -718,6 +723,7 @@ public class Troop : MonoBehaviour
         GetComponent<TroopClass>().SetTargetPositionHere();
         //ccClickingOnLocation = true;
 
+
         gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
@@ -769,10 +775,13 @@ public class Troop : MonoBehaviour
             }
         }
 
+        Instantiate(UltCircle, newPosition, Quaternion.identity);
+
         yield return new WaitForSeconds(UltiDelay);
 
         Instantiate(tauntMine, newPosition, Quaternion.identity);
         //ccClickingOnLocation = false;
+        
 
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;
