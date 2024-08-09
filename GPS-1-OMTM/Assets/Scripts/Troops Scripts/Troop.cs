@@ -673,6 +673,8 @@ public class Troop : MonoBehaviour
             }
         }
 
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+
         StartCoroutine(DestroyTankShield(shield));
     }
 
