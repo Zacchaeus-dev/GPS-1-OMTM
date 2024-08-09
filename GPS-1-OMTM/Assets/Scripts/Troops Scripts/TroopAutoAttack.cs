@@ -759,7 +759,7 @@ public class TroopAutoAttack : MonoBehaviour
         // 2. hit effect
     }
 
-    
+    public GameObject CC_AOE_ExplosionEffect;
     IEnumerator CC_Weapon2Damage(GameObject _enemy)
     {
         yield return new WaitForSeconds(0.3f);
@@ -778,18 +778,20 @@ public class TroopAutoAttack : MonoBehaviour
             }
 
             Vector2 attackCenter = _enemy.transform.position; // Center of the attack
+            Instantiate(CC_AOE_ExplosionEffect, attackCenter, Quaternion.identity);
             Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackCenter, 4f, LayerMask.GetMask("Enemy")); // AOE detection
 
             foreach (Collider2D enemyCollider in enemiesHit)
             {
                 enemy = enemyCollider.GetComponent<Enemy>();
+                FlyingEnemy flyingEnemy = enemyCollider.GetComponent<FlyingEnemy>();
                 if (enemy != null)
                 {
                     enemy.TakeDamage(attackDamage);
                 }
                 else
                 {
-                    FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
+                    //FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
                     flyingEnemy.TakeDamage(attackDamage);
                 }
             }

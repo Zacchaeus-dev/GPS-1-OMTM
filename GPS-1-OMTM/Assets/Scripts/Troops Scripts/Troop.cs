@@ -601,11 +601,11 @@ public class Troop : MonoBehaviour
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
 
-        Vector3 shieldOffset = new Vector3(20, 0, 0);
+        Vector3 shieldOffset = new Vector3(40, 0, 0);
 
         if (!movingRight)
         {
-            shieldOffset = new Vector3(-20, 0, 0);
+            shieldOffset = new Vector3(-40, 0, 0);
         }
 
         Vector3 newPosition = transform.position + shieldOffset;
@@ -697,12 +697,12 @@ public class Troop : MonoBehaviour
         if (!isFlying)
         {
             Enemy enemy = _enemy.GetComponent<Enemy>();
-            enemy.Stun(true);
+            //enemy.Stun(true);
         }
         else
         {
             FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
-            flyingEnemy.Stun(true);
+            //flyingEnemy.Stun(true);
         }
         
         yield return new WaitForSeconds(duration);

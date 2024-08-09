@@ -88,6 +88,7 @@ public class TauntMine : MonoBehaviour
         }
     }
 
+    public GameObject CC_AOE_ExplosionEffect;
     IEnumerator ExplodeMine()
     {
         yield return new WaitForSeconds(timeUntilExplode);
@@ -137,7 +138,7 @@ public class TauntMine : MonoBehaviour
                 }
             }
         }
-
+        Instantiate(CC_AOE_ExplosionEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
