@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6679252712070632445}
   - component: {fileID: 5393794672507732250}
+  - component: {fileID: 3261061149165066353}
   m_Layer: 0
   m_Name: CannonProjectile
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: -1310919259
   m_SortingLayer: 5
   m_SortingOrder: 100
-  m_Sprite: {fileID: 129646224, guid: bffe8d97214f5074c8e251e8650277a2, type: 3}
+  m_Sprite: {fileID: 1565380907, guid: d6138d2a02d40b141906ff578bfe232c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,3 +85,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3261061149165066353
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871525572390666974}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e94b21fe65dff6b45b9c16568ee19ffb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

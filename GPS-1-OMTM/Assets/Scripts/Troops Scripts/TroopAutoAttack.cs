@@ -139,7 +139,7 @@ public class TroopAutoAttack : MonoBehaviour
                 ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
-                attackDamage = 20;
+                attackDamage = 30;
                 attackCooldown = 2f;
                 AnimationDelay = 0.8f;
                 ShootingDelay = 1f;
@@ -787,7 +787,7 @@ public class TroopAutoAttack : MonoBehaviour
                 FlyingEnemy flyingEnemy = enemyCollider.GetComponent<FlyingEnemy>();
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(attackDamage);
+                    enemy.TakeDamage(attackDamage - 10);
                 }
                 else
                 {

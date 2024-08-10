@@ -83,7 +83,7 @@ public class FlyingEnemy : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x && !isStunned) //move depending on killdozer's location
         {
