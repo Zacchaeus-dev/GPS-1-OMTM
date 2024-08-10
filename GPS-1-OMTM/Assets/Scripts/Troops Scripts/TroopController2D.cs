@@ -40,8 +40,8 @@ public class TroopController2D : MonoBehaviour
     public EnergySystem energySystem;
 
     //tp 
-    private bool teleporting = false;
-    private Animator animator;
+    //private bool teleporting = false;
+    //private Animator animator;
     public GameObject tpAnimation1;
     public GameObject tpAnimation2;
     public GameObject tpAnimation3;

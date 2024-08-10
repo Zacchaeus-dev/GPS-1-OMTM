@@ -42,6 +42,7 @@ public class TutorialPhase : MonoBehaviour
     public GameObject wavePopUp;
     public GameObject preWave1Screen;
     public GameObject skipTutorialButton;
+    private bool canRespawn = true;
 
     void Start()
     {
@@ -77,7 +78,7 @@ public class TutorialPhase : MonoBehaviour
 
         if (dummyEnemy != null)
         {
-            if (dummyEnemy.dummyDead == true && !respawning && tutorialOn == true)
+            if (dummyEnemy.dummyDead == true && !respawning && tutorialOn == true && canRespawn == true)
             {
                 if (!dummyDiedOnce)
                 {
@@ -127,6 +128,7 @@ public class TutorialPhase : MonoBehaviour
     IEnumerator TutorialEnd()
     {
         //waveSystem.gameObject.SetActive(true);
+        DestroyObjectsWithTag("EnergyOrb");
         tank.SetActive(true);
         cc.SetActive(true);
         healer.SetActive(true);
@@ -145,8 +147,7 @@ public class TutorialPhase : MonoBehaviour
         instruction8On = true;
         tutorialOn = false;
 
-        yield return new WaitForSeconds(1f);
-        //DestroyObjectsWithTag("Enemy");
+        yield return new WaitForSeconds(0.1f);
     }
 
     public void EnableEdgePanTutorial()
@@ -157,7 +158,6 @@ public class TutorialPhase : MonoBehaviour
         StartCoroutine(CloseEdgePanTutorial());
     }
 
-    /*
     void DestroyObjectsWithTag(string tag)
     {
         GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag(tag);
@@ -166,14 +166,22 @@ public class TutorialPhase : MonoBehaviour
             Destroy(obj);
         }
     }
-    */
+
+    public void KillDummy()
+    {
+        canRespawn = false;
+        if (dummy != null)
+        {
+            dummy.SetActive(false);
+        }
+    }
 
     IEnumerator RespawnDummy()
     {
         yield return new WaitForSeconds(5f);
 
         //GameObject dummy = Instantiate(dummyPrefab, dummyTransform.position, Quaternion.identity);
-        if (dummy != null)
+        if (dummy != null && canRespawn == true)
         {
             dummy.SetActive(true);
             dummyEnemy.currentHealth = dummyEnemy.maxHealth;

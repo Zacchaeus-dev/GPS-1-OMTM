@@ -40,8 +40,8 @@ public class Troop : MonoBehaviour
     private bool ultimateOnCooldown = false;
     public float ultimateCooldown = 5f;
     public float ultimateDuration = 0f;
-    private bool ccClickingOnLocation = false;
-    private bool tankClickingOnLocation = false;
+    //private bool ccClickingOnLocation = false;
+    //private bool tankClickingOnLocation = false;
 
     // Ultimate Objects
     public GameObject tankShield;
@@ -596,7 +596,6 @@ public class Troop : MonoBehaviour
         GetComponent<TroopClass>().SetTargetPositionHere();
         //tankClickingOnLocation = true;
         
-
         TroopModel.GetComponent<TroopAnimationsManager>().TroopAttackOff();
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
@@ -612,20 +611,19 @@ public class Troop : MonoBehaviour
 
         Instantiate(UltCircle, newPosition, Quaternion.identity);
 
-        yield return new WaitForSeconds(UltiDelay);
-
-        GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
-        TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
-
-        tankClickingOnLocation = false;
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
 
-        StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
+        yield return new WaitForSeconds(UltiDelay);
 
-        
+        GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
+        TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
+
+        //tankClickingOnLocation = false;
+
+        StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
 
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
 
@@ -778,17 +776,16 @@ public class Troop : MonoBehaviour
 
         Instantiate(UltCircle, newPosition, Quaternion.identity);
 
-        yield return new WaitForSeconds(UltiDelay);
-
-        Instantiate(tauntMine, newPosition, Quaternion.identity);
-        //ccClickingOnLocation = false;
-        
-
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
         Debug.Log("CC Ultimate Activated");
+
+        yield return new WaitForSeconds(UltiDelay);
+
+        Instantiate(tauntMine, newPosition, Quaternion.identity);
+        //ccClickingOnLocation = false;
 
         StartCoroutine(Ultimate_CC_End());
 

@@ -274,8 +274,17 @@ public class Enemy : MonoBehaviour
 
     IEnumerator AttackTarget()
     {
-        while (closestTarget != null && Vector3.Distance(transform.position, closestTarget.position) <= (closestTarget == killdozerTransform ? killdozerStoppingDistance : troopStoppingDistance) && !isStunned)
+        while (closestTarget != null && !isStunned)
         {
+            float distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
+            float stoppingDistance = (closestTarget == killdozerTransform) ? killdozerStoppingDistance : troopStoppingDistance;
+
+            // Ensure the target is within range before attacking
+            if (distanceToTarget > stoppingDistance)
+            {
+                break;
+            }
+
             Animator.TroopAttackOn();
 
             yield return new WaitForSeconds(attackSpeed);
@@ -285,6 +294,13 @@ public class Enemy : MonoBehaviour
                 Killdozer killdozerScript = closestTarget.GetComponent<Killdozer>();
                 if (killdozerScript != null)
                 {
+                    // Recheck the distance to Killdozer before applying damage
+                    distanceToTarget = Vector3.Distance(transform.position, closestTarget.position);
+                    if (distanceToTarget > killdozerStoppingDistance)
+                    {
+                        break;
+                    }
+
                     // Check if killdozer is dead
                     if (killdozerScript.currentHealth <= 0)
                     {
@@ -292,12 +308,11 @@ public class Enemy : MonoBehaviour
                         break;
                     }
 
-                    killdozerScript.TakeDamage(attack); // Killdozer takes damage equal to attack
+                    killdozerScript.TakeDamage(attack); 
                     attackingKilldozer = true;
-                    //Debug.Log("Attacking killdozer");
                 }
             }
-            else
+            else if (closestTarget != null && closestTarget.gameObject.activeInHierarchy)
             {
                 Troop troopScript = closestTarget.GetComponent<Troop>();
                 if (troopScript != null)
@@ -305,15 +320,28 @@ public class Enemy : MonoBehaviour
                     // Check if troop is dead
                     if (troopScript.currentHealth <= 0)
                     {
+                        // Stop attacking if the troop dies
+                        closestTarget = null;
+                        isAttacking = false;
+                        Animator.TroopAttackOff();
                         break;
                     }
 
-                    troopScript.TakeDamage(attack); // Troop takes damage equal to attack
-                    //Debug.Log("Attacking troop: " + closestTarget.name);
+                    troopScript.TakeDamage(attack); 
                 }
             }
+            else
+            {
+                // If the target becomes invalid, stop attacking
+                closestTarget = null;
+                isAttacking = false;
+                Animator.TroopAttackOff();
+                break;
+            }
         }
-        closestTarget = null; // deselect target
+
+        // Reset variables after attacking
+        closestTarget = null;
         isAttacking = false;
         Animator.TroopAttackOff();
     }

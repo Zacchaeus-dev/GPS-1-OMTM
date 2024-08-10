@@ -14,7 +14,7 @@ public class ButtonManager : MonoBehaviour
 
     private void Update()
     {
-        if (button.interactable = false)
+        if (button.interactable == false)
         {
             UpdateButtonAppearance();
         }

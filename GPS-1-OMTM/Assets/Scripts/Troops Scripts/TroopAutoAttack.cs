@@ -21,9 +21,10 @@ public class TroopAutoAttack : MonoBehaviour
     public TroopClass troopClass;
     public TroopEnergy troopEnergy;
     public TroopWeapon troopWeapon;
-    private int tankAttackCounter = 0;
+    //private int tankAttackCounter = 0;
     private float dpsWeapon2Range = 10;
     private float dpsWeapon2Width = 1.5f;
+    public Transform dpsWeapon2Transform;
     public Transform dpsWeapon2ShootPoint;
     public Transform screenLeftShootingPoint;
     public Transform screenRightShootingPoint;
@@ -443,7 +444,9 @@ public class TroopAutoAttack : MonoBehaviour
             DrawBulletTracer(shootingPoint2.transform.position, new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.8f));
         }
 
-        DrawAttackRectangle(transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        //Vector3 offset = new Vector3(5, 0, 0);
+
+        DrawAttackRectangle(dpsWeapon2Transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
         troopEnergy.GainPower();
     }
 
@@ -628,7 +631,7 @@ public class TroopAutoAttack : MonoBehaviour
                     flyingEnemy.TakeDamage(attackDamage);
                 }
             }
-            tankAttackCounter = 0; // Reset the counter
+            //tankAttackCounter = 0; // Reset the counter
        // }
     }
 

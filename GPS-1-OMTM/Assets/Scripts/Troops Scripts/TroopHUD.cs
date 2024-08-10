@@ -25,6 +25,8 @@ public class TroopHUD : MonoBehaviour
     public Image hpBar;
     public GameObject powerBarObject;
     public Image powerBar;
+    public GameObject shieldBarObject;
+    public Image shieldBar;
 
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
@@ -88,15 +90,17 @@ public class TroopHUD : MonoBehaviour
         if (troopEnergy.currentPower == troopEnergy.maxPower)
         {
             ultimatePowerOverlay.gameObject.SetActive(false);
+            powerPercentage.gameObject.SetActive(false);
         }
         else
         {
             ultimatePowerOverlay.gameObject.SetActive(true);
+            powerPercentage.gameObject.SetActive(true);
         }
 
         hpBar.fillAmount = ((float)_troop.currentHealth / (float)_troop.maxHealth);
         powerBar.fillAmount = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
-
+        shieldBar.fillAmount = (float)_troop.currentShield / (float)_troop.maxShield;
     }
 
     public void ButtonClick()
@@ -150,6 +154,7 @@ public class TroopHUD : MonoBehaviour
         bgBarObject.SetActive(true);
         hpBarObject.SetActive(true);
         powerBarObject.SetActive(true);
+        shieldBarObject.SetActive(true);
     }
 
     public void DisableTroopBars()
@@ -157,5 +162,6 @@ public class TroopHUD : MonoBehaviour
         bgBarObject.SetActive(false);
         hpBarObject.SetActive(false);
         powerBarObject.SetActive(false);
+        shieldBarObject.SetActive(false);   
     }
 }

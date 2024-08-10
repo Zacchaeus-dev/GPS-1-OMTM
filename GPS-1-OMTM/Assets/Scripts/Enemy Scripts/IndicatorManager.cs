@@ -14,10 +14,12 @@ public class IndicatorManager : MonoBehaviour
     private Dictionary<EnemyIndicator.Tier, GameObject> leftIndicators = new Dictionary<EnemyIndicator.Tier, GameObject>();
     private Dictionary<EnemyIndicator.Tier, GameObject> rightIndicators = new Dictionary<EnemyIndicator.Tier, GameObject>();
 
+    public float minX = -50f;
+    public float maxX = 200f;
+
     private void Awake()
     {
         Instance = this;
-        //canvas = FindObjectOfType<Canvas>();
     }
 
     private void Update()
@@ -27,7 +29,14 @@ public class IndicatorManager : MonoBehaviour
 
     public void AddIndicator(EnemyIndicator enemy, float cameraX)
     {
-        if (enemy.transform.position.x < cameraX)
+        float enemyX = enemy.transform.position.x;
+
+        if (enemyX < minX || enemyX > maxX) // Only consider enemies within the defined range
+        {
+            return;
+        }
+
+        if (enemyX < cameraX)
         {
             if (!leftIndicators.ContainsKey(enemy.enemyTier) && leftIndicators.Count < 3)
             {
@@ -110,7 +119,9 @@ public class IndicatorManager : MonoBehaviour
                 Vector3 screenPos = Camera.main.WorldToViewportPoint(enemy.transform.position);
                 bool onScreen = screenPos.x > 0 && screenPos.x < 1 && screenPos.y > 0 && screenPos.y < 1;
 
-                if (!onScreen && (left ? enemy.transform.position.x < screenBoundX : enemy.transform.position.x > screenBoundX))
+                if (!onScreen &&
+                    (left ? enemy.transform.position.x < screenBoundX : enemy.transform.position.x > screenBoundX) &&
+                    (enemy.transform.position.x >= minX && enemy.transform.position.x <= maxX))
                 {
                     return false;
                 }

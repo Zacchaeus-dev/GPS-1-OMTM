@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8791878752881137860}
   - component: {fileID: 6872703781100327450}
   - component: {fileID: 2026638277852652926}
+  - component: {fileID: 7332289253819085772}
   m_Layer: 7
   m_Name: Drone
   m_TagString: Enemy
@@ -229,6 +230,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 2
+--- !u!114 &7332289253819085772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123245629827382086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58143d0c48ed43d41b00fba598465867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyTier: 0
 --- !u!1 &2715790793983140121
 GameObject:
   m_ObjectHideFlags: 0

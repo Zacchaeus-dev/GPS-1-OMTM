@@ -14,6 +14,10 @@ public class NormalPanels : MonoBehaviour
     public void OpenSettingsPanel()
     {
         settingsPanel.SetActive(true);
+        if (tutorialPhase != null && tutorialPhase.tutorialOn)
+        {
+            tutorialPhase.KillDummy();
+        }
     }
 
     public void CloseSettingsPanel()
