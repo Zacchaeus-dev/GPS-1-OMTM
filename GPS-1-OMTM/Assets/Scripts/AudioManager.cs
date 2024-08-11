@@ -19,13 +19,24 @@ public class AudioManager : MonoBehaviour
 
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
+            s.source.loop = s.loop;
         }
     }
 
     public void Play(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Play();
+
+        if (s.name == "Orb")
+        {
+            s.source.pitch = s.pitch + UnityEngine.Random.Range(0f, 0.5f);
+        }
+        s.source.Play(); 
+    }    
+    public void Stop(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        s.source.Stop(); 
     }    
     
     public void Dim(string name)
@@ -37,7 +48,7 @@ public class AudioManager : MonoBehaviour
     public void Undim(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.volume = 0.257f;
+        s.source.volume = 0.20f;
     }
 
     

@@ -454,7 +454,7 @@ public class Troop : MonoBehaviour
                 gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
                 gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
-
+                FindObjectOfType<AudioManager>().Play("lvlup");
                 yield return new WaitForSeconds(UltiDelay);
 
                 switch (troopWeapon.selectedWeapon)
@@ -591,6 +591,7 @@ public class Troop : MonoBehaviour
     }
     */
     public GameObject UltCircle;
+    public CameraShake cameraShake;
     IEnumerator Ultimate_Tank()
     {
         GetComponent<TroopClass>().SetTargetPositionHere();
@@ -617,10 +618,11 @@ public class Troop : MonoBehaviour
         ultimateDurationTimeRemaining = ultimateDuration;
 
         yield return new WaitForSeconds(UltiDelay);
-
+        FindObjectOfType<AudioManager>().Play("Slam");
+        
         GameObject TankShield = Instantiate(tankShield, transform.position, Quaternion.identity);
         TankShield.GetComponent<BoxCollider2D>().enabled = false; // Disable collider initially
-
+        StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
         //tankClickingOnLocation = false;
 
         StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
@@ -634,7 +636,7 @@ public class Troop : MonoBehaviour
 
     IEnumerator MoveShieldToPosition(GameObject shield, Vector3 targetPosition)
     {
-        float speed = 50f;
+        float speed = 100f;
         while ((targetPosition - shield.transform.position).magnitude > 0.1f)
         {
             shield.transform.position = Vector3.MoveTowards(shield.transform.position, targetPosition, speed * Time.deltaTime);
@@ -657,7 +659,7 @@ public class Troop : MonoBehaviour
             {
                 Debug.Log("Enemy took damage from Tank's Ulti");
                 enemy.TakeDamage(50);
-                StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, false)); // Stun duration
+                //StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, false)); // Stun duration
             }
             else
             {
@@ -666,7 +668,7 @@ public class Troop : MonoBehaviour
                 {
                     Debug.Log("Flying enemy took damage from Tank's Ulti");
                     flyingEnemy.TakeDamage(50);
-                    StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, true));
+                    //StartCoroutine(StunEnemy(enemyCollider.gameObject, 2f, true));
                 }
             }
         }
@@ -695,12 +697,12 @@ public class Troop : MonoBehaviour
         if (!isFlying)
         {
             Enemy enemy = _enemy.GetComponent<Enemy>();
-            //enemy.Stun(true);
+            enemy.Stun(true);
         }
         else
         {
             FlyingEnemy flyingEnemy = _enemy.GetComponent<FlyingEnemy>();
-            //flyingEnemy.Stun(true);
+            flyingEnemy.Stun(true);
         }
         
         yield return new WaitForSeconds(duration);
@@ -775,6 +777,7 @@ public class Troop : MonoBehaviour
         }
 
         Instantiate(UltCircle, newPosition, Quaternion.identity);
+        FindObjectOfType<AudioManager>().Play("troop2");
 
         troopEnergy.UseAllPower();
         ultimateOnCooldown = true;
@@ -785,6 +788,7 @@ public class Troop : MonoBehaviour
         yield return new WaitForSeconds(UltiDelay);
 
         Instantiate(tauntMine, newPosition, Quaternion.identity);
+        
         //ccClickingOnLocation = false;
 
         StartCoroutine(Ultimate_CC_End());
@@ -793,6 +797,10 @@ public class Troop : MonoBehaviour
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
         ultimateOnCooldown = false;
+        yield return new WaitForSeconds(6);
+        StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
+
+        
     }
 
     IEnumerator Ultimate_CC_End()
@@ -807,6 +815,8 @@ public class Troop : MonoBehaviour
 
     IEnumerator Ultimate_Healer()
     {
+        StartCoroutine(cameraShake.Shake(0.005f, 0.005f));
+        FindObjectOfType<AudioManager>().Play("HealBomb");
         GetComponent<TroopClass>().SetTargetPositionHere();
         ultimateOnCooldown = true;
         ultimateCooldownTimeRemaining = ultimateCooldown;
@@ -861,7 +871,6 @@ public class Troop : MonoBehaviour
             StartCoroutine(ReduceShieldOverTime());
         }
     }
-
     public void TakeDamage(int damage)
     {
         if (invincible)
@@ -877,6 +886,8 @@ public class Troop : MonoBehaviour
         {
             tookdamage = true;
             currentHealth -= damage;
+            
+            FindObjectOfType<AudioManager>().Play("MetalHit2");
         }
 
         damageIndicator.SetActive(true);

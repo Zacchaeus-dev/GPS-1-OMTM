@@ -46,6 +46,7 @@ public class EnergyOrb : MonoBehaviour
             TroopEnergy otherTroopEnergy = other.GetComponent<TroopEnergy>();
             if (otherTroopEnergy != null && otherTroopEnergy.currentPower < otherTroopEnergy.maxPower)
             {
+                FindObjectOfType<AudioManager>().Play("Orb");
                 // Add energy to the troop
                 if (otherTroopEnergy.currentPower + energyAmount > otherTroopEnergy.maxPower)
                 {

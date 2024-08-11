@@ -44,6 +44,7 @@ public class ComicPrologue : MonoBehaviour
             mainMenu.SetActive(false); // Disable the main menu
             StartCoroutine(ShowNextButtonWithDelay());
         }
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     void ShowNextPanel()
@@ -66,6 +67,7 @@ public class ComicPrologue : MonoBehaviour
             // Trigger fade out and scene load
             fadeManager.FadeOutAndLoadScene();
         }
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     void ShowPreviousPanel()
@@ -91,6 +93,7 @@ public class ComicPrologue : MonoBehaviour
             mainMenu.SetActive(true);
             gameObject.SetActive(false); // Hide the comic prologue
         }
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     IEnumerator ShowNextButtonWithDelay()

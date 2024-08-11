@@ -331,6 +331,8 @@ public class FlyingEnemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        FindObjectOfType<AudioManager>().Play("MetalHit");
+
         tookdamage = true;
         currentHealth -= damage;
 

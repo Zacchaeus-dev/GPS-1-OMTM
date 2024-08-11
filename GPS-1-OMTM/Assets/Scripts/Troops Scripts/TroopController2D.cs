@@ -146,6 +146,8 @@ public class TroopController2D : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
         {
+            
+
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             int layerMask = LayerMask.GetMask("Pathfinding"); 
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, layerMask);
@@ -166,6 +168,7 @@ public class TroopController2D : MonoBehaviour
                 {
                     // stop moving
                     selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true); // Pathfind UI
+                    //FindObjectOfType<AudioManager>().Play("troop3");
                     //selectedTroop.GetComponent<TroopClass>().GoingLeft = true;
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedLeft == false)
@@ -174,6 +177,7 @@ public class TroopController2D : MonoBehaviour
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit); // start moving
                         selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false); // Pathfind UI
+                        //FindObjectOfType<AudioManager>().Play("troop2");
 
                     }
                 }
@@ -184,6 +188,7 @@ public class TroopController2D : MonoBehaviour
                 if (selectedTroop.GetComponent<TroopClass>().BlockedRight == true)
                 {
                     selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
+                    //FindObjectOfType<AudioManager>().Play("troop3");
                 }
                 else if (selectedTroop.GetComponent<TroopClass>().BlockedRight == false)
                 {
@@ -191,6 +196,7 @@ public class TroopController2D : MonoBehaviour
                     {
                         selectedTroop.GetComponent<TroopClass>().SetTroopTargetPosition(mousePosition, hit);
                         selectedTroop.GetComponent<TroopClass>().arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", false);
+                        //FindObjectOfType<AudioManager>().Play("troop2");
                     }
                 }
             }
@@ -320,6 +326,7 @@ public class TroopController2D : MonoBehaviour
             selectedTroop.GetComponent<TroopAttackRange>().DrawCircle();
         }
         //Debug.Log("Troop selected: " + selectedTroop.name);
+        //FindObjectOfType<AudioManager>().Play("troop");
     }
 
     public void DeselectTroop() 
@@ -364,6 +371,7 @@ public class TroopController2D : MonoBehaviour
         troop.UpdateHUD();
 
         // Reactivate the troop
+        FindObjectOfType<AudioManager>().Play("Teleport");
         troop.gameObject.SetActive(true);
         troop.GetComponent<TroopClass>().SetTargetPositionHere();
         Debug.Log(troop.gameObject.name + " has respawned.");

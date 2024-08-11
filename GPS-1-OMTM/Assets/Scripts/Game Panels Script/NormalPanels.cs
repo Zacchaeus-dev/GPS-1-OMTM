@@ -18,10 +18,12 @@ public class NormalPanels : MonoBehaviour
         {
             tutorialPhase.KillDummy();
         }
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     public void CloseSettingsPanel()
     {
+        FindObjectOfType<AudioManager>().Play("button");
         if (tutorialPhase != null && tutorialPhase.tutorialOn == true)
         {
             instruction4A.SetActive(false);
@@ -29,6 +31,7 @@ public class NormalPanels : MonoBehaviour
             settingsPanel.SetActive(false);
             Time.timeScale = 0f;
             //StartCoroutine(TutorialDelay());
+            
         }
         else
         {

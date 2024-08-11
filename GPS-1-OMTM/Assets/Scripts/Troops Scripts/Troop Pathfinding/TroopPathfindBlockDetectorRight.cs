@@ -29,6 +29,7 @@ public class TroopPathfindBlockDetectorRight : MonoBehaviour
                 PathfindingScript.SetTroopTargetPosition(transform.position, hit);
                 PathfindingScript.ONCE2 = true;
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().pathfindIcon.SetBool("x", true);
+                FindObjectOfType<AudioManager>().Play("troop3");
                 PathfindingScript.arrow.GetComponent<TroopPathfindArrow>().DeactivateX();
                 
             }

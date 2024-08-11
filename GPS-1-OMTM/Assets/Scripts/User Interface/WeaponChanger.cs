@@ -165,6 +165,7 @@ public class WeaponChanger : MonoBehaviour
 
     public void ChangeToWeapon1()
     {
+        FindObjectOfType<AudioManager>().Play("button");
         switch (troopUnit)
         {
             case TroopUnit.DPS:
@@ -208,6 +209,7 @@ public class WeaponChanger : MonoBehaviour
 
     public void ChangeToWeapon2()
     {
+        FindObjectOfType<AudioManager>().Play("button");
         switch (troopUnit)
         {
             case TroopUnit.DPS:

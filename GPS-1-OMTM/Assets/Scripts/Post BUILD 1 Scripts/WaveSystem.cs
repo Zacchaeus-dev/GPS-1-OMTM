@@ -301,7 +301,7 @@ public class WaveSystem : MonoBehaviour
                 wave4Screen.SetActive(true);
                 break;
         }
-
+        FindObjectOfType<AudioManager>().Play("button");
         wavePopUp.SetActive(true);
 
         StartCoroutine(WaveAnimation());
@@ -516,6 +516,8 @@ public class WaveSystem : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         settingsPanel.SetActive(true);
+        FindObjectOfType<AudioManager>().Stop("BGM");
+        FindObjectOfType<AudioManager>().Play("WinBGM");
     }
 
     void HandleTransition()
@@ -1670,9 +1672,16 @@ public class WaveSystem : MonoBehaviour
 
     IEnumerator TPAnimationDelay()
     {
+        troop1AM.TroopIdle();
+        troop2AM.TroopIdle();
+        troop3AM.TroopIdle();
+        troop4AM.TroopIdle();
+
         yield return new WaitForSeconds(0.75f);
 
         troopController2D.DeselectTroop();
+
+        
 
         troop1Model.SetActive(false);
         troop2Model.SetActive(false);
@@ -1708,8 +1717,10 @@ public class WaveSystem : MonoBehaviour
         troop3Model.SetActive(true);
         troop4Model.SetActive(true);
 
-        troop1AM.TroopIdleOn();
-        troop2AM.TroopWalkOff();
+        troop1AM.TroopIdle();
+        troop2AM.TroopIdle();
+        troop3AM.TroopIdle();
+        troop4AM.TroopIdle();
     }
 
     void UpdateButtonState()

@@ -6,7 +6,7 @@ public class TauntMine : MonoBehaviour
 {
     public int tauntMineDamage;
     public float tauntMineRadius;
-    public float timeUntilExplode = 7.5f;
+    public float timeUntilExplode;
     public float pullForce = 15f;
     private bool taunting = false;
 
@@ -21,6 +21,8 @@ public class TauntMine : MonoBehaviour
         AddToEnemyTargets();
 
         StartCoroutine(ExplodeMine());
+
+        cameraShake = FindObjectOfType<CameraSystem>().GetComponent<CameraShake>();
     }
 
     private void Update()
@@ -89,9 +91,15 @@ public class TauntMine : MonoBehaviour
     }
 
     public GameObject CC_AOE_ExplosionEffect;
+    public CameraShake cameraShake;
     IEnumerator ExplodeMine()
     {
-        yield return new WaitForSeconds(timeUntilExplode);
+        for (int i = 0; i <= timeUntilExplode; i++)
+        {
+            FindObjectOfType<AudioManager>().Play("troop4");
+            yield return new WaitForSeconds(1);
+        }
+        
 
         taunting = false;
 
@@ -99,6 +107,9 @@ public class TauntMine : MonoBehaviour
         enemies = Physics2D.OverlapCircleAll(spawnPosition, tauntMineRadius);
 
         Debug.Log("Explode");
+        FindObjectOfType<AudioManager>().Play("Bomb");
+        
+
         foreach (var enemy in enemies)
         {
             if (enemy != null)
@@ -137,6 +148,7 @@ public class TauntMine : MonoBehaviour
                     }
                 }
             }
+            //StartCoroutine(cameraShake.Shake(0.005f, 0.00015f));
         }
         Instantiate(CC_AOE_ExplosionEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);

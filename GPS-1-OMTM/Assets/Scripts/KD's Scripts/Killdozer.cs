@@ -101,7 +101,10 @@ public class Killdozer : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        FindObjectOfType<AudioManager>().Play("MetalHit");
+        if (currentHealth > 0)
+        {
+            FindObjectOfType<AudioManager>().Play("KDHit");
+        }
 
         if (invincible)
         {
@@ -125,20 +128,32 @@ public class Killdozer : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Death();
+            StartCoroutine(Death());
         }
 
         //KDUIScript.KDHealthText();
     }
-
-    void Death()
+    bool dieOnce = false;
+    IEnumerator Death()
     {
+        if (dieOnce == false)
+        {
+            dieOnce = true;
 
+            FindObjectOfType<AudioManager>().Stop("BGM");
+            FindObjectOfType<AudioManager>().Play("KDDeath");
+            settingsPanel.SetActive(true);
+            gameOver = true;
 
+            yield return new WaitForSeconds(2);
+            FindObjectOfType<AudioManager>().Play("LoseBGM");
 
-        settingsPanel.SetActive(true);
+            //gameObject.SetActive(false);
+            
 
-        gameOver = true;
+            
+
+        }
 
 
 

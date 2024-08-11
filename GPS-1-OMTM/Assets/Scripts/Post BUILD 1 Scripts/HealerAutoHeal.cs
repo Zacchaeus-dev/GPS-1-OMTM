@@ -71,7 +71,7 @@ public class HealerAutoHeal : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 healAmount = 20;
-                healCooldown = 1.3f;
+                healCooldown = 2f;
                 AnimationDelay = 0f;
                 ShootingDelay = 0f;
 
@@ -239,6 +239,7 @@ public class HealerAutoHeal : MonoBehaviour
                             {
                                 StartCoroutine(ShowHealNeedle(targetAlly.transform));
                                 allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                                FindObjectOfType<AudioManager>().Play("heal");
                                 lastHealTime = Time.time;
                                 //Debug.Log(targetAlly.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                                 allyTroop.UpdateHUD();
@@ -265,7 +266,7 @@ public class HealerAutoHeal : MonoBehaviour
             delay = 0;
         }
     }
-
+    public GameObject HealAOE;
     void Healer_Weapon2Heal()
     {
         if (troopClass.isMoving == false) //refering to the TroopClass on "(moving == false)" then this autoattack is activated......
@@ -287,15 +288,16 @@ public class HealerAutoHeal : MonoBehaviour
                     if (Time.time >= lastHealTime + healCooldown)
                     {
                         Collider2D[] alliesInRange = Physics2D.OverlapCircleAll(transform.position, healRange, LayerMask.GetMask("Troop"));
-
+                        Instantiate(HealAOE, transform.position, Quaternion.identity);
                         foreach (Collider2D allyCollider in alliesInRange)
                         {
                             Troop allyTroop = allyCollider.GetComponent<Troop>();
 
                             if (allyTroop != null && allyTroop.gameObject != gameObject) //heals everyone except herself
                             {
-                                StartCoroutine(ShowHealAOE(allyTroop.transform));
+                                //StartCoroutine(ShowHealAOE(allyTroop.transform));
                                 allyTroop.currentHealth = Mathf.Min(allyTroop.currentHealth + healAmount, allyTroop.maxHealth);
+                                FindObjectOfType<AudioManager>().Play("heal");
                                 Debug.Log(allyTroop.name + " healed by " + healAmount + " to " + allyTroop.currentHealth + " health.");
                                 allyTroop.UpdateHUD();
 

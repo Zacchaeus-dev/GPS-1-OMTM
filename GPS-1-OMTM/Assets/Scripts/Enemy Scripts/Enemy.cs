@@ -363,7 +363,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        FindObjectOfType<AudioManager>().Play("MetalHit2");
+        FindObjectOfType<AudioManager>().Play("MetalHit");
 
         if (invincible)
         {

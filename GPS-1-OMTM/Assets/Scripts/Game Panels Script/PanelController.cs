@@ -23,11 +23,13 @@ public class PanelController : MonoBehaviour
     public void OpenSettingsPanel()
     {
         settingsPanel.SetActive(true);
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     public void CloseSettingsPanel()
     {
         settingsPanel.SetActive(false);
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     public void SetVolume(float volume)

@@ -194,6 +194,7 @@ public class TutorialPhase : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         instruction3.SetActive(false);
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     public void CloseTutorialPanel()
@@ -207,6 +208,7 @@ public class TutorialPhase : MonoBehaviour
         instruction5.SetActive(false); //prevent bug
         StartCoroutine(WaveAnimation());
         //StartCoroutine(TutorialEnd());
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     IEnumerator WaveAnimation()
@@ -225,6 +227,7 @@ public class TutorialPhase : MonoBehaviour
     {
         objectivePanel.SetActive(false);
         tutorialPanel.SetActive(true);
+        FindObjectOfType<AudioManager>().Play("button");
     }
 
     IEnumerator DefocusKilldozer()
@@ -244,6 +247,7 @@ public class TutorialPhase : MonoBehaviour
 
     public void SkipTutorial()
     {
+        FindObjectOfType<AudioManager>().Play("button");
         instruction1.SetActive(false);
         instruction2.SetActive(false);
         instruction3.SetActive(false);

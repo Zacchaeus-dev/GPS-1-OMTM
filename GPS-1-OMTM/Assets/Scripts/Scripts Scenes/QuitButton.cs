@@ -6,6 +6,7 @@ public class QuitButton : MonoBehaviour
 {
    public void QuitGame()
    {
+        FindObjectOfType<AudioManager>().Play("button");
         Application.Quit();
 
         #if UNITY_EDITOR
