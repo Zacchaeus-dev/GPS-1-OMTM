@@ -26,7 +26,9 @@ public class FadeManager : MonoBehaviour
         yield return StartCoroutine(Fade(0f, 1f));
 
         // Load the new scene
-        SceneManager.LoadScene(sceneToLoad);
+        SceneManager.LoadScene("SampleScene");
+            
+            //(sceneToLoad);
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha)

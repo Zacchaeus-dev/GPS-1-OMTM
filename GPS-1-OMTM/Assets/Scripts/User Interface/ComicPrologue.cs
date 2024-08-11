@@ -12,9 +12,12 @@ public class ComicPrologue : MonoBehaviour
     public string sceneToLoad; // Name of the scene to load after the comic prologue
 
     [Header("UI Elements")]
-    public GameObject mainMenu; // Reference to the main menu GameObject
+    //public GameObject mainMenu; // Reference to the main menu GameObject
     public Button nextButton; // Reference to the next button
     public Button backButton; // Reference to the back button
+    public Button skipButton; // Reference to the skip button
+    public GameObject BG;
+    public GameObject PausePanel;
     public float delayBeforeButton = 2f; // Delay before showing the next button
     public FadeManager fadeManager;
 
@@ -29,10 +32,14 @@ public class ComicPrologue : MonoBehaviour
         }
         nextButton.gameObject.SetActive(false);
         backButton.gameObject.SetActive(false);
+        skipButton.gameObject.SetActive(false); // Show skip button initially
+        BG.SetActive(false);
+        PausePanel.SetActive(false);
 
         // Add listeners for the buttons
         nextButton.onClick.AddListener(ShowNextPanel);
         backButton.onClick.AddListener(ShowPreviousPanel);
+        skipButton.onClick.AddListener(SkipToNextScene);
     }
 
     public void StartComicPrologue()
@@ -41,7 +48,10 @@ public class ComicPrologue : MonoBehaviour
         {
             currentPanelIndex = 0;
             comicPanels[currentPanelIndex].SetActive(true);
-            mainMenu.SetActive(false); // Disable the main menu
+            //mainMenu.SetActive(false); // Disable the main menu
+            BG.SetActive(true);
+            PausePanel.SetActive(true);
+            skipButton.gameObject.SetActive(false);
             StartCoroutine(ShowNextButtonWithDelay());
         }
         FindObjectOfType<AudioManager>().Play("button");
@@ -60,6 +70,7 @@ public class ComicPrologue : MonoBehaviour
             comicPanels[currentPanelIndex].SetActive(true);
             nextButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(false);
+            skipButton.gameObject.SetActive(false);
             StartCoroutine(ShowNextButtonWithDelay());
         }
         else
@@ -75,22 +86,20 @@ public class ComicPrologue : MonoBehaviour
         if (comicPanels.Length == 0)
             return;
 
-        // Deactivate the current panel
         comicPanels[currentPanelIndex].SetActive(false);
 
-        // Check if there are previous panels to show
         if (currentPanelIndex > 0)
         {
             currentPanelIndex--;
             comicPanels[currentPanelIndex].SetActive(true);
-            nextButton.gameObject.SetActive(false); // Hide the next button
-            backButton.gameObject.SetActive(false); // Hide the back button
+            nextButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(false);
+            skipButton.gameObject.SetActive(false);
             StartCoroutine(ShowNextButtonWithDelay());
         }
         else
         {
-            // Go back to the main menu if at the first panel
-            mainMenu.SetActive(true);
+            //mainMenu.SetActive(true);
             gameObject.SetActive(false); // Hide the comic prologue
         }
         FindObjectOfType<AudioManager>().Play("button");
@@ -100,9 +109,18 @@ public class ComicPrologue : MonoBehaviour
     {
         yield return new WaitForSeconds(delayBeforeButton);
         nextButton.gameObject.SetActive(true);
+        skipButton.gameObject.SetActive(true);
         if (currentPanelIndex > 0) // Show the back button only if not on the first panel
         {
             backButton.gameObject.SetActive(true);
         }
+      
+    }
+
+    // New function for skipping to the next scene
+    void SkipToNextScene()
+    {
+        fadeManager.FadeOutAndLoadScene();
+        FindObjectOfType<AudioManager>().Play("button");
     }
 }
