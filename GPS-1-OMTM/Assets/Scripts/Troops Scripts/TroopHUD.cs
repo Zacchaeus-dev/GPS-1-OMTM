@@ -28,6 +28,8 @@ public class TroopHUD : MonoBehaviour
     public GameObject shieldBarObject;
     public Image shieldBar;
 
+    public GameObject medicMessage;
+
     public TroopController2D troopController2D;
     public CameraSystem cameraSystem;
     public GameObject troop;
@@ -101,6 +103,15 @@ public class TroopHUD : MonoBehaviour
         hpBar.fillAmount = ((float)_troop.currentHealth / (float)_troop.maxHealth);
         powerBar.fillAmount = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
         shieldBar.fillAmount = (float)_troop.currentShield / (float)_troop.maxShield;
+
+        if (_troop.currentHealth <= (_troop.maxHealth / 10) && _troop.currentHealth > 0)
+        {
+            medicMessage.SetActive(true);
+        }
+        else
+        {
+            medicMessage.SetActive(false);
+        }
     }
 
     public void ButtonClick()

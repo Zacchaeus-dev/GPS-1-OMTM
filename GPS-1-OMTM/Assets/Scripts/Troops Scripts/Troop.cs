@@ -545,6 +545,8 @@ public class Troop : MonoBehaviour
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
 
         yield return new WaitForSeconds(ultimateDuration);//ultimateDuration);
+
+        troopEnergy.DisableUltimateVisual();
         troopAutoAttack.attackDamage -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
 
@@ -630,6 +632,8 @@ public class Troop : MonoBehaviour
         gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = true;
 
         yield return new WaitForSeconds(UltiDelay);
+
+        troopEnergy.DisableUltimateVisual();
 
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
     }
@@ -797,10 +801,9 @@ public class Troop : MonoBehaviour
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
 
         ultimateOnCooldown = false;
+        troopEnergy.DisableUltimateVisual();
         yield return new WaitForSeconds(6);
         StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
-
-        
     }
 
     IEnumerator Ultimate_CC_End()
@@ -824,21 +827,24 @@ public class Troop : MonoBehaviour
         Debug.Log("Healer Ultimate Activated");
 
         //golden fleece
-        if (troopController2D.troop1.activeInHierarchy == true)
+        if (troopController2D.troop1.activeInHierarchy == true && troopController2D.troop1.GetComponent<Troop>().currentHealth > 0)
         {
             GainShield(troopController2D.troop1);
         }
-        if (troopController2D.troop2.activeInHierarchy == true)
+        if (troopController2D.troop2.activeInHierarchy == true && troopController2D.troop2.GetComponent<Troop>().currentHealth > 0)
         {
             GainShield(troopController2D.troop2);
         }
-        if (troopController2D.troop3.activeInHierarchy == true)
+        if (troopController2D.troop3.activeInHierarchy == true && troopController2D.troop3.GetComponent<Troop>().currentHealth > 0)
         {
             GainShield(troopController2D.troop3);
         }
+
         GainShield(gameObject);
 
         shieldOverlay.SetActive(true);
+
+        troopEnergy.DisableUltimateVisual();
 
         yield return new WaitForSeconds(1.5f);
         gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;

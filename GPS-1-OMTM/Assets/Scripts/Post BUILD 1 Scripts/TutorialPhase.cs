@@ -42,7 +42,9 @@ public class TutorialPhase : MonoBehaviour
     public GameObject wavePopUp;
     public GameObject preWave1Screen;
     public GameObject skipTutorialButton;
+    private bool tutorialSkipped;
     private bool canRespawn = true;
+    public TroopEnergy dpsPower;
 
     void Start()
     {
@@ -100,8 +102,15 @@ public class TutorialPhase : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        instruction4A.SetActive(true);
-        kddButton.SetActive(true);
+        if(tutorialSkipped == false)
+        {
+            instruction4A.SetActive(true);
+            kddButton.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("a");
+        }
     }
 
     public void TutorialStart()
@@ -145,6 +154,7 @@ public class TutorialPhase : MonoBehaviour
         StartCoroutine(DefocusKilldozer());
         instruction8.SetActive(true);
         instruction8On = true;
+        dpsPower.UseAllPower();
         tutorialOn = false;
 
         yield return new WaitForSeconds(0.1f);
@@ -194,6 +204,7 @@ public class TutorialPhase : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         instruction3.SetActive(false);
+        skipTutorialButton.SetActive(true);
         FindObjectOfType<AudioManager>().Play("button");
     }
 
@@ -248,6 +259,8 @@ public class TutorialPhase : MonoBehaviour
     public void SkipTutorial()
     {
         FindObjectOfType<AudioManager>().Play("button");
+        KillDummy();
+        rightClickPosition.SetActive(false);
         instruction1.SetActive(false);
         instruction2.SetActive(false);
         instruction3.SetActive(false);
@@ -257,6 +270,8 @@ public class TutorialPhase : MonoBehaviour
         instruction7.SetActive(false);
         instruction8.SetActive(false);
         labels.SetActive(false);
+        dpsPower.UseAllPower();
+        tutorialSkipped = true;
 
         preWave1Screen.SetActive(true);
         wavePopUp.SetActive(true);

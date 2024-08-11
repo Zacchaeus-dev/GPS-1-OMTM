@@ -62,6 +62,7 @@ public class TroopController2D : MonoBehaviour
     public GameObject instruction6;
     public GameObject tutorialPanel;
     public GameObject instruction8;
+    public GameObject skipTutorialButton;
 
     void Start()
     {
@@ -118,7 +119,7 @@ public class TroopController2D : MonoBehaviour
                           attackRangeLabel.SetActive(true);
                        }
                     }
-                    else if (tutorialPhase.tutorialOn == false && tutorialPhase.instruction8On == true)
+                    else if (tutorialPhase.tutorialOn == false && instruction8.activeInHierarchy == true)
                     {
                         instruction8.SetActive(false);
                         tutorialPhase.EnableEdgePanTutorial();
@@ -216,6 +217,7 @@ public class TroopController2D : MonoBehaviour
         instruction2.SetActive(false);
         attackRangeLabel.SetActive(false);
         instruction3.SetActive(true);
+        skipTutorialButton.SetActive(false);
         Time.timeScale = 0f;
     }
 

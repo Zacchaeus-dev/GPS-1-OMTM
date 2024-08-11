@@ -158,6 +158,7 @@ public class WaveSystem : MonoBehaviour
     public GameObject instruction7;
     public GameObject instruction8;
     public GameObject edgePanTutorial;
+    public GameObject rightClickObject;
     int maxEnemies = 80;
     private bool ending = false;
     public TroopHUD troop1HUD;
@@ -266,6 +267,7 @@ public class WaveSystem : MonoBehaviour
         instruction7.SetActive(false);
         instruction8.SetActive(false);
         edgePanTutorial.SetActive(false);
+        //rightClickObject.SetActive(false);
 
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();

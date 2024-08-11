@@ -10,12 +10,14 @@ public class NormalPanels : MonoBehaviour
     public TutorialPhase tutorialPhase;
     public GameObject objectivePanel;
     public GameObject instruction4A;
+    public GameObject skipTutorialButton;
 
     public void OpenSettingsPanel()
     {
         settingsPanel.SetActive(true);
         if (tutorialPhase != null && tutorialPhase.tutorialOn)
         {
+            skipTutorialButton.SetActive(false);
             tutorialPhase.KillDummy();
         }
         FindObjectOfType<AudioManager>().Play("button");

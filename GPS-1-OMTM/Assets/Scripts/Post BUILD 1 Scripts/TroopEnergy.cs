@@ -15,6 +15,7 @@ public class TroopEnergy : MonoBehaviour
     public TutorialPhase tutorialPhase;
     public GameObject instruction4;
     public GameObject instruction5;
+    public GameObject ultimateVisual;
 
     public enum PowerMethod
     {
@@ -35,6 +36,7 @@ public class TroopEnergy : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))  //testing
         {
             currentPower = maxPower;
+            UpdateHUD();
         }
         */
     }
@@ -42,6 +44,7 @@ public class TroopEnergy : MonoBehaviour
     public void UpdateHUD()
     {
         powerText.text = currentPower.ToString();
+        EnableUltimateVisual();
         troop.UpdateHUD();
     }
 
@@ -62,6 +65,19 @@ public class TroopEnergy : MonoBehaviour
     {
         currentPower = 0;
         UpdateHUD();
+    }
+
+    public void EnableUltimateVisual()
+    {
+        if (currentPower == maxPower)
+        {
+            ultimateVisual.SetActive(true);
+        }
+    }
+
+    public void DisableUltimateVisual()
+    {
+        ultimateVisual.SetActive(false);
     }
 
     public void Instruction5()
