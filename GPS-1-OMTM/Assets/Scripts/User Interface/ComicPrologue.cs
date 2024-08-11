@@ -18,7 +18,7 @@ public class ComicPrologue : MonoBehaviour
     public Button skipButton; // Reference to the skip button
     public GameObject BG;
     public GameObject PausePanel;
-    public float delayBeforeButton = 2f; // Delay before showing the next button
+    private float delayBeforeButton = 2f; // Delay before showing the next button
     public FadeManager fadeManager;
 
     private int currentPanelIndex = 0; // Current panel index
@@ -52,7 +52,7 @@ public class ComicPrologue : MonoBehaviour
             BG.SetActive(true);
             PausePanel.SetActive(true);
             skipButton.gameObject.SetActive(false);
-            StartCoroutine(ShowNextButtonWithDelay());
+            StartCoroutine(ShowNextButtonWithDelay(0));
         }
         FindObjectOfType<AudioManager>().Play("button");
     }
@@ -71,7 +71,13 @@ public class ComicPrologue : MonoBehaviour
             nextButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(false);
             skipButton.gameObject.SetActive(false);
-            StartCoroutine(ShowNextButtonWithDelay());
+            StartCoroutine(ShowNextButtonWithDelay(0));
+
+            if (currentPanelIndex == comicPanels.Length - 1)
+            {
+                nextButton.gameObject.SetActive(false);
+                StartCoroutine(ShowNextButtonWithDelay(2));
+            }
         }
         else
         {
@@ -95,7 +101,7 @@ public class ComicPrologue : MonoBehaviour
             nextButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(false);
             skipButton.gameObject.SetActive(false);
-            StartCoroutine(ShowNextButtonWithDelay());
+            StartCoroutine(ShowNextButtonWithDelay(0));
         }
         else
         {
@@ -105,14 +111,19 @@ public class ComicPrologue : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("button");
     }
 
-    IEnumerator ShowNextButtonWithDelay()
+    IEnumerator ShowNextButtonWithDelay(float delayBeforeButton)
     {
+        nextButton.gameObject.SetActive(false);
         yield return new WaitForSeconds(delayBeforeButton);
         nextButton.gameObject.SetActive(true);
         skipButton.gameObject.SetActive(true);
         if (currentPanelIndex > 0) // Show the back button only if not on the first panel
         {
             backButton.gameObject.SetActive(true);
+        }
+        if (currentPanelIndex == comicPanels.Length - 1)
+        {
+            skipButton.gameObject.SetActive(false);
         }
       
     }
