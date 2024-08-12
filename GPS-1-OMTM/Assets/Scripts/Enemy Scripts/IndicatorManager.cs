@@ -78,15 +78,15 @@ public class IndicatorManager : MonoBehaviour
         {
             case EnemyIndicator.Tier.Tier1:
                 arrowPrefab = arrowPrefabTier1;
-                yOffset = 240f + 100;
+                yOffset = 115f;
                 break;
             case EnemyIndicator.Tier.Tier2:
                 arrowPrefab = arrowPrefabTier2;
-                yOffset =  150f + 125;
+                yOffset =  50f;
                 break;
             case EnemyIndicator.Tier.Tier3:
                 arrowPrefab = arrowPrefabTier3;
-                yOffset = 330f + 50;
+                yOffset = 330f + 0;
                 break;
         }
 

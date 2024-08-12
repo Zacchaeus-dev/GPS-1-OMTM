@@ -42,13 +42,13 @@ public class AudioManager : MonoBehaviour
     public void Dim(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.volume = 0.1f;
+        s.source.volume = 0.05f;
     }    
     
     public void Undim(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.volume = 0.20f;
+        s.source.volume = 0.10f;
     }
 
     

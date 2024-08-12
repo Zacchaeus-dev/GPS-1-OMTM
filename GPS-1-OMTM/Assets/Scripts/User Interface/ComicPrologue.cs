@@ -40,6 +40,8 @@ public class ComicPrologue : MonoBehaviour
         nextButton.onClick.AddListener(ShowNextPanel);
         backButton.onClick.AddListener(ShowPreviousPanel);
         skipButton.onClick.AddListener(SkipToNextScene);
+
+        FindObjectOfType<AudioManager>().Play("BGM");
     }
 
     public void StartComicPrologue()
@@ -55,6 +57,8 @@ public class ComicPrologue : MonoBehaviour
             StartCoroutine(ShowNextButtonWithDelay(0));
         }
         FindObjectOfType<AudioManager>().Play("button");
+        FindObjectOfType<AudioManager>().Stop("BGM");
+        FindObjectOfType<AudioManager>().Play("BGM2");
     }
 
     void ShowNextPanel()

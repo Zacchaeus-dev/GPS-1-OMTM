@@ -328,7 +328,7 @@ public class TroopController2D : MonoBehaviour
             selectedTroop.GetComponent<TroopAttackRange>().DrawCircle();
         }
         //Debug.Log("Troop selected: " + selectedTroop.name);
-        //FindObjectOfType<AudioManager>().Play("troop");
+        FindObjectOfType<AudioManager>().Play("troop");
     }
 
     public void DeselectTroop() 

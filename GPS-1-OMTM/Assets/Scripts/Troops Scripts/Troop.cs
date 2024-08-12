@@ -465,6 +465,7 @@ public class Troop : MonoBehaviour
                         break;
                     case TroopWeapon.Weapon.Weapon2_DPS:
                         TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOn();
+                        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
                         AttackModel2ndSniper.SetActive(true);// SetActive Left Sniper
                         break;
                 }

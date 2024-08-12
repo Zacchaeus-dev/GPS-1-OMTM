@@ -11,7 +11,7 @@ public class TroopPathfindArrow : MonoBehaviour
         if (other.CompareTag("Troop") && other.gameObject == Troop )
         {
             gameObject.SetActive(false);
-            FindObjectOfType<AudioManager>().Play("troop2");
+            //FindObjectOfType<AudioManager>().Play("troop2");
         }
     }
 

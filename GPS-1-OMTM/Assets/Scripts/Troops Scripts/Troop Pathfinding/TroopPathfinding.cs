@@ -106,13 +106,13 @@ public class TroopClass : MonoBehaviour
                 MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Healer:
-                moveSpeed = 12;
+                moveSpeed = 10;
                 climbDelay = 0.5f;
                 fallDelay = 0.1f;
                 MiddleGroundYSnap = 4.75f;
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
-                moveSpeed = 12;
+                moveSpeed = 10;
                 climbDelay = 0.5f;
                 fallDelay = 0.1f;
                 MiddleGroundYSnap = 4.75f;
