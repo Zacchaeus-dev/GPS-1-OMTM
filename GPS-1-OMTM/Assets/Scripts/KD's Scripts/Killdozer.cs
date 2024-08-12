@@ -134,14 +134,24 @@ public class Killdozer : MonoBehaviour
         //KDUIScript.KDHealthText();
     }
     bool dieOnce = false;
+    public CameraShake cameraShake;
     IEnumerator Death()
     {
         if (dieOnce == false)
         {
             dieOnce = true;
-
             FindObjectOfType<AudioManager>().Stop("BGM");
             FindObjectOfType<AudioManager>().Play("KDDeath");
+
+            StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(cameraShake.Shake(0.010f, 0.015f));
+
+
             settingsPanel.SetActive(true);
             gameOver = true;
 
