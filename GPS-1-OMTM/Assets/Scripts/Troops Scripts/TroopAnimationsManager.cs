@@ -12,6 +12,7 @@ public class TroopAnimationsManager : MonoBehaviour
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("ulti", false);
         TroopAnimator.SetBool("attack", false);
+        Debug.Log("Im the amamamam2");
     }    
     
     public void TroopIdleOn()
@@ -32,7 +33,8 @@ public class TroopAnimationsManager : MonoBehaviour
     
     public void TroopWalkOff()
     {
-        TroopAnimator.SetBool("walking", false);    
+        TroopAnimator.SetBool("walking", false);
+        Debug.Log("Im the amamamam");
     }        
     
     public void TroopClimbOn()
@@ -78,6 +80,7 @@ public class TroopAnimationsManager : MonoBehaviour
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("ulti", true);
         TroopAnimator.SetBool("attack", false);
+        Debug.Log("Im the amamamam22");
     }    
     public void TroopUltiOff()
     {
@@ -85,6 +88,7 @@ public class TroopAnimationsManager : MonoBehaviour
         TroopAnimator.SetBool("walking", false);
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("attack", false);
+        Debug.Log("Im the amamamam23");
     }
 
     public void TroopOnWeapon1()
