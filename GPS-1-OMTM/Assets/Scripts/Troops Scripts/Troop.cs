@@ -465,7 +465,7 @@ public class Troop : MonoBehaviour
                         break;
                     case TroopWeapon.Weapon.Weapon2_DPS:
                         TroopModel.GetComponent<TroopAnimationsManager>().TroopIdleOn();
-                        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+                        //TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
                         AttackModel2ndSniper.SetActive(true);// SetActive Left Sniper
                         break;
                 }
@@ -542,13 +542,13 @@ public class Troop : MonoBehaviour
 
         //berserk
         //add attack and attack speed 
-        troopAutoAttack.attackDamage += 25;
+        troopAutoAttack.DPSUltBuff += 25;
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
 
         yield return new WaitForSeconds(ultimateDuration);//ultimateDuration);
-
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
         troopEnergy.DisableUltimateVisual();
-        troopAutoAttack.attackDamage -= 25;
+        troopAutoAttack.DPSUltBuff -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
 
         switch (troopWeapon.selectedWeapon)

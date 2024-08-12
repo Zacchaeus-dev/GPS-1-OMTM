@@ -23,7 +23,7 @@ public class TroopAutoAttack : MonoBehaviour
     public TroopWeapon troopWeapon;
     //private int tankAttackCounter = 0;
     private float dpsWeapon2Range = 10;
-    private float dpsWeapon2Width = 1.5f;
+    private float dpsWeapon2Width = 2f;
     public Transform dpsWeapon2Transform;
     public Transform dpsWeapon2ShootPoint;
     public Transform screenLeftShootingPoint;
@@ -102,19 +102,19 @@ public class TroopAutoAttack : MonoBehaviour
                 break;
         }
     }
-
+    public int DPSUltBuff;
     void DetermineAttack()
     {
         switch (troopWeapon.selectedWeapon) //determine attack based on selected weapon
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
-                attackDamage = 40;
+                attackDamage = 40 + DPSUltBuff;
                 attackCooldown = 0.25f;
                 AnimationDelay = 0.4f;
                 ShootingDelay = 0.5f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
-                attackDamage = 35;
+                attackDamage = 35 + DPSUltBuff;
                 attackCooldown = 1f;
                 AnimationDelay = 0.4f;
                 ShootingDelay = 1f;
@@ -449,7 +449,7 @@ public class TroopAutoAttack : MonoBehaviour
 
         //Vector3 offset = new Vector3(5, 0, 0);
 
-        DrawAttackRectangle(dpsWeapon2Transform.position, attackDirectionFORVISUALS, dpsWeapon2Width, dpsWeapon2Range - 3.5f);
+        DrawAttackRectangle(dpsWeapon2Transform.position, attackDirectionFORVISUALS, dpsWeapon2Width - 1, dpsWeapon2Range - 3.5f);
         troopEnergy.GainPower();
     }
 

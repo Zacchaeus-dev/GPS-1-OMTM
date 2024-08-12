@@ -60,14 +60,14 @@ public class RankingSystem : MonoBehaviour
 
     GameObject CalculateRank(float healthPercentage)
     {
-        if (healthPercentage == 100) return SSSRank;
+        if (healthPercentage >= 100) return SSSRank;
         else if (healthPercentage >= 90) return SSRank;
         else if (healthPercentage >= 80) return SRank;
-        else if (healthPercentage >= 70) return ARank;
-        else if (healthPercentage >= 50) return BRank;
-        else if (healthPercentage >= 40) return CRank;
-        else if (healthPercentage >= 30) return DRank;
-        else if (healthPercentage >= 20) return ERank;
+        else if (healthPercentage >= 20) return ARank;
+        else if (healthPercentage >= 10) return BRank;
+        else if (healthPercentage >= 5) return CRank;
+        else if (healthPercentage >= 2.5f) return DRank;
+        else if (healthPercentage > 0) return ERank;
         else return FRank;
     }
 }
