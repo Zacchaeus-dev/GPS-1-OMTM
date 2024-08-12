@@ -401,8 +401,11 @@ public class TroopAutoAttack : MonoBehaviour
 
     void DPS_Weapon2Attack(GameObject _enemy)
     {
+        Vector3 targetPositionFORVISUAL = new Vector2(_enemy.transform.position.x, _enemy.transform.position.y + 0.65f);
         Vector3 targetPosition = _enemy.transform.position;
-        Vector2 attackDirection = (targetPosition - transform.position).normalized;
+        Vector2 attackDirection = (targetPositionFORVISUAL - transform.position).normalized;
+        Vector2 attackDirectionFORVISUALS = (targetPositionFORVISUAL - transform.position).normalized;
+
 
         // Define the rectangle's size
         float halfWidth = dpsWeapon2Width / 2;
@@ -446,7 +449,7 @@ public class TroopAutoAttack : MonoBehaviour
 
         //Vector3 offset = new Vector3(5, 0, 0);
 
-        DrawAttackRectangle(dpsWeapon2Transform.position, attackDirection, dpsWeapon2Width, dpsWeapon2Range);
+        DrawAttackRectangle(dpsWeapon2Transform.position, attackDirectionFORVISUALS, dpsWeapon2Width, dpsWeapon2Range - 3.5f);
         troopEnergy.GainPower();
     }
 
