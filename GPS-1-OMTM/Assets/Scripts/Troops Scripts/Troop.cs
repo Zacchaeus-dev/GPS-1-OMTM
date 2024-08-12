@@ -758,7 +758,7 @@ public class Troop : MonoBehaviour
         {
             if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground") || Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2")
                 || Hit.collider.CompareTag("[PF] Upper-Ground 3") || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
-                || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)"))
+                || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[TP] Upper-Ground 4"))
             {
                 if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
                 {
@@ -766,10 +766,11 @@ public class Troop : MonoBehaviour
                     newPosition.y = -3;
                 }
                 else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
-                        || Hit.collider.CompareTag("[PF] Upper-Ground 4"))
+                        || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[TP] Upper-Ground 4"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = 3;
+                    Debug.Log("YES");
                 }
                 else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (3)")
                         || Hit.collider.CompareTag("[PF] Upper-Ground 1 (4)"))

@@ -572,6 +572,7 @@ public class WaveSystem : MonoBehaviour
 
         IEnumerator TransitionDelay()
     {
+        /*
         if (waves[currentWaveIndex].waveNum != 4)
         {
             yield return new WaitForSeconds(5.5f);
@@ -580,7 +581,9 @@ public class WaveSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(12.5f); //transition is longer for wave 4
         }
-        
+        */
+
+        yield return new WaitForSeconds(5.5f);
         transitioning = false;
         prewaveTimer = waves[currentWaveIndex].prewaveDuration;
         timerDuration = prewaveTimer;
