@@ -155,6 +155,7 @@ public class TutorialPhase : MonoBehaviour
         instruction8.SetActive(true);
         instruction8On = true;
         dpsPower.UseAllPower();
+        dpsPower.DisableUltimateVisual();
         tutorialOn = false;
 
         yield return new WaitForSeconds(0.1f);

@@ -1682,15 +1682,11 @@ public class WaveSystem : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         troopController2D.DeselectTroop();
-        Vector2 t1mOriPos = troop1Model.transform.position;
-        Vector2 t2mOriPos = troop2Model.transform.position;
-        Vector2 t3mOriPos = troop3Model.transform.position;
-        Vector2 t4mOriPos = troop4Model.transform.position;
-        yield return new WaitForSeconds(0.01f);
-        troop1Model.transform.position = new Vector2(-1000, -15);
-        troop2Model.transform.position = new Vector2(-1000, -15);
-        troop3Model.transform.position = new Vector2(-1000, -15);
-        troop4Model.transform.position = new Vector2(-1000, -15);
+
+        troop1Model.transform.position = new Vector3(-1000, -15, 0);
+        troop2Model.transform.position = new Vector3(-1000, -15, 0);
+        troop3Model.transform.position = new Vector3(-1000, -15, 0);
+        troop4Model.transform.position = new Vector3(-1000, -15, 0);
 
         /*
                 troop1Model.SetActive(false);
@@ -1717,15 +1713,15 @@ public class WaveSystem : MonoBehaviour
 
         yield return new WaitForSeconds(0.75f);
 
-        troop1Model.transform.position = new Vector2(t1mOriPos.x + 1.09f, t1mOriPos.y);
-        troop2Model.transform.position = new Vector2(t2mOriPos.x + 1.09f, t2mOriPos.y);
-        troop3Model.transform.position = new Vector2(t3mOriPos.x + 1.09f, t3mOriPos.y);
-        troop4Model.transform.position = new Vector2(t4mOriPos.x + 1.09f, t4mOriPos.y);
+        troop1Model.transform.position = new Vector2(killdozerTransform1.position.x - 0.02f, killdozerTransform1.position.y - 0.65f);
+        troop2Model.transform.position = killdozerTransform2.position;
+        troop3Model.transform.position = new Vector2(killdozerTransform3.position.x + 0.05f, killdozerTransform3.position.y - 0.57f);
+        troop4Model.transform.position = new Vector2(killdozerTransform4.position.x + 0.21f, killdozerTransform1.position.y - 0.78f);
+
         troop1.transform.position = killdozerTransform1.position;
         troop2.transform.position = killdozerTransform2.position;
         troop3.transform.position = killdozerTransform3.position;
         troop4.transform.position = killdozerTransform4.position;
-
 
         /*        troop1Model.SetActive(true);
                 troop2Model.SetActive(true);

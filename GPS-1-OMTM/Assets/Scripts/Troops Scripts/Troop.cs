@@ -37,7 +37,7 @@ public class Troop : MonoBehaviour
 
     // Ultimate
     public Ultimate ultimate = Ultimate.None;
-    private bool ultimateOnCooldown = false;
+    public bool ultimateOnCooldown = false;
     public float ultimateCooldown = 5f;
     public float ultimateDuration = 0f;
     //private bool ccClickingOnLocation = false;
