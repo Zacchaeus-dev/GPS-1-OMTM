@@ -174,6 +174,9 @@ public class WaveSystem : MonoBehaviour
     public GameObject breakWaveBarObject;
     public Image breakProgressBar;
 
+    //new labels pop ups
+    public GameObject breakLabel;
+    public GameObject waveLabel;
     void Start()
     {
         startButton.SetActive(true);
@@ -269,6 +272,7 @@ public class WaveSystem : MonoBehaviour
         edgePanTutorial.SetActive(false);
         //rightClickObject.SetActive(false);
 
+
         waveStateText.text = "Pre Wave";
         waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
 
@@ -320,6 +324,8 @@ public class WaveSystem : MonoBehaviour
 
         wavePopUp.SetActive(false);
 
+        
+
         //currentMiniWaveIndex = 0;
         StartMiniWave();
         var index = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
@@ -338,6 +344,7 @@ public class WaveSystem : MonoBehaviour
 
         currentState = WaveState.InWave;
     }
+
 
     void HandlePrewave()
     {
@@ -383,6 +390,7 @@ public class WaveSystem : MonoBehaviour
     void HandleInWave()
     {
         waveStateText.text = "In Wave";
+
 
         if (aliveEnemies.Count == 0 && inwaveTimer1 <= 0 && inwaveTimer2 <= 0 && inwaveTimer3 <= 0 && inwaveTimer4 <= 0 && inwaveTimer5 <= 0 && inwaveTimer6 <= 0 && inwaveTimer7 <= 0 && inwaveTimer8 <= 0 && inwaveTimer9 <= 0 && inwaveTimer10 <= 0 && inwaveTimer11 <= 0 && inwaveTimer12 <= 0)
         {
@@ -437,6 +445,8 @@ public class WaveSystem : MonoBehaviour
     {
         waveStateText.text = "Break";
         FindObjectOfType<AudioManager>().Dim("BGM");
+
+
         if (breakTimer > 0)
         {
             breakTimer -= Time.deltaTime;
@@ -640,6 +650,7 @@ public class WaveSystem : MonoBehaviour
     void StartMiniWave()
     {
         FindObjectOfType<AudioManager>().Undim("BGM");
+
 
         startButton.SetActive(false);
         startBorder.SetActive(false);
