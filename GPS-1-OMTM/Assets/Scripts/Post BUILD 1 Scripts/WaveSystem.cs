@@ -1667,6 +1667,8 @@ public class WaveSystem : MonoBehaviour
         troop3TPAnimator.gameObject.SetActive(true);
         troop4TPAnimator.gameObject.SetActive(true);
 
+        FindObjectOfType<AudioManager>().Play("Teleport");
+
         troop1TPAnimator.SetTrigger("Death");
         troop2TPAnimator.SetTrigger("Death");
         troop3TPAnimator.SetTrigger("Death");
@@ -1703,6 +1705,7 @@ public class WaveSystem : MonoBehaviour
         troop4HUD.DisableTroopBars();
 
         yield return new WaitForSeconds(0.75f);
+        FindObjectOfType<AudioManager>().Play("Teleport");
 
         troop1.GetComponent<TroopClass>().SetTargetPositionHere();
         troop2.GetComponent<TroopClass>().SetTargetPositionHere();
@@ -1715,6 +1718,7 @@ public class WaveSystem : MonoBehaviour
         troop4TPAnimator.SetTrigger("Death");
 
         yield return new WaitForSeconds(0.75f);
+
 
         troop1Model.transform.position = new Vector2(killdozerTransform1.position.x - 0.02f, killdozerTransform1.position.y - 0.65f);
         troop2Model.transform.position = killdozerTransform2.position;
