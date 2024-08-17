@@ -406,6 +406,7 @@ public class WaveSystem : MonoBehaviour
         {
             breakLabel.SetActive(true);
             startButton.SetActive(true);    
+            startBorder.SetActive(true);    
             StartCoroutine(BreakAnimation());   
         }
 

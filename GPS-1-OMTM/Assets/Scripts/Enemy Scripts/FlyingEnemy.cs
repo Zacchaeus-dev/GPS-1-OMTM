@@ -298,11 +298,11 @@ public class FlyingEnemy : MonoBehaviour
             }
         }
     }
-
+    public GameObject hitpoint;
     IEnumerator DrawBulletTracer(Vector3 targetPosition)
     {
-        lineRenderer = Instantiate(lineRendererPrefab).GetComponent<LineRenderer>(); 
-        lineRenderer.SetPosition(0, transform.position + startOffset);
+        lineRenderer = Instantiate(lineRendererPrefab).GetComponent<LineRenderer>();
+        lineRenderer.SetPosition(0, hitpoint.transform.position); //transform.position + startOffset);
         lineRenderer.SetPosition(1, targetPosition);
 
         Color startColor = lineRenderer.startColor;

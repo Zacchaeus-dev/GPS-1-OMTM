@@ -85,7 +85,7 @@ public class TroopAnimationsManager : MonoBehaviour
     public void TroopUltiOff()
     {
         TroopAnimator.SetBool("ulti", false);
-        TroopAnimator.SetBool("walking", false);
+        //TroopAnimator.SetBool("walking", false);
         TroopAnimator.SetBool("climbing", false);
         TroopAnimator.SetBool("attack", false);
         //Debug.Log("Im the amamamam23");

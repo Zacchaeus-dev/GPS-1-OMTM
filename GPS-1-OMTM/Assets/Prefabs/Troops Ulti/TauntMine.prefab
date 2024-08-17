@@ -251,7 +251,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tauntMineDamage: 100
-  tauntMineRadius: 7
+  tauntMineRadius: 10
   timeUntilExplode: 5
-  pullForce: 10
+  pullForce: 5
   CC_AOE_ExplosionEffect: {fileID: 1064722401036425389, guid: bad9364b192aada4fb5d3b66c985421e, type: 3}
+  cameraShake: {fileID: 0}

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1523602270857420605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 571837895253816624}
+  m_Layer: 0
+  m_Name: hitpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &571837895253816624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523602270857420605}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.17, y: -0.24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1511719740186873055}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2123245629827382086
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,8 +140,8 @@ MonoBehaviour:
   maxHealth: 30
   currentHealth: 30
   speed: 1
-  detectionRange: 5
-  attackRange: 5
+  detectionRange: 7
+  attackRange: 7
   attackDamage: 10
   attackInterval: 3
   startOffset: {x: 0, y: 0, z: 0}
@@ -137,6 +168,7 @@ MonoBehaviour:
   energyOrb: {fileID: 8791878752881137860}
   energyOrbDropNum: 1
   EnemyModel: {fileID: 4499519239705694393}
+  hitpoint: {fileID: 1523602270857420605}
   knockbackForce: 0
 --- !u!114 &8791878752881137860
 MonoBehaviour:
@@ -803,7 +835,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -5950105926317376037, guid: f56af2069071e894d9c0d4f0eda7a79a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 571837895253816624}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: f56af2069071e894d9c0d4f0eda7a79a, type: 3}
       insertIndex: -1
@@ -818,6 +853,11 @@ PrefabInstance:
 --- !u!212 &451577192328497370 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4598769123953457630, guid: f56af2069071e894d9c0d4f0eda7a79a, type: 3}
+  m_PrefabInstance: {fileID: 4149591206393753860}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1511719740186873055 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5950105926317376037, guid: f56af2069071e894d9c0d4f0eda7a79a, type: 3}
   m_PrefabInstance: {fileID: 4149591206393753860}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3366890681061263578 stripped

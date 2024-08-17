@@ -7,7 +7,7 @@ public class TauntMine : MonoBehaviour
     public int tauntMineDamage;
     public float tauntMineRadius;
     public float timeUntilExplode;
-    public float pullForce = 15f;
+    public float pullForce;
     private bool taunting = false;
 
     Collider2D[] enemies;
