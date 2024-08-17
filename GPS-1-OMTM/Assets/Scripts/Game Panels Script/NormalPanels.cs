@@ -11,6 +11,7 @@ public class NormalPanels : MonoBehaviour
     public GameObject objectivePanel;
     public GameObject instruction4A;
     public GameObject skipTutorialButton;
+    public Troop dps;
 
     public void OpenSettingsPanel()
     {
@@ -19,6 +20,7 @@ public class NormalPanels : MonoBehaviour
         {
             skipTutorialButton.SetActive(false);
             tutorialPhase.KillDummy();
+            dps.Ultimate_DPS_End();
         }
         FindObjectOfType<AudioManager>().Play("button");
     }

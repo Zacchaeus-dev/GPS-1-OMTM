@@ -125,8 +125,14 @@ public class TroopController2D : MonoBehaviour
                         tutorialPhase.EnableEdgePanTutorial();
                     }
 
-
-                    SelectTroop(hit.collider.gameObject);
+                    if (hit.collider.CompareTag("TroopSelect"))
+                    {
+                        SelectTroop(hit.collider.gameObject.GetComponent<TroopSelect>().troop);
+                    }
+                    else
+                    {
+                        SelectTroop(hit.collider.gameObject);
+                    }
                 }
                 /*
                 else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50 && teleporting == false) //clicking when zoomed out

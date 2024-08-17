@@ -45,6 +45,7 @@ public class TutorialPhase : MonoBehaviour
     private bool tutorialSkipped;
     private bool canRespawn = true;
     public TroopEnergy dpsPower;
+    public Troop dps;
 
     void Start()
     {
@@ -89,7 +90,7 @@ public class TutorialPhase : MonoBehaviour
                     instruction4.SetActive(true);
                     labels.SetActive(false);
 
-                    StartCoroutine(Instruction4ADelay());
+                    //StartCoroutine(Instruction4ADelay());
                 }
 
                 respawning = true;
@@ -104,12 +105,12 @@ public class TutorialPhase : MonoBehaviour
 
         if(tutorialSkipped == false)
         {
-            instruction4A.SetActive(true);
-            kddButton.SetActive(true);
+            //instruction4A.SetActive(true);
+            //kddButton.SetActive(true);
         }
         else
         {
-            Debug.Log("a");
+            //Debug.Log("a");
         }
     }
 
@@ -156,6 +157,7 @@ public class TutorialPhase : MonoBehaviour
         instruction8On = true;
         dpsPower.UseAllPower();
         dpsPower.DisableUltimateVisual();
+        dps.Ultimate_DPS_End();
         tutorialOn = false;
 
         yield return new WaitForSeconds(0.1f);

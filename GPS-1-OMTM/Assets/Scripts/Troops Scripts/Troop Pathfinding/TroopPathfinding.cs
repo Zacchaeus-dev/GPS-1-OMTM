@@ -127,7 +127,7 @@ public class TroopClass : MonoBehaviour
         isMoving = false;
         canClimb = false;
         arrow.SetActive(false);
-        Debug.Log("IM THE MAN");
+        //Debug.Log("IM THE MAN");
     }
 
     // After Player's Right Click, determine the position & how troop should pathfind to thr
@@ -2325,7 +2325,7 @@ public class TroopClass : MonoBehaviour
                 transform.position = targetPosition;
                 isMoving = false;
 
-                Debug.Log("Troop arrived at target position: " + targetPosition);
+                //Debug.Log("Troop arrived at target position: " + targetPosition);
             }
         }
 
@@ -2338,7 +2338,7 @@ public class TroopClass : MonoBehaviour
             WalkOrStopAnimation = false;
             TroopAnimator.TroopWalkOff();
             //gameObject.GetComponent<TroopAutoAttack>().AttackModelParts.SetActive(false);
-            Debug.Log("IM THE BAABI");
+            //Debug.Log("IM THE BAABI");
         }
     }
 

@@ -22,8 +22,8 @@ public class FlyingEnemy : MonoBehaviour
     private GameObject killdozer;
     private GameObject killdozerLeftTarget;
     private GameObject killdozerRightTarget;
-    private Vector3 rightOffset = new Vector3(32f, 0, 0);
-    private Vector3 leftOffset = new Vector3(-30f, 0, 0);
+    public Vector3 rightOffset = new Vector3(27f, 0, 0);
+    public Vector3 leftOffset = new Vector3(-25f, 0, 0);
     private bool attackingKilldozer;
     private float lastAttackTime = 0f;
     private bool shouldMove = true; // Flag to control movement

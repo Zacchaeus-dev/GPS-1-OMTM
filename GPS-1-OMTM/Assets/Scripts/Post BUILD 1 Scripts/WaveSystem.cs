@@ -177,6 +177,7 @@ public class WaveSystem : MonoBehaviour
     //new labels pop ups
     public GameObject breakLabel;
     public GameObject waveLabel;
+    private bool newMiniWaveOn;
     void Start()
     {
         startButton.SetActive(true);
@@ -267,64 +268,75 @@ public class WaveSystem : MonoBehaviour
 
     public void StartWave()
     {
-        instruction7.SetActive(false);
-        instruction8.SetActive(false);
-        edgePanTutorial.SetActive(false);
-        //rightClickObject.SetActive(false);
-
-
-        waveStateText.text = "Pre Wave";
-        waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
-
-        wave1Started = true;
-
-        waves[currentWaveIndex].spawnMarkers.SetActive(false);
-
-        switch (waves[currentWaveIndex].waveNum)
+        if (currentState == WaveState.Prewave || currentState == WaveState.Start)
         {
-            case 1:
-                wave1Screen.SetActive(true);
-                wave2Screen.SetActive(false);
-                wave3Screen.SetActive(false);
-                wave4Screen.SetActive(false);
-                break;
-            case 2:
-                wave1Screen.SetActive(false);
-                wave2Screen.SetActive(true);
-                wave3Screen.SetActive(false);
-                wave4Screen.SetActive(false);
-                break;
-            case 3:
-                wave1Screen.SetActive(false);
-                wave2Screen.SetActive(false);
-                wave3Screen.SetActive(true);
-                wave4Screen.SetActive(false);
-                break;
-            case 4:
-                wave1Screen.SetActive(false);
-                wave2Screen.SetActive(false);
-                wave3Screen.SetActive(false);
-                wave4Screen.SetActive(true);
-                break;
+            //Debug.Log("Normal");
+            instruction7.SetActive(false);
+            instruction8.SetActive(false);
+            edgePanTutorial.SetActive(false);
+            //rightClickObject.SetActive(false);
+
+            waveStateText.text = "Pre Wave";
+            waveNumText.text = waves[currentWaveIndex].waveNum.ToString();
+
+            wave1Started = true;
+
+            waves[currentWaveIndex].spawnMarkers.SetActive(false);
+
+            switch (waves[currentWaveIndex].waveNum)
+            {
+                case 1:
+                    wave1Screen.SetActive(true);
+                    wave2Screen.SetActive(false);
+                    wave3Screen.SetActive(false);
+                    wave4Screen.SetActive(false);
+                    break;
+                case 2:
+                    wave1Screen.SetActive(false);
+                    wave2Screen.SetActive(true);
+                    wave3Screen.SetActive(false);
+                    wave4Screen.SetActive(false);
+                    break;
+                case 3:
+                    wave1Screen.SetActive(false);
+                    wave2Screen.SetActive(false);
+                    wave3Screen.SetActive(true);
+                    wave4Screen.SetActive(false);
+                    break;
+                case 4:
+                    wave1Screen.SetActive(false);
+                    wave2Screen.SetActive(false);
+                    wave3Screen.SetActive(false);
+                    wave4Screen.SetActive(true);
+                    break;
+            }
+            FindObjectOfType<AudioManager>().Play("button");
+            wavePopUp.SetActive(true);
+
+            StartCoroutine(StartWaveAnimation());
+
+            // bgm
+            FindObjectOfType<AudioManager>().Play("BGM");
+            startButton.SetActive(false);
+            startBorder.SetActive(false);
         }
-        FindObjectOfType<AudioManager>().Play("button");
-        wavePopUp.SetActive(true);
-
-        StartCoroutine(WaveAnimation());
-
-        // bgm
-        FindObjectOfType<AudioManager>().Play("BGM");
-        startButton.SetActive(false);
-        startBorder.SetActive(false);
+        else
+        {
+            //Debug.Log("Mini");
+            StartMiniWave();
+        }
     }
 
-    IEnumerator WaveAnimation()
+    IEnumerator StartWaveAnimation()
     {
         yield return new WaitForSeconds(3f); //animation duration
 
         wavePopUp.SetActive(false);
+        //waveLabel.SetActive(true);
 
-        
+        //yield return new WaitForSeconds(5f);
+
+        //waveLabel.SetActive(false);
 
         //currentMiniWaveIndex = 0;
         StartMiniWave();
@@ -344,7 +356,6 @@ public class WaveSystem : MonoBehaviour
 
         currentState = WaveState.InWave;
     }
-
 
     void HandlePrewave()
     {
@@ -391,15 +402,11 @@ public class WaveSystem : MonoBehaviour
     {
         waveStateText.text = "In Wave";
 
-
-        if (aliveEnemies.Count == 0 && inwaveTimer1 <= 0 && inwaveTimer2 <= 0 && inwaveTimer3 <= 0 && inwaveTimer4 <= 0 && inwaveTimer5 <= 0 && inwaveTimer6 <= 0 && inwaveTimer7 <= 0 && inwaveTimer8 <= 0 && inwaveTimer9 <= 0 && inwaveTimer10 <= 0 && inwaveTimer11 <= 0 && inwaveTimer12 <= 0)
+        if (aliveEnemies.Count == 0 && inwaveTimer1 <= 0 && inwaveTimer2 <= 0 && inwaveTimer3 <= 0 && inwaveTimer4 <= 0 && inwaveTimer5 <= 0 && inwaveTimer6 <= 0 && inwaveTimer7 <= 0 && inwaveTimer8 <= 0 && inwaveTimer9 <= 0 && inwaveTimer10 <= 0 && inwaveTimer11 <= 0 && inwaveTimer12 <= 0 && breakLabel.activeInHierarchy == false)
         {
-            currentMiniWaveIndex++;
-            breakTimer = waves[currentWaveIndex].breakDuration;
-            currentState = WaveState.Break;
-            //startButton.SetActive(true); (skips transition)
-            teleported = false;
-            startSpawning = false;  
+            breakLabel.SetActive(true);
+            startButton.SetActive(true);    
+            StartCoroutine(BreakAnimation());   
         }
 
         if (inwaveTimer1 > 0)
@@ -439,6 +446,21 @@ public class WaveSystem : MonoBehaviour
             inwaveTimer12 -= Time.deltaTime;
 
         UpdateInWaveProgressBar();
+    }
+
+    IEnumerator BreakAnimation()
+    {
+        currentMiniWaveIndex++;
+        breakTimer = waves[currentWaveIndex].breakDuration;
+        currentState = WaveState.Break;
+        //startButton.SetActive(true); (skips transition)
+        teleported = false;
+        startSpawning = false;
+        newMiniWaveOn = false;
+
+        yield return new WaitForSeconds(5f);
+
+        breakLabel.SetActive(false);
     }
 
     void HandleBreak()
@@ -651,7 +673,6 @@ public class WaveSystem : MonoBehaviour
     {
         FindObjectOfType<AudioManager>().Undim("BGM");
 
-
         startButton.SetActive(false);
         startBorder.SetActive(false);
 
@@ -660,46 +681,58 @@ public class WaveSystem : MonoBehaviour
             //Debug.Log("Next");
             NextWave();
         }
-        else
+        else if (newMiniWaveOn == false)
         {
-            //Debug.Log("Spawn");
-            miniWaveNumText.text = (currentMiniWaveIndex + 1).ToString();
-            MiniWave currentMiniWave = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
-
-            inwaveTimer1 = currentMiniWave.timeUntilSpawningEnds1;
-            inwaveTimer2 = currentMiniWave.timeUntilSpawningEnds2;
-            inwaveTimer3 = currentMiniWave.timeUntilSpawningEnds3;
-            inwaveTimer4 = currentMiniWave.timeUntilSpawningEnds4;
-            inwaveTimer5 = currentMiniWave.timeUntilSpawningEnds5;
-            inwaveTimer6 = currentMiniWave.timeUntilSpawningEnds6;
-            inwaveTimer7 = currentMiniWave.timeUntilSpawningEnds7;
-            inwaveTimer8 = currentMiniWave.timeUntilSpawningEnds8;
-            inwaveTimer9 = currentMiniWave.timeUntilSpawningEnds9;
-            inwaveTimer10 = currentMiniWave.timeUntilSpawningEnds10;
-            inwaveTimer11 = currentMiniWave.timeUntilSpawningEnds11;
-            inwaveTimer12 = currentMiniWave.timeUntilSpawningEnds12;
-
-            currentState = WaveState.InWave;
-
-            if (startSpawning == true)
-            {
-                return;
-            }
-
-            startSpawning = true;
-            StartCoroutine(SpawnEnemies1(currentMiniWave));
-            StartCoroutine(SpawnEnemies2(currentMiniWave));
-            StartCoroutine(SpawnEnemies3(currentMiniWave));
-            StartCoroutine(SpawnEnemies4(currentMiniWave));
-            StartCoroutine(SpawnEnemies5(currentMiniWave));
-            StartCoroutine(SpawnEnemies6(currentMiniWave));
-            StartCoroutine(SpawnEnemies7(currentMiniWave));
-            StartCoroutine(SpawnEnemies8(currentMiniWave));
-            StartCoroutine(SpawnEnemies9(currentMiniWave));
-            StartCoroutine(SpawnEnemies10(currentMiniWave));
-            StartCoroutine(SpawnEnemies11(currentMiniWave));
-            StartCoroutine(SpawnEnemies12(currentMiniWave));
+            //Debug.Log("Open");
+            waveLabel.SetActive(true);
+            StartCoroutine(MiniWaveAnimation());
         }
+    }
+
+    IEnumerator MiniWaveAnimation()
+    {
+        newMiniWaveOn = true;
+
+        miniWaveNumText.text = (currentMiniWaveIndex + 1).ToString();
+        MiniWave currentMiniWave = waves[currentWaveIndex].miniWaves[currentMiniWaveIndex];
+
+        inwaveTimer1 = currentMiniWave.timeUntilSpawningEnds1;
+        inwaveTimer2 = currentMiniWave.timeUntilSpawningEnds2;
+        inwaveTimer3 = currentMiniWave.timeUntilSpawningEnds3;
+        inwaveTimer4 = currentMiniWave.timeUntilSpawningEnds4;
+        inwaveTimer5 = currentMiniWave.timeUntilSpawningEnds5;
+        inwaveTimer6 = currentMiniWave.timeUntilSpawningEnds6;
+        inwaveTimer7 = currentMiniWave.timeUntilSpawningEnds7;
+        inwaveTimer8 = currentMiniWave.timeUntilSpawningEnds8;
+        inwaveTimer9 = currentMiniWave.timeUntilSpawningEnds9;
+        inwaveTimer10 = currentMiniWave.timeUntilSpawningEnds10;
+        inwaveTimer11 = currentMiniWave.timeUntilSpawningEnds11;
+        inwaveTimer12 = currentMiniWave.timeUntilSpawningEnds12;
+
+        currentState = WaveState.InWave;
+
+        if (startSpawning == true)
+        {
+            yield break;
+        }
+
+        startSpawning = true;
+        StartCoroutine(SpawnEnemies1(currentMiniWave));
+        StartCoroutine(SpawnEnemies2(currentMiniWave));
+        StartCoroutine(SpawnEnemies3(currentMiniWave));
+        StartCoroutine(SpawnEnemies4(currentMiniWave));
+        StartCoroutine(SpawnEnemies5(currentMiniWave));
+        StartCoroutine(SpawnEnemies6(currentMiniWave));
+        StartCoroutine(SpawnEnemies7(currentMiniWave));
+        StartCoroutine(SpawnEnemies8(currentMiniWave));
+        StartCoroutine(SpawnEnemies9(currentMiniWave));
+        StartCoroutine(SpawnEnemies10(currentMiniWave));
+        StartCoroutine(SpawnEnemies11(currentMiniWave));
+        StartCoroutine(SpawnEnemies12(currentMiniWave));
+
+        yield return new WaitForSeconds(5f);
+
+        waveLabel.SetActive(false);
     }
 
     void NextWave()

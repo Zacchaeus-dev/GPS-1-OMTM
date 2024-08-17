@@ -86,8 +86,10 @@ public class Troop : MonoBehaviour
     public bool troopOnKilldozer = false;
 
     public TutorialPhase tutorialPhase;
+    public GameObject instruction4A;
     public GameObject instruction5;
     //public GameObject instruction6;
+    public GameObject kddButton;
     public GameObject tutorialPanel;
 
     public GameObject tpObject;
@@ -545,7 +547,35 @@ public class Troop : MonoBehaviour
         troopAutoAttack.DPSUltBuff += 25;
         troopAutoAttack.attackCooldown -= 0.075f; //3% increase in speed
 
+
+        if (tutorialPhase != null && tutorialPhase.tutorialOn) //tutorial
+        {
+            if (instruction5.activeInHierarchy == true)
+            {
+                instruction5.SetActive(false);
+                //instruction6.SetActive(true);
+
+                StartCoroutine(TutorialDelay());
+            }
+        }
+
         yield return new WaitForSeconds(ultimateDuration);//ultimateDuration);
+        
+        //if (dpsUltiOn == true)
+        //{
+            Ultimate_DPS_End();
+        //}
+    }
+
+    public void Ultimate_DPS_End()
+    {
+        if (dpsUltiOn == false)
+        {
+            return;
+        }
+
+        //Debug.Log("DPS Ulti Ended");
+
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
         troopEnergy.DisableUltimateVisual();
         troopAutoAttack.DPSUltBuff -= 25;
@@ -565,34 +595,24 @@ public class Troop : MonoBehaviour
 
         dpsUltiOn = false;
 
-        yield return new WaitForSeconds(ultimateCooldown);
+        //yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
-
-        if (tutorialPhase != null && tutorialPhase.tutorialOn) //tutorial
-        {
-            yield return new WaitForSeconds(5f);
-
-            if (instruction5.activeInHierarchy == true)
-            {
-                instruction5.SetActive(false);
-                //instruction6.SetActive(true);
-
-                //StartCoroutine(TutorialDelay());
-            }
-        }
     }
 
-    /*
+    
     IEnumerator TutorialDelay()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         //instruction6.SetActive(false);
-        tutorialPanel.SetActive(true);
-        Debug.Log("Tutorial Panel On");
-        Time.timeScale = 0.0f;
+        //tutorialPanel.SetActive(true);
+        //Debug.Log("Tutorial Panel On");
+        //Time.timeScale = 0.0f;
+
+        instruction4A.SetActive(true);
+        kddButton.SetActive(true);
     }
-    */
+    
     public GameObject UltCircle;
     public CameraShake cameraShake;
     IEnumerator Ultimate_Tank()
