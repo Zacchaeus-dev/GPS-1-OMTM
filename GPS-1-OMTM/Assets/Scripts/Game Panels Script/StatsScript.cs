@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 //using static UnityEditor.MaterialProperty;
 
 public class StatsScript : MonoBehaviour
@@ -13,12 +14,13 @@ public class StatsScript : MonoBehaviour
     public HealerAutoHeal healerAHScript;
     //public List <Troop> troops = new List<Troop>();
     
-    public Text maxHealthText;
-    public Text currentHealthText;
-    public Text attackText;
-    public Text attackSpeedText;
-    public Text attackRangeText;
-    public Text moveSpeedText;
+    
+    public TextMeshProUGUI maxHealthText;
+    public TextMeshProUGUI currentHealthText;
+    public TextMeshProUGUI attackText;
+    public TextMeshProUGUI attackSpeedText;
+    public TextMeshProUGUI attackRangeText;
+    public TextMeshProUGUI moveSpeedText;
 
     public bool isHealer;
 
@@ -44,6 +46,7 @@ public class StatsScript : MonoBehaviour
         {
             maxHealthText.text = "Max Health: " + troopScript.maxHealth.ToString();
             currentHealthText.text = "Current Health: " + troopScript.currentHealth.ToString();
+
             attackText.text = "Attack Damage: " + troopAAScript.attackDamage.ToString();
             attackSpeedText.text = "Attack Speed: " + troopAAScript.attackCooldown.ToString();
             attackRangeText.text = "Attack Range: " + troopAAScript.attackRange.ToString();

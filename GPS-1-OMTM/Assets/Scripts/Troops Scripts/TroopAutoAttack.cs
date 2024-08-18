@@ -7,7 +7,7 @@ using UnityEngine;
 public class TroopAutoAttack : MonoBehaviour
 {
     public bool autoAttackEnabled = false;
-    public int attackDamage = 10; // Attack damage settable via Inspector
+    public int attackDamage; // Attack damage settable via Inspector
     public float detectionRange = 3f; // Range within which the troop can detect enemies
     public float attackRange = 1.5f; // Range within which the troop can attack enemies
     public float attackCooldown = 1f; // Time between attacks
@@ -103,7 +103,7 @@ public class TroopAutoAttack : MonoBehaviour
         }
     }
     public int DPSUltBuff;
-    void DetermineAttack()
+    public void DetermineAttack()
     {
         switch (troopWeapon.selectedWeapon) //determine attack based on selected weapon
         {
