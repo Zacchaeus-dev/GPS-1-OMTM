@@ -103,52 +103,46 @@ public class TroopController2D : MonoBehaviour
             // Check if the mouse is over a UI element
             //if (!EventSystem.current.IsPointerOverGameObject())
             //{
-                if (hit.collider != null && hit.collider.CompareTag("Troop") && cameraSystem.isZoomedOut == false)
+            if (hit.collider != null && hit.collider.CompareTag("Troop") && cameraSystem.isZoomedOut == false)
+            {
+                if (selectedTroop != null) //if already have a troop selected
                 {
-                    if (selectedTroop != null) //if already have a troop selected
-                    {
-                        DeselectTroop(); //deselect old troop
-                    }
+                    DeselectTroop(); //deselect old troop
+                }
 
-                    if (tutorialPhase.tutorialOn == true)
+                if (tutorialPhase.tutorialOn == true)
+                {
+                    if (instruction1.activeInHierarchy == true) //tutorial selecting troop
                     {
-                       if (instruction1.activeInHierarchy == true) //tutorial selecting troop
-                       {
-                          instruction1.SetActive(false);
-                          instruction2.SetActive(true);
-                          attackRangeLabel.SetActive(true);
-                       }
+                        instruction1.SetActive(false);
+                        instruction2.SetActive(true);
+                        attackRangeLabel.SetActive(true);
                     }
-                    else if (tutorialPhase.tutorialOn == false && instruction8.activeInHierarchy == true)
-                    {
-                        instruction8.SetActive(false);
-                        tutorialPhase.EnableEdgePanTutorial();
-                    }
+                }
+                else if (tutorialPhase.tutorialOn == false && instruction8.activeInHierarchy == true)
+                {
+                    instruction8.SetActive(false);
+                    tutorialPhase.EnableEdgePanTutorial();
+                }
 
-                    if (hit.collider.CompareTag("TroopSelect"))
-                    {
-                        SelectTroop(hit.collider.gameObject.GetComponent<TroopSelect>().troop);
-                    }
-                    else
-                    {
-                        SelectTroop(hit.collider.gameObject);
-                    }
-                }
-                /*
-                else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50 && teleporting == false) //clicking when zoomed out
+                SelectTroop(hit.collider.gameObject);
+            }
+
+            /*
+            else if (cameraSystem != null && cameraSystem.isZoomedOut && selectedTroop != null && selectedTroop && energySystem.currentEnergy >= 50 && teleporting == false) //clicking when zoomed out
+            {
+                Debug.Log("Teleport");
+                if (teleporting == false)
                 {
-                    Debug.Log("Teleport");
-                    if (teleporting == false)
-                    {
-                        teleporting = true;
-                        StartCoroutine(Teleportation());
-                    }
+                    teleporting = true;
+                    StartCoroutine(Teleportation());
                 }
-                */
-                else if (selectedTroop != null && !EventSystem.current.IsPointerOverGameObject()) // clicking elsewhere besides ui to deselect troop
-                {
-                    DeselectTroop();
-                }
+            }
+            */
+            else if (selectedTroop != null && !EventSystem.current.IsPointerOverGameObject()) // clicking elsewhere besides ui to deselect troop
+            {
+                DeselectTroop();
+            }
             //}
         }
         else if (Input.GetMouseButtonDown(1) && selectedTroop != null) // Right click
