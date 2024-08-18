@@ -137,5 +137,6 @@ public class ComicPrologue : MonoBehaviour
     {
         fadeManager.FadeOutAndLoadScene();
         FindObjectOfType<AudioManager>().Play("button");
+        FindObjectOfType<AudioManager>().Stop("BGM2");
     }
 }
