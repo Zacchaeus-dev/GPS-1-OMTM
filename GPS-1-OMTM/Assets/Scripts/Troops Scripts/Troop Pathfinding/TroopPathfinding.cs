@@ -2049,7 +2049,7 @@ public class TroopClass : MonoBehaviour
             || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Ground Check")
         {
             Debug.Log("Ground Check");
-            transform.position = new Vector2(transform.position.x, GroundYSnap - 1);//to snap to correct y position
+            transform.position = new Vector2(transform.position.x, GroundYSnap - 1.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2060,7 +2060,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Ground Check")
         {
             Debug.Log("Ground Check");
-            transform.position = new Vector2(transform.position.x, GroundYSnap - 1);//to snap to correct y position
+            transform.position = new Vector2(transform.position.x, GroundYSnap - 1.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
