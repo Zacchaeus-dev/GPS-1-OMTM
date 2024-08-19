@@ -230,6 +230,10 @@ public class Troop : MonoBehaviour
             // Start the ultimate if not on cooldown
             StartCoroutine(UseUltimate(ultimate));
         }
+        else if (selected && Input.GetKeyDown(KeyCode.R) && ultimateOnCooldown)
+        {
+            FindObjectOfType<AudioManager>().Play("NoUlt");
+        }
 
         /*
         if (ccClickingOnLocation && Input.GetMouseButtonDown(0)) //CC's ultimate
@@ -440,6 +444,7 @@ public class Troop : MonoBehaviour
     {
         if (troopEnergy.currentPower < troopEnergy.maxPower)
         {
+            FindObjectOfType<AudioManager>().Play("NoUlt");
             Debug.Log("Not enough energy");
             yield break;
         }
@@ -543,7 +548,7 @@ public class Troop : MonoBehaviour
         ultimateCooldownTimeRemaining = ultimateCooldown;
         ultimateDurationTimeRemaining = ultimateDuration;
         Debug.Log("DPS Ultimate Activated");
-
+        troopEnergy.DisableUltimateVisual();
         //berserk
         //add attack and attack speed 
         troopAutoAttack.DPSUltBuff += 25;
@@ -579,7 +584,7 @@ public class Troop : MonoBehaviour
         //Debug.Log("DPS Ulti Ended");
 
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
-        troopEnergy.DisableUltimateVisual();
+        //troopEnergy.DisableUltimateVisual();
         troopAutoAttack.DPSUltBuff -= 25;
         troopAutoAttack.attackCooldown += 0.075f;
 
