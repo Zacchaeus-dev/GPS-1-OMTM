@@ -563,6 +563,7 @@ public class Troop : MonoBehaviour
                 //instruction6.SetActive(true);
 
                 StartCoroutine(TutorialDelay());
+                Debug.Log("gay");
             }
         }
 

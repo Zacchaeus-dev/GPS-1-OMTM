@@ -138,6 +138,7 @@ public class TutorialPhase : MonoBehaviour
     IEnumerator TutorialEnd()
     {
         //waveSystem.gameObject.SetActive(true);
+        tutorialOn = false;
         DestroyObjectsWithTag("EnergyOrb");
         tank.SetActive(true);
         cc.SetActive(true);
