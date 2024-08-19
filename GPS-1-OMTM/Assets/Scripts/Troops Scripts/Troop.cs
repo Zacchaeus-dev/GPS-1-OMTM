@@ -463,7 +463,7 @@ public class Troop : MonoBehaviour
                 TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
                 FindObjectOfType<AudioManager>().Play("lvlup");
                 yield return new WaitForSeconds(0.9f);
-                TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+                //TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
                 yield return new WaitForSeconds(UltiDelay - 0.9f);
 
                 switch (troopWeapon.selectedWeapon)

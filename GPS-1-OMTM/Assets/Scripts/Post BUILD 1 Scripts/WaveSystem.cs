@@ -571,6 +571,7 @@ public class WaveSystem : MonoBehaviour
             return;
         }
         transitioned = true;
+
         TeleportTroopsToKilldozerWithAnimation();
         cameraSystem.FocusOnKilldozer();
 
@@ -624,8 +625,10 @@ public class WaveSystem : MonoBehaviour
             yield return new WaitForSeconds(12.5f); //transition is longer for wave 4
         }
         */
-
-        yield return new WaitForSeconds(5.5f);
+        yield return new WaitForSeconds(3f);
+        cameraSystem.leftBorder = waves[currentWaveIndex].leftBorder;
+        cameraSystem.rightBorder = waves[currentWaveIndex].rightBorder;
+        yield return new WaitForSeconds(2.5f);
         transitioning = false;
         prewaveTimer = waves[currentWaveIndex].prewaveDuration;
         timerDuration = prewaveTimer;

@@ -104,7 +104,7 @@ public class TroopHUD : MonoBehaviour
         powerBar.fillAmount = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
         shieldBar.fillAmount = (float)_troop.currentShield / (float)_troop.maxShield;
 
-        if (_troop.currentHealth <= (_troop.maxHealth / 20) && _troop.currentHealth > 0)
+        if (_troop.currentHealth <= (_troop.maxHealth / 2.5f) && _troop.currentHealth > 0)
         {
             medicMessage.SetActive(true);
         }

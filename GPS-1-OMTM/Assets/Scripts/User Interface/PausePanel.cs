@@ -6,6 +6,8 @@ public class PausePanel : MonoBehaviour
 {
     [Header("Pause Panel")]
     public GameObject pausePanel; // Reference to the settings panel GameObject
+    public GameObject audioPanel; 
+    public GameObject controlPanel; 
 
     private bool isPaused = false; // Whether the game is currently paused
 
@@ -37,6 +39,8 @@ public class PausePanel : MonoBehaviour
     {
         // Hide the pause panel and resume the game
         pausePanel.SetActive(false);
+        audioPanel.SetActive(false);
+        controlPanel.SetActive(false);
         Time.timeScale = 1f; // Resume the game time
         isPaused = false;
     }

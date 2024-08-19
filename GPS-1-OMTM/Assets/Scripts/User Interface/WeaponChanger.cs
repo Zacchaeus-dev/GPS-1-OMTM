@@ -162,13 +162,26 @@ public class WeaponChanger : MonoBehaviour
         }
     }
     */
-
+    public GameObject UltiError;
+    IEnumerator ErrorUlti()
+    {
+        
+        UltiError.SetActive(true);
+        yield return new WaitForSeconds(1);
+        //UltiError.SetActive(false);
+    }
+  
     public void ChangeToWeapon1()
     {
         FindObjectOfType<AudioManager>().Play("button");
 
         if (troop.GetComponent<Troop>().ultimateOnCooldown == true)
         {
+            if (UltiError.activeSelf == false)
+            {
+                StartCoroutine(ErrorUlti());
+            }
+            FindObjectOfType<AudioManager>().Play("NoUlt");
             return;
         }
 
@@ -219,6 +232,11 @@ public class WeaponChanger : MonoBehaviour
 
         if (troop.GetComponent<Troop>().ultimateOnCooldown == true)
         {
+            if (UltiError.activeSelf == false)
+            {
+                StartCoroutine(ErrorUlti());
+            }
+            FindObjectOfType<AudioManager>().Play("NoUlt");
             return;
         }
 

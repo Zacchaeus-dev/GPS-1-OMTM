@@ -9101,7 +9101,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
     m_HighlightedColor: {r: 0.013794942, g: 0.5849056, b: 0.5849056, a: 1}
     m_PressedColor: {r: 0.5882353, g: 0.32941177, b: 0.3372549, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
     m_DisabledColor: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -13571,7 +13571,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
     m_HighlightedColor: {r: 0.013794942, g: 0.5849056, b: 0.5849056, a: 1}
     m_PressedColor: {r: 0.5882353, g: 0.32941177, b: 0.3372549, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
     m_DisabledColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -23995,6 +23995,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 406661132}
+  audioPanel: {fileID: 102807567}
+  controlPanel: {fileID: 1382236841}
 --- !u!1 &1826014898
 GameObject:
   m_ObjectHideFlags: 0
