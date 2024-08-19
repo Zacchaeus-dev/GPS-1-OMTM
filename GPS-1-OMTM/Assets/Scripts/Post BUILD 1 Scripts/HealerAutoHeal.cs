@@ -63,7 +63,7 @@ public class HealerAutoHeal : MonoBehaviour
         {
             case TroopWeapon.Weapon.Weapon1_Healer:
                 healAmount = 50;
-                healCooldown = 1.5f;
+                healCooldown = 1.5f; // 1.5
                 AnimationDelay = 0f;
                 ShootingDelay = 0.1f;
 
@@ -71,7 +71,7 @@ public class HealerAutoHeal : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon2_Healer:
                 healAmount = 20;
-                healCooldown = 2f;
+                healCooldown = 2f; //1
                 AnimationDelay = 0f;
                 ShootingDelay = 0f;
 

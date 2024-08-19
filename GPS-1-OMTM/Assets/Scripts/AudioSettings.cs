@@ -12,11 +12,11 @@ public class AudioSettings : MonoBehaviour
     void Start()
     {
         // Initialize sliders with saved values
-        float savedBGMVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
-        float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
+        //float savedBGMVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
+       // float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
 
-        bgmSlider.value = savedBGMVolume;
-        sfxSlider.value = savedSFXVolume;
+        bgmSlider.value = 0.1f;
+        sfxSlider.value = 0.5f;
 
         // Add listeners to sliders
         bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
@@ -28,8 +28,8 @@ public class AudioSettings : MonoBehaviour
         // Update BGM volume in AudioManager
         audioManager.SetBGMVolume(value);
         // Save the new value
-        PlayerPrefs.SetFloat("BGMVolume", value);
-        PlayerPrefs.Save();
+/*        PlayerPrefs.SetFloat("BGMVolume", value);
+        PlayerPrefs.Save();*/
     }
 
     public void OnSFXVolumeChanged(float value)
@@ -37,8 +37,8 @@ public class AudioSettings : MonoBehaviour
         // Update SFX volume in AudioManager
         audioManager.SetSFXVolume(value);
         // Save the new value
-        PlayerPrefs.SetFloat("SFXVolume", value);
-        PlayerPrefs.Save();
+/*        PlayerPrefs.SetFloat("SFXVolume", value);
+        PlayerPrefs.Save();*/
     }
 
     public void UpdateSliders()

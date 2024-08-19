@@ -62,67 +62,68 @@ public class StatsPanel : MonoBehaviour
     }
     public void DPS1()
     {
-        maxHealthText.text = "MaxHealth: 150";
-        attackDamageText.text = "Damage: 40";
-        attackSpeedText.text = "Attack Speed: 4";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 8";
+        maxHealthText.text = "Health :" +
+            " 150";
+        attackDamageText.text = "Damage : 40";
+        attackSpeedText.text = "Atk Speed : 8";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 8";
     }
     public void DPS2()
     {
-        maxHealthText.text = "MaxHealth: 150";
-        attackDamageText.text = "Damage: 35";
-        attackSpeedText.text = "Attack Speed: 1";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 8";
+        maxHealthText.text = "Health : 150";
+        attackDamageText.text = "Damage : 35";
+        attackSpeedText.text = "Atk Speed : 2";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 8";
     }
     public void TANK1()
     {
-        maxHealthText.text = "MaxHealth: 1100";
-        attackDamageText.text = "Damage: 20";
-        attackSpeedText.text = "Attack Speed: 0.25";
-        attackRangeText.text = "Attack Range: 4.5";
-        moveSpeedText.text = "Movement Speed: 5";
+        maxHealthText.text = "Health : 1100";
+        attackDamageText.text = "Damage : 20";
+        attackSpeedText.text = "Atk Speed : 20";
+        attackRangeText.text = "Atk Range : 45";
+        moveSpeedText.text = "Move Spd : 5";
     }
     public void TANK2()
     {
-        maxHealthText.text = "MaxHealth: 750";
-        attackDamageText.text = "Damage: 75";
-        attackSpeedText.text = "Attack Speed: 0.5";
-        attackRangeText.text = "Attack Range: 4.5";
-        moveSpeedText.text = "Movement Speed: 7";
+        maxHealthText.text = "Health : 750";
+        attackDamageText.text = "Damage : 75";
+        attackSpeedText.text = "Atk Speed : 15";
+        attackRangeText.text = "Atk Range : 45";
+        moveSpeedText.text = "Move Spd : 7";
     }
     public void CC1()
     {
-        maxHealthText.text = "MaxHealth: 200";
-        attackDamageText.text = "Damage: 30";
-        attackSpeedText.text = "Attack Speed: 1";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 7";
+        maxHealthText.text = "Health : 200";
+        attackDamageText.text = "Damage : 30";
+        attackSpeedText.text = "Atk Speed : 20";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 7";
     }
     public void CC2()
     {
-        maxHealthText.text = "MaxHealth: 200";
-        attackDamageText.text = "Damage: 75";
-        attackSpeedText.text = "Attack Speed: 0.125";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 7";
+        maxHealthText.text = "Health : 200";
+        attackDamageText.text = "Damage : 75";
+        attackSpeedText.text = "Atk Speed : 10";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 7";
     }
     public void HEALER1()
     {
-        maxHealthText.text = "MaxHealth: 100";
-        attackDamageText.text = "Heal: 50";
-        attackSpeedText.text = "Attack Speed: 0.5";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 10";
+        maxHealthText.text = "Health : 100";
+        attackDamageText.text = "Heal Amt : 50";
+        attackSpeedText.text = "Atk Speed : 15";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 10";
     }
     public void HEALER2()
     {
-        maxHealthText.text = "MaxHealth: 100";
-        attackDamageText.text = "Heal: 20";
-        attackSpeedText.text = "Attack Speed: 0.125";
-        attackRangeText.text = "Attack Range: 10";
-        moveSpeedText.text = "Movement Speed: 10";
+        maxHealthText.text = "Health : 100";
+        attackDamageText.text = "Heal Amt : 20";
+        attackSpeedText.text = "Atk Speed : 10";
+        attackRangeText.text = "Atk Range : 100";
+        moveSpeedText.text = "Move Spd : 10";
     }
     
 

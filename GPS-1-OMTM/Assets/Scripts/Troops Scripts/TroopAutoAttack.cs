@@ -109,25 +109,25 @@ public class TroopAutoAttack : MonoBehaviour
         {
             case TroopWeapon.Weapon.Weapon1_DPS:
                 attackDamage = 40 + DPSUltBuff;
-                attackCooldown = 0.25f;
+                attackCooldown = 0.25f; //8
                 AnimationDelay = 0.4f;
                 ShootingDelay = 0.5f;
                 break;
             case TroopWeapon.Weapon.Weapon2_DPS:
                 attackDamage = 35 + DPSUltBuff;
-                attackCooldown = 1f;
+                attackCooldown = 1f; //2
                 AnimationDelay = 0.4f;
                 ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon1_Tank:
                 attackDamage = 20;
-                attackCooldown = 1f;
+                attackCooldown = 1f; //2
                 AnimationDelay = 0f;
                 ShootingDelay = 2f;
                 break;
             case TroopWeapon.Weapon.Weapon2_Tank:
                 attackDamage = 75;
-                attackCooldown = 1.5f;
+                attackCooldown = 1.5f; //1.5
                 AnimationDelay = 0f;
                 ShootingDelay = 0.4f;
                 gameObject.GetComponent<Troop>().maxHealth = 750;
@@ -135,13 +135,13 @@ public class TroopAutoAttack : MonoBehaviour
                 break;
             case TroopWeapon.Weapon.Weapon1_CC:
                 attackDamage = 30;
-                attackCooldown = 1f;
+                attackCooldown = 1f; //2
                 AnimationDelay = 0f;
                 ShootingDelay = 1f;
                 break;
             case TroopWeapon.Weapon.Weapon2_CC:
                 attackDamage = 30;
-                attackCooldown = 2f;
+                attackCooldown = 2f; //1
                 AnimationDelay = 0.8f;
                 ShootingDelay = 1f;
                 break;

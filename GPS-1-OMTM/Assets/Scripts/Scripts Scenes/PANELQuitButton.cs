@@ -33,7 +33,7 @@ public class PANELQuitButton : MonoBehaviour
             Time.timeScale = 1f;
         }
     }
-
+/*
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Apply volume settings and update sliders after the scene has loaded
@@ -55,5 +55,5 @@ public class PANELQuitButton : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded; // Unsubscribe to prevent memory leaks
-    }
+    }*/
 }

@@ -654,7 +654,7 @@ public class Troop : MonoBehaviour
         troopEnergy.DisableUltimateVisual();
 
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
-        TroopModel.GetComponent<TroopAnimationsManager>().TroopWalkOn();
+        //TroopModel.GetComponent<TroopAnimationsManager>().TroopWalkOn();
 
         StartCoroutine(MoveShieldToPosition(TankShield, newPosition));
 
@@ -754,9 +754,6 @@ public class Troop : MonoBehaviour
         //ccClickingOnLocation = true;
 
 
-        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
-        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
-        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
 
         //yield return new WaitForSeconds(UltiDelay);
 
@@ -776,59 +773,87 @@ public class Troop : MonoBehaviour
 
         Vector3 newPosition = transform.position;
         Vector2 MousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+        //RaycastHit2D[] hits = Physics2D.RaycastAll(MousePosition, Vector2.zero);
+        int layerMask = LayerMask.GetMask("Pathfinding");
+        RaycastHit2D hit = Physics2D.Raycast(MousePosition, Vector2.zero, Mathf.Infinity, layerMask);
 
-        foreach (var Hit in hits)
-        {
-            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground") || Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2")
-                || Hit.collider.CompareTag("[PF] Upper-Ground 3") || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
-                || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[TP] Upper-Ground 4")
-                || Hit.collider.CompareTag("[PF] KD Upper-Ground") || Hit.collider.CompareTag("[PF] KD Middle-Ground"))
+            /*            if (Hit.collider != null && Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground") || Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2")
+                            || Hit.collider.CompareTag("[PF] Upper-Ground 3") || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)")
+                            || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[TP] Upper-Ground 4")
+                            || Hit.collider.CompareTag("[PF] KD Upper-Ground") || Hit.collider.CompareTag("[PF] KD Middle-Ground"))
+                        {
+                            if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
+                            {
+                                newPosition.x = MousePosition.x;
+                                newPosition.y = -3;
+                            }
+                            else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
+                                    || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[TP] Upper-Ground 4") || Hit.collider.CompareTag("[PF] KD Middle-Ground"))
+                            {
+                                newPosition.x = MousePosition.x;
+                                newPosition.y = 3;
+                                Debug.Log("YES");
+                            }
+                            else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
+                                    || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[PF] KD Upper-Ground"))
+                            {
+                                newPosition.x = MousePosition.x;
+                                newPosition.y = 8;
+                            }
+                            break;
+                        }*/
+            if (hit.collider == null)
             {
-                if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
-                {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = -3;
-                }
-                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
-                        || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[TP] Upper-Ground 4") || Hit.collider.CompareTag("[PF] KD Middle-Ground"))
-                {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = 3;
-                    Debug.Log("YES");
-                }
-                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
-                        || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[PF] KD Upper-Ground"))
-                {
-                    newPosition.x = MousePosition.x;
-                    newPosition.y = 8;
-                }
-                break;
+                FindObjectOfType<AudioManager>().Play("NoUlt");
+                Debug.Log(" NO ULT FOR U");
+                yield break;
             }
-/*            if (Hit.collider != null)
+                
+            if (hit.collider != null)
             {
-                if (Hit.collider.CompareTag("[TP] Ground") || Hit.collider.CompareTag("[PF] Ground"))
+                if (hit.collider.CompareTag("[TP] Ground") || hit.collider.CompareTag("[PF] Ground")|| hit.collider.CompareTag("[PF] Ground Check")
+                    || hit.collider.CompareTag("[PF] Vertically 1") || hit.collider.CompareTag("[PF] Vertically 2") || hit.collider.CompareTag("[PF] Vertically 3") || hit.collider.CompareTag("[PF] Vertically 4")
+                    || hit.collider.CompareTag("[PF] KD Vertically 1"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = -3;
+                    StartCoroutine(TauntMine(newPosition));
                 }
-                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1") || Hit.collider.CompareTag("[PF] Upper-Ground 2") || Hit.collider.CompareTag("[PF] Upper-Ground 3")
-                        || Hit.collider.CompareTag("[PF] Upper-Ground 4") || Hit.collider.CompareTag("[TP] Upper-Ground 4") || Hit.collider.CompareTag("[PF] KD Middle-Ground"))
+                else if (hit.collider.CompareTag("[PF] Upper-Ground 1") || hit.collider.CompareTag("[PF] Upper-Ground 2") || hit.collider.CompareTag("[PF] Upper-Ground 3")
+                        || hit.collider.CompareTag("[PF] Upper-Ground 4") || hit.collider.CompareTag("[TP] Upper-Ground 4") || hit.collider.CompareTag("[PF] KD Middle-Ground")
+                        || hit.collider.CompareTag("[PF] KD Vertically 2") || hit.collider.CompareTag("[PF] KD Middle-Ground Check"))
                 {
                     newPosition.x = MousePosition.x;
                     newPosition.y = 3;
-                    Debug.Log("YES");
+                    StartCoroutine(TauntMine(newPosition));
+
                 }
-                else if (Hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
-                        || Hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || Hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || Hit.collider.CompareTag("[PF] KD Upper-Ground"))
+                else if (hit.collider.CompareTag("[PF] Upper-Ground 1 (2)") || hit.collider.CompareTag("[PF] Upper-Ground 2 (2)")
+                        || hit.collider.CompareTag("[PF] Upper-Ground 3 (2)") || hit.collider.CompareTag("[PF] Upper-Ground 4 (2)") || hit.collider.CompareTag("[PF] KD Upper-Ground"))
                 {
                     newPosition.x = MousePosition.x;
-                    newPosition.y = 8;
+                    newPosition.y = 7.5f;
+                    StartCoroutine(TauntMine(newPosition));
                 }
-                break;
-            }*/
+                else
+                {
+                //play sound
+                FindObjectOfType<AudioManager>().Play("NoUlt");
+                Debug.Log(" NO ULT FOR U");
+                yield break;
+                }
+            }
         }
 
+    
+
+    IEnumerator TauntMine(Vector2 newPositions)
+    {
+        gameObject.GetComponent<TroopAutoAttack>().DeactivateAttackVisuals();
+        gameObject.GetComponent<TroopAutoAttack>().autoAttackEnabled = false;
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOn();
+
+        Vector2 newPosition = newPositions;
         Instantiate(UltCircle, newPosition, Quaternion.identity);
         FindObjectOfType<AudioManager>().Play("troop2");
 
@@ -841,7 +866,7 @@ public class Troop : MonoBehaviour
         yield return new WaitForSeconds(UltiDelay);
 
         Instantiate(tauntMine, newPosition, Quaternion.identity);
-        
+
         //ccClickingOnLocation = false;
 
         StartCoroutine(Ultimate_CC_End());

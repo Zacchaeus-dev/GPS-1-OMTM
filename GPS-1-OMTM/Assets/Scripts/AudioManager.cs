@@ -19,20 +19,23 @@ public class AudioManager : MonoBehaviour
 
     public void Awake()
     {
-        if (instance == null)
+/*        if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Make AudioManager persistent across scenes
+             // Make AudioManager persistent across scenes
         }
         else
         {
             Destroy(gameObject);
             return;
         }
-
+        DontDestroyOnLoad(gameObject);*/
         // Load saved volume settings
-        bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
-        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
+        //bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
+       // sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
+
+        bgmVolume = 0.5f;
+        //sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
 
         foreach (Soundclass s in sounds)
         {
@@ -45,14 +48,14 @@ public class AudioManager : MonoBehaviour
             s.source.playOnAwake = false;
 
             // Adjust initial volume based on type
-            if (s.type == SoundType.BGM)
+/*            if (s.type == SoundType.BGM)
             {
                 s.source.volume = bgmVolume;
             }
             else if (s.type == SoundType.SFX)
             {
                 s.source.volume = sfxVolume;
-            }
+            }*/
         }
     }
 
@@ -95,9 +98,9 @@ public class AudioManager : MonoBehaviour
                 s.source.volume = bgmVolume;
             }
         }
-        PlayerPrefs.SetFloat("BGMVolume", volume); // Save the volume setting
+        //PlayerPrefs.SetFloat("BGMVolume", volume); // Save the volume setting
 
-        OnVolumeChange?.Invoke(); // Trigger the event
+        //OnVolumeChange?.Invoke(); // Trigger the event
     }
 
     public void SetSFXVolume(float volume)
@@ -110,12 +113,12 @@ public class AudioManager : MonoBehaviour
                 s.source.volume = sfxVolume;
             }
         }
-        PlayerPrefs.SetFloat("SFXVolume", volume); // Save the volume setting
+        //layerPrefs.SetFloat("SFXVolume", volume); // Save the volume setting
 
-        OnVolumeChange?.Invoke(); // Trigger the event
+        //OnVolumeChange?.Invoke(); // Trigger the event
     }
 
-    public void OnEnable()
+/*    public void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded; // Subscribe to the sceneLoaded event
     }
@@ -123,9 +126,9 @@ public class AudioManager : MonoBehaviour
     public void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded; // Unsubscribe to prevent memory leaks
-    }
+    }*/
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+/*    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Reapply the saved volume settings when the scene is loaded
         ApplyVolumeSettings();
@@ -147,5 +150,5 @@ public class AudioManager : MonoBehaviour
                 s.source.volume = sfxVolume;
             }
         }
-    }
+    }*/
 }

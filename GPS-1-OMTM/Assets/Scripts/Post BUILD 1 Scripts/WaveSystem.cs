@@ -180,6 +180,7 @@ public class WaveSystem : MonoBehaviour
     private bool newMiniWaveOn;
     void Start()
     {
+        //FindObjectOfType<AudioManager>().Play("BGM3");
         startButton.SetActive(true);
         startBorder.SetActive(true);
         waveNumText.text = "0";
@@ -266,6 +267,7 @@ public class WaveSystem : MonoBehaviour
         UpdateTimerUI();
     }
 
+    bool playonces = false;
     public void StartWave()
     {
         if (currentState == WaveState.Prewave || currentState == WaveState.Start)
@@ -316,7 +318,12 @@ public class WaveSystem : MonoBehaviour
             StartCoroutine(StartWaveAnimation());
 
             // bgm
-            FindObjectOfType<AudioManager>().Play("BGM3");
+            if (playonces == false)
+            {
+                FindObjectOfType<AudioManager>().Play("BGM3");
+                playonces = true;
+            }
+            
             startButton.SetActive(false);
             startBorder.SetActive(false);
         }
@@ -467,7 +474,7 @@ public class WaveSystem : MonoBehaviour
     void HandleBreak()
     {
         waveStateText.text = "Break";
-        FindObjectOfType<AudioManager>().Dim("BGM3");
+        //FindObjectOfType<AudioManager>().Dim("BGM3");
 
 
         if (breakTimer > 0)
@@ -542,6 +549,7 @@ public class WaveSystem : MonoBehaviour
         killdozerAnimator.SetTrigger("Move Right");
     }
 
+    public GameObject GameplayUI;
     IEnumerator EndDelay()
     {
         yield return new WaitForSeconds(6f);
@@ -551,6 +559,7 @@ public class WaveSystem : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         settingsPanel.SetActive(true);
+        GameplayUI.SetActive(false);
         FindObjectOfType<AudioManager>().Stop("BGM3");
         FindObjectOfType<AudioManager>().Play("WinBGM");
     }
@@ -672,7 +681,8 @@ public class WaveSystem : MonoBehaviour
 
     void StartMiniWave()
     {
-        FindObjectOfType<AudioManager>().Undim("BGM3");
+        //FindObjectOfType<AudioManager>().Undim("BGM3");
+        
 
         startButton.SetActive(false);
         startBorder.SetActive(false);
