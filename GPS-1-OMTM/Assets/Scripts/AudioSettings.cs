@@ -8,6 +8,7 @@ public class AudioSettings : MonoBehaviour
     public AudioManager audioManager;
     public Slider bgmSlider;
     public Slider sfxSlider;
+    public float bgmvolume;
 
     void Start()
     {
@@ -15,7 +16,7 @@ public class AudioSettings : MonoBehaviour
         //float savedBGMVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
        // float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
 
-        bgmSlider.value = 0.1f;
+        bgmSlider.value = bgmvolume;
         sfxSlider.value = 0.5f;
 
         // Add listeners to sliders

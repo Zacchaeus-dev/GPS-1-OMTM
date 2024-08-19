@@ -49,8 +49,9 @@ public class TroopClass : MonoBehaviour
     float climbDelay;
     float fallDelay;
 
-    public float MiddleGroundYSnap;
-    public float UpperGroundYSnap;
+    public float GroundYSnap = -4;
+    public float MiddleGroundYSnap = 4.75f;
+    public float UpperGroundYSnap = 9;
 
     private void Start()
     {
@@ -1933,6 +1934,7 @@ public class TroopClass : MonoBehaviour
         if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 1" || onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Upper-Ground 1")
         {
             Debug.Log("Upper Ground 1");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1943,6 +1945,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 2" || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] Upper-Ground 2")
         {
             Debug.Log("Upper Ground 2");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1953,6 +1956,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 3" || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] Upper-Ground 3")
         {
             Debug.Log("Upper Ground 3");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1963,6 +1967,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Ground" && collision.tag == "[PF] Upper-Ground 4" || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Upper-Ground 4")
         {
             Debug.Log("Upper Ground 4");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1972,7 +1977,8 @@ public class TroopClass : MonoBehaviour
         }
         else if (onPlatform == "Ground" && collision.tag == "[PF] KD Middle-Ground")// || onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Middle-Ground")
         {
-            //Debug.Log("KD Middle Ground");
+            Debug.Log("KD Middle Ground");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1983,6 +1989,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] KD Upper-Ground")
         {
             Debug.Log("KD Upper Ground");
+            transform.position = new Vector2(transform.position.x, UpperGroundYSnap + 9.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -1993,6 +2000,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Upper-Ground 1 (2)")
         {
             Debug.Log("Upper Ground 1 (2)");
+            transform.position = new Vector2(transform.position.x, UpperGroundYSnap + 9.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2003,6 +2011,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 2" && collision.tag == "[PF] Upper-Ground 2 (2)")
         {
             Debug.Log("Upper Ground 2 (2)");
+            transform.position = new Vector2(transform.position.x, UpperGroundYSnap + 9.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2013,6 +2022,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 3" && collision.tag == "[PF] Upper-Ground 3 (2)")
         {
             Debug.Log("Upper Ground 3 (2)");
+            transform.position = new Vector2(transform.position.x, UpperGroundYSnap + 9.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2023,6 +2033,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Upper-Ground 4 (2)")
         {
             Debug.Log("Upper Ground 4 (2)");
+            transform.position = new Vector2(transform.position.x, UpperGroundYSnap + 9.25f);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2038,6 +2049,7 @@ public class TroopClass : MonoBehaviour
             || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Ground Check")
         {
             Debug.Log("Ground Check");
+            transform.position = new Vector2(transform.position.x, GroundYSnap - 1);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2047,7 +2059,8 @@ public class TroopClass : MonoBehaviour
         }
         else if (onPlatform == "KD Middle-Ground" && collision.tag == "[PF] Ground Check")
         {
-            //Debug.Log("Ground Check");
+            Debug.Log("Ground Check");
+            transform.position = new Vector2(transform.position.x, GroundYSnap - 1);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2070,6 +2083,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 1 (2)" && collision.tag == "[PF] Upper-Ground 1 Check" || onPlatform == "Upper-Ground 1" && collision.tag == "[PF] Upper-Ground 1 Check")
         {
             Debug.Log("Upper-Ground 1 Check");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2080,6 +2094,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 2 (2)" && collision.tag == "[PF] Upper-Ground 2 Check" || onPlatform == "Upper-Ground 2" && collision.tag == "[PF] Upper-Ground 2 Check")
         {
             Debug.Log("Upper-Ground 2 Check");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2090,6 +2105,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 3 (2)" && collision.tag == "[PF] Upper-Ground 3 Check" || onPlatform == "Upper-Ground 3" && collision.tag == "[PF] Upper-Ground 3 Check")
         {
             Debug.Log("Upper-Ground 3 Check");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
@@ -2100,6 +2116,7 @@ public class TroopClass : MonoBehaviour
         else if (onPlatform == "Upper-Ground 4 (2)" && collision.tag == "[PF] Upper-Ground 4 Check" || onPlatform == "Upper-Ground 4" && collision.tag == "[PF] Upper-Ground 4 Check")
         {
             Debug.Log("Upper-Ground 4 Check");
+            transform.position = new Vector2(transform.position.x, MiddleGroundYSnap);//to snap to correct y position
             canClimb = false;
             isMoving = true;
 
