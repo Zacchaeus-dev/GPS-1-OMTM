@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelfInactive : MonoBehaviour
 {
-    float time;
+    public float time;
     public float duration = 4;
     void Update()
     {

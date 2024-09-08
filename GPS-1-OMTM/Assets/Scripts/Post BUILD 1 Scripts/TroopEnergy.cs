@@ -16,6 +16,7 @@ public class TroopEnergy : MonoBehaviour
     public GameObject instruction4;
     public GameObject instruction5;
     public GameObject ultimateVisual;
+    public GameObject ultiReadyBar;
 
     public enum PowerMethod
     {
@@ -72,14 +73,17 @@ public class TroopEnergy : MonoBehaviour
         if (currentPower == maxPower)
         {
             ultimateVisual.SetActive(true);
+            ultiReadyBar.SetActive(true);
         }
     }
 
     public void DisableUltimateVisual()
     {
         ultimateVisual.SetActive(false);
+        ultiReadyBar.SetActive(false);
     }
 
+    bool once;
     public void Instruction5()
     {
         if (tutorialPhase != null && tutorialPhase.tutorialOn == true)
@@ -87,7 +91,11 @@ public class TroopEnergy : MonoBehaviour
             if (currentPower == maxPower)
             {
                 instruction4.SetActive(false);
-                instruction5.SetActive(true);
+                if (once == false)
+                {
+                    instruction5.SetActive(true);
+                    once = true;
+                }
             }
         }
     }

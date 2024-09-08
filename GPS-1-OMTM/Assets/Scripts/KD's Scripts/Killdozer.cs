@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+
 public class Killdozer : MonoBehaviour
 {
    /* public float speed;
@@ -27,6 +28,11 @@ public class Killdozer : MonoBehaviour
     public GameObject rightTarget;
 
     public GameObject redOverlay;
+
+    public GameObject KDHitEffect;
+    public GameObject KDHP;
+    public GameObject KDHPBarObject;
+    public Image KDHPBar;
 
     public Animator healthAnimator;
 
@@ -104,6 +110,9 @@ public class Killdozer : MonoBehaviour
         if (currentHealth > 0)
         {
             FindObjectOfType<AudioManager>().Play("KDHit");
+            KDHP.SetActive(true);
+            KDHitEffect.SetActive(true);
+            KDHP.GetComponent<SelfInactive>().time = 0;
         }
 
         if (invincible)
@@ -131,7 +140,7 @@ public class Killdozer : MonoBehaviour
             StartCoroutine(Death());
         }
 
-        //KDUIScript.KDHealthText();
+        KDHPBar.fillAmount = ((float)currentHealth / (float)maxHealth);
     }
     bool dieOnce = false;
     public CameraShake cameraShake;

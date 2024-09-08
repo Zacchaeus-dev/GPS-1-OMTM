@@ -102,6 +102,18 @@ public class TroopHUD : MonoBehaviour
 
         hpBar.fillAmount = ((float)_troop.currentHealth / (float)_troop.maxHealth);
         powerBar.fillAmount = ((float)troopEnergy.currentPower / (float)troopEnergy.maxPower);
+/*
+        if (powerBar.fillAmount.Equals(1))
+        {
+            powerBar.color = new Color(255, 168, 16);
+            Debug.Log("test");
+        }
+        else
+        {
+            powerBar.color = new Color(199,199,199);
+            Debug.Log("NO");
+        }*/
+
         shieldBar.fillAmount = (float)_troop.currentShield / (float)_troop.maxShield;
 
         if (_troop.currentHealth <= (_troop.maxHealth / 2.5f) && _troop.currentHealth > 0)
