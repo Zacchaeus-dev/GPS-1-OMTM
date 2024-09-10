@@ -302,6 +302,20 @@ public class TroopController2D : MonoBehaviour
         }
         else
         {
+            if (tutorialPhase.tutorialOn == true)
+            {
+                if (instruction1.activeInHierarchy == true) //tutorial selecting troop
+                {
+                    instruction1.SetActive(false);
+                    instruction2.SetActive(true);
+                    attackRangeLabel.SetActive(true);
+                }
+            }
+            else if (tutorialPhase.tutorialOn == false && instruction8.activeInHierarchy == true)
+            {
+                instruction8.SetActive(false);
+                tutorialPhase.EnableEdgePanTutorial();
+            }
             // Single press
             if (selectedTroop != null)
             {

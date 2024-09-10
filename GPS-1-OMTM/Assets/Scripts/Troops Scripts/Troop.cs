@@ -225,12 +225,12 @@ public class Troop : MonoBehaviour
         }
         */
 
-        if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown)
+        if (selected && Input.GetKeyDown(KeyCode.R) && !ultimateOnCooldown && death == false)
         {
             // Start the ultimate if not on cooldown
             StartCoroutine(UseUltimate(ultimate));
         }
-        else if (selected && Input.GetKeyDown(KeyCode.R) && ultimateOnCooldown)
+        else if ((selected && Input.GetKeyDown(KeyCode.R) && ultimateOnCooldown) || ((selected && Input.GetKeyDown(KeyCode.R) && death == true)))
         {
             FindObjectOfType<AudioManager>().Play("NoUlt");
         }
@@ -927,13 +927,16 @@ public class Troop : MonoBehaviour
         troopEnergy.DisableUltimateVisual();
 
         yield return new WaitForSeconds(1.5f);
+        StartCoroutine(Ultimate_Healer_end());
+    }
+    IEnumerator Ultimate_Healer_end()
+    {
         gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
         TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
         yield return new WaitForSeconds(ultimateDuration);
         yield return new WaitForSeconds(ultimateCooldown);
         ultimateOnCooldown = false;
     }
-
     void GainShield(GameObject go)
     {
         Troop troop = go.GetComponent<Troop>();
@@ -950,7 +953,7 @@ public class Troop : MonoBehaviour
     {
         if (shieldOn && reducingShield && currentShield > 0) //reduce shield over time
         {
-            currentShield = currentShield - 50;
+            currentShield = currentShield - 25;
             Debug.Log(gameObject.name + "'s Current Shield: " + currentShield);
             reducingShield = false;
             UpdateHUD();
@@ -982,8 +985,12 @@ public class Troop : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            StartCoroutine(Death());
+            
             death = true;
+
+            // for healer ult
+
+            StartCoroutine(Death());
         }
 
         if (troopEnergy != null)
@@ -1043,6 +1050,29 @@ public class Troop : MonoBehaviour
         animator.SetTrigger("Death");
 
         yield return new WaitForSeconds(0.5f);
+        if (gameObject.GetComponent<HealerAutoHeal>() != null)
+        {
+            gameObject.GetComponent<HealerAutoHeal>().autoHealEnabled = true;
+        }
+        TroopModel.GetComponent<TroopAnimationsManager>().TroopUltiOff();
+        ultimateOnCooldown = false;
+
+        if (troopShield.activeInHierarchy == true)
+        {
+            troopShield.SetActive(false);
+        }
+        if (shieldOverlay.activeInHierarchy == true)
+        {
+            shieldOverlay.SetActive(false);
+        }
+
+        currentShield = 0;
+        shieldOn = false;
+        reducingShield = false;
+        troopShield.SetActive(false);
+
+        UpdateHUD();
+
         TroopModel.GetComponent<TroopAnimationsManager>().TroopIdle();
         TroopModel.GetComponent<TroopAnimationsManager>().TroopRespawn();
         yield return new WaitForSeconds(0.3f);

@@ -8,19 +8,22 @@ public class timerselfinactive : MonoBehaviour
 {
     public float time;
     public float duration = 10;
-    public float respawn = 11;
+    public float respawn = 10;
     public TextMeshProUGUI respawntimer;
 
-    public void Start()
+
+    private void OnEnable()
     {
+        respawn = 10;
         StartCoroutine(respawna());
+        
     }
 
     IEnumerator respawna()
     {
         for (int i = 0; respawn >= 0; respawn--)
         {
-            respawntimer.text = (respawn - 1).ToString();
+            respawntimer.text = respawn.ToString();
             
             if (respawn <= 0)
             {

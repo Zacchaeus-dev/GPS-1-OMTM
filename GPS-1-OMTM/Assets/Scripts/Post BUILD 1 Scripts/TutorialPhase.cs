@@ -154,17 +154,31 @@ public class TutorialPhase : MonoBehaviour
         waveSystem.TeleportTroopsToKilldozer();
         cameraSystem.FocusOnKilldozer();
         StartCoroutine(DefocusKilldozer());
-        instruction8.SetActive(true);
-        instruction8On = true;
+        
         dpsPower.UseAllPower();
         dpsPower.DisableUltimateVisual();
 
         tutorialOn = false;
 
-        waveSystem.startButton.SetActive(false);
-        waveSystem.startBorder.SetActive(false);
-        waveSystem.ok = false;
+        if (tutorialSkipped == false)
+        {
+            waveSystem.startButton.SetActive(false);
+            waveSystem.startBorder.SetActive(false);
+            waveSystem.ok = false;
 
+            instruction8.SetActive(true);
+            instruction8On = true;
+        }
+
+        if (tutorialSkipped == true)
+        {
+            waveSystem.startButton.SetActive(true);
+            waveSystem.startBorder.SetActive(true);
+            waveSystem.ok = true;
+
+            instruction8.SetActive(false);
+            instruction8On = false;
+        }
 
 
         dps.Ultimate_DPS_End();
@@ -252,6 +266,50 @@ public class TutorialPhase : MonoBehaviour
         wavePopUp.SetActive(false);
         preWave1Screen.SetActive(false);
         StartCoroutine(TutorialEnd());
+    }    
+    
+    IEnumerator WaveAnimationSkip()
+    {
+        skipTutorialButton.SetActive(false);
+
+        yield return new WaitForSeconds(3f); //animation duration
+
+        instruction5.SetActive(false); //prevent bug
+        wavePopUp.SetActive(false);
+        preWave1Screen.SetActive(false);
+
+        //waveSystem.gameObject.SetActive(true);
+        tutorialOn = false;
+        DestroyObjectsWithTag("EnergyOrb");
+        tank.SetActive(true);
+        cc.SetActive(true);
+        healer.SetActive(true);
+        tankHUD.DimOff();
+        ccHUD.DimOff();
+        healerHUD.DimOff();
+        kdd.SetActive(true);
+        healerHUD.DimOff();
+        instruction4.SetActive(false); //prevent bug
+        instruction5.SetActive(false);
+        wavesObject.SetActive(true);
+        waveSystem.TeleportTroopsToKilldozer();
+        cameraSystem.FocusOnKilldozer();
+        StartCoroutine(DefocusKilldozer());
+        instruction8.SetActive(false);
+        instruction8On = false;
+        dpsPower.UseAllPower();
+        dpsPower.DisableUltimateVisual();
+
+        tutorialOn = false;
+
+        waveSystem.startButton.SetActive(true);
+        waveSystem.startBorder.SetActive(true);
+        waveSystem.ok = false;
+
+        dps.Ultimate_DPS_End();
+
+        yield return new WaitForSeconds(0.1f);
+        
     }
 
     public void CloseObjectivePanel()
