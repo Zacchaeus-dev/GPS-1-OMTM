@@ -181,8 +181,8 @@ public class WaveSystem : MonoBehaviour
     void Start()
     {
         //FindObjectOfType<AudioManager>().Play("BGM3");
-        startButton.SetActive(true);
-        startBorder.SetActive(true);
+        //startButton.SetActive(true);
+        //startBorder.SetActive(true);
         waveNumText.text = "0";
         miniWaveNumText.text = "0";
         waveStateText.text = "Pre Wave";
@@ -405,6 +405,7 @@ public class WaveSystem : MonoBehaviour
         }
     }
 
+    public bool ok = false;
     void HandleInWave()
     {
         waveStateText.text = "In Wave";
@@ -412,8 +413,12 @@ public class WaveSystem : MonoBehaviour
         if (aliveEnemies.Count == 0 && inwaveTimer1 <= 0 && inwaveTimer2 <= 0 && inwaveTimer3 <= 0 && inwaveTimer4 <= 0 && inwaveTimer5 <= 0 && inwaveTimer6 <= 0 && inwaveTimer7 <= 0 && inwaveTimer8 <= 0 && inwaveTimer9 <= 0 && inwaveTimer10 <= 0 && inwaveTimer11 <= 0 && inwaveTimer12 <= 0 && breakLabel.activeInHierarchy == false)
         {
             breakLabel.SetActive(true);
-            startButton.SetActive(true);    
-            startBorder.SetActive(true);    
+            if (ok == true)
+            {
+                startButton.SetActive(true);
+                startBorder.SetActive(true);
+            }
+                
             StartCoroutine(BreakAnimation());   
         }
 

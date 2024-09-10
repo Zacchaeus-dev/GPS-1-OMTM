@@ -283,10 +283,10 @@ public class TroopController2D : MonoBehaviour
             }
         }
     }
-
+    
     void HandleKeyPress(KeyCode key, GameObject troop)
     {
-        if (WaveSystem.transitioning == true || tutorialPhase.tutorialOn == true)
+        if (WaveSystem.transitioning == true || tutorialPhase.tutorialOn == true && troop != troop1)
         {
             return;
         }

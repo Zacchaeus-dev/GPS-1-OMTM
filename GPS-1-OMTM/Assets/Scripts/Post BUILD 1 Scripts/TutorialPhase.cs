@@ -158,10 +158,21 @@ public class TutorialPhase : MonoBehaviour
         instruction8On = true;
         dpsPower.UseAllPower();
         dpsPower.DisableUltimateVisual();
-        dps.Ultimate_DPS_End();
+
         tutorialOn = false;
 
+        waveSystem.startButton.SetActive(false);
+        waveSystem.startBorder.SetActive(false);
+        waveSystem.ok = false;
+
+
+
+        dps.Ultimate_DPS_End();
+
         yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(2f);
+        waveSystem.startButton.SetActive(false);
+        waveSystem.startBorder.SetActive(false);
     }
 
     public void EnableEdgePanTutorial()
@@ -169,6 +180,11 @@ public class TutorialPhase : MonoBehaviour
         instruction8On = false;
         instruction7.SetActive(true);
         edgePanTutorial.SetActive(true);
+
+        waveSystem.ok = true;
+        waveSystem.startButton.SetActive(true);
+        waveSystem.startBorder.SetActive(true);
+
         StartCoroutine(CloseEdgePanTutorial());
     }
 
