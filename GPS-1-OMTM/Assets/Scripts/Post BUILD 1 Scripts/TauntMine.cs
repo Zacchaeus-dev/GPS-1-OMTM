@@ -68,6 +68,13 @@ public class TauntMine : MonoBehaviour
                     if (enemy.GetComponent<Enemy>() != null || enemy.GetComponent<FlyingEnemy>() != null)
                     {
                         enemyRb.AddForce(direction * pullForce, ForceMode2D.Impulse);
+
+                        if (enemy.GetComponent<FlyingEnemy>() != null)
+                        {
+                            enemy.GetComponent<FlyingEnemy>().enabled = false;
+                            enemy.GetComponent<Rigidbody2D>().constraints = ~RigidbodyConstraints2D.FreezePosition;
+                            enemy.GetComponent<PolygonCollider2D>().isTrigger = false;
+                        }
                     }
                 }
             }
@@ -83,8 +90,12 @@ public class TauntMine : MonoBehaviour
                 Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
                 {
-                    Vector2 direction = (transform.position - enemy.transform.position).normalized;
-                    enemyRb.AddForce(direction * 1, ForceMode2D.Impulse);
+
+                        Vector2 direction = (transform.position - enemy.transform.position).normalized;
+                        enemyRb.AddForce(direction * 1, ForceMode2D.Impulse);
+                        Debug.Log(direction);
+                    
+
                 }
             }
         }

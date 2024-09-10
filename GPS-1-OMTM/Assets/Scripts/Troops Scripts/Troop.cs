@@ -1012,6 +1012,7 @@ public class Troop : MonoBehaviour
 
     public bool healer = false;
 
+    public GameObject dim;
     IEnumerator Death()
     {
         damageIndicator.SetActive(false);
@@ -1048,6 +1049,8 @@ public class Troop : MonoBehaviour
         model.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
+        //dim & timer
+        dim.SetActive(true);
 
         // Notify troopController2D to respawn this troop
         troopController2D.HandleRespawn(this);
@@ -1055,6 +1058,7 @@ public class Troop : MonoBehaviour
         // Deactivate the troop
         gameObject.SetActive(false);
         death = false;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

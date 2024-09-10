@@ -183,7 +183,9 @@ public class TroopAutoAttack : MonoBehaviour
         {
             if (hitCollider.CompareTag("Enemy"))
             {
-                float distanceToEnemy = Vector2.Distance(transform.position, hitCollider.transform.position);
+                Vector2 a = new Vector2(transform.position.x, 0);
+                Vector2 b = new Vector2(hitCollider.transform.position.x, 0);
+                float distanceToEnemy = Vector2.Distance(a, b);
                 if (distanceToEnemy < closestDistance)
                 {
                     closestDistance = distanceToEnemy;

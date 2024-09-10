@@ -83,20 +83,26 @@ public class FlyingEnemy : MonoBehaviour
         }
     }
 
+    public bool MOVE = true;
     void FixedUpdate()
     {
-        if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x && !isStunned) //move depending on killdozer's location
+        if (MOVE == true)
         {
-            MoveLeft();
-            Animator.TroopAttackOff();
-            facingRight = false;
+            if (shouldMove && killdozerRightTarget.transform.position.x + rightOffset.x < transform.position.x && !isStunned) //move depending on killdozer's location
+            {
+                MoveLeft();
+                Animator.TroopAttackOff();
+                facingRight = false;
+            }
+            else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x && !isStunned)
+            {
+                MoveRight();
+                Animator.TroopAttackOff();
+                facingRight = true;
+            }
+            MoveTowardsTarget();
         }
-        else if (shouldMove && killdozerLeftTarget.transform.position.x + leftOffset.x > transform.position.x && !isStunned)
-        {
-            MoveRight();
-            Animator.TroopAttackOff();
-            facingRight = true;
-        }
+
 
         if (facingRight)
         {
@@ -108,7 +114,7 @@ public class FlyingEnemy : MonoBehaviour
         }
 
         DetectTargets();
-        MoveTowardsTarget();
+        
         HandleAttack();
 
         if (tookdamage)
@@ -134,11 +140,11 @@ public class FlyingEnemy : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+/*        if (Input.GetKeyDown(KeyCode.A))
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
             Debug.Log("Rotation: " + transform.eulerAngles.y);
-        }
+        }*/
     }
 
     void MoveLeft()
